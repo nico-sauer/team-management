@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Booking</title>
+</head>
+
+<body>
+    <h2>Create a new appointment</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <button type="submit">book</button>
+    </form>
+    {% if messages or form.errors %}
+
+    {# Django Messages #}
+    {% for message in messages %}
+        {% if message.tags == "error" %}
+        <p style="color:red;">{{ message }}</p>
+        {% elif message.tags == "success" %}
+        <p style="color:green;">{{ message }}</p>
+        {% else %}
+        <p>{{ message }}</p>
+        {% endif %}
+    {% endfor %}
+
+    {# Form Field Errors #}
+    {% for field in form %}
+        {% for error in field.errors %}
+        <p style="color:red;">{{ error }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    {# Non-field Errors #}
+    {% for error in form.non_field_errors %}
+        <p style="color:red;">{{ error }}</p>
+    {% endfor %}
+
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'appointments:booking_list' %}">To booking overview</a>
+</body>
+</html>
