@@ -14,7 +14,13 @@ class Calendar(HTMLCalendar):
 		bookings_per_day = bookings.filter(start__day=day)
 		d = ''
 		for booking in bookings_per_day:
-			d += f'<li> {booking.title} </li>'
+      
+			if booking.status == 'pending':
+				d += f'<li>Event status pending</li>'
+			elif booking.event_type == 'private':
+				d += f'<li>Private event</li>'
+			else:
+				d += f'<li> {booking.title} </li>'
 
 		if day != 0:
 			return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
@@ -37,4 +43,5 @@ class Calendar(HTMLCalendar):
 		cal += f'{self.formatweekheader()}\n'
 		for week in self.monthdays2calendar(self.year, self.month):
 			cal += f'{self.formatweek(week, events)}\n'
+		cal += '</table>'
 		return cal

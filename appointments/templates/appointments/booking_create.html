@@ -41,6 +41,18 @@
     {% endif %}
 
     <br><br>
-    <a href="{% url 'appointments:booking_list' %}">To booking overview</a>
+
+    <div class="text-left mt-4">
+        <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
+            To Booking Overview
+        </a>
+    </div>
+
+    <div class="text-right mt-4">
+        <a href="{% url 'appointments:calendar' %}" class="btn btn-primary">
+            To Calendar View
+        </a>
+    </div>
+
 </body>
 </html>
