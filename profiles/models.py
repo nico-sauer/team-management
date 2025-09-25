@@ -73,8 +73,8 @@ class AthleteProfile(models.Model):
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     #user = models.OneToOneField(User, on_delete=models.CASCADE)
-    number = models.PositiveIntegerField(default=0) #unless we use their jersey number as id for easier searching
-    
+    number = models.PositiveIntegerField(blank=True) #unless we use their jersey number as id for easier searching
+    position = models.CharField(null=True)
     height = models.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
     weight = models.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True) 
     

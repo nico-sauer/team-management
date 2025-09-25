@@ -38,6 +38,7 @@ class AthleteProfileSerializer(serializers.HyperlinkedModelSerializer):
     birthday = serializers.ReadOnlyField()
     age = serializers.ReadOnlyField(source="get_age")
     number = serializers.ReadOnlyField()
+    position = serializers.ReadOnlyField()
 
     class Meta:
         model = AthleteProfile
@@ -50,6 +51,7 @@ class AthleteProfileSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
+            "position"
             
         ]
        
@@ -99,6 +101,7 @@ class ManagerAccessAthleteSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
+            "position",
             "height",
             "weight",
             "training_plan",
@@ -116,6 +119,7 @@ class MedicalStaffAccessSerializer(serializers.HyperlinkedModelSerializer):
     birthday = serializers.ReadOnlyField()
     age = serializers.ReadOnlyField(source="get_age")
     number = serializers.ReadOnlyField()
+    position = serializers.ReadOnlyField()
     training_plan = serializers.ReadOnlyField()
     meal_plan = serializers.ReadOnlyField()
     nutri_plan = serializers.ReadOnlyField(source="get_nutri_plan")
@@ -134,6 +138,7 @@ class MedicalStaffAccessSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
+            "position",
             "height",
             "weight",
             "nutri_plan",
@@ -151,6 +156,7 @@ class TrainerAccessSerializer(serializers.HyperlinkedModelSerializer):
     birthday = serializers.ReadOnlyField()
     age = serializers.ReadOnlyField(source="get_age")
     number = serializers.ReadOnlyField()
+    position = serializers.ReadOnlyField()
     height = serializers.ReadOnlyField()
     weight = serializers.ReadOnlyField()
     meal_plan = serializers.ReadOnlyField()
@@ -165,6 +171,7 @@ class TrainerAccessSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
+            "position",
             "height",
             "weight",
             "nutri_plan",
@@ -181,6 +188,7 @@ class DieticianAccessSerializer(serializers.HyperlinkedModelSerializer):
     phone_number = serializers.ReadOnlyField(source="get_phone_number")
     birthday = serializers.ReadOnlyField()
     number = serializers.ReadOnlyField()
+    position = serializers.ReadOnlyField()
     height = serializers.ReadOnlyField()
     weight = serializers.ReadOnlyField()
     training_plan = serializers.ReadOnlyField()
@@ -196,6 +204,7 @@ class DieticianAccessSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
+            "position",
             "height",
             "weight",
             "calories",
@@ -213,6 +222,7 @@ class ChefAccessSerializer(serializers.HyperlinkedModelSerializer):
     number = serializers.ReadOnlyField()
     nutri_plan = serializers.ReadOnlyField(source="get_nutri_plan")
     birthday = serializers.ReadOnlyField()
+    position = serializers.ReadOnlyField()
     
 
     class Meta:
@@ -223,6 +233,7 @@ class ChefAccessSerializer(serializers.HyperlinkedModelSerializer):
             "full_name",
             "birthday",
             "number",
+            "position",
             "nutri_plan",
             "meal_plan"  
         ]
