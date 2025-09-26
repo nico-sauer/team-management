@@ -9,7 +9,7 @@ from django.views import generic
 from django.utils.safestring import mark_safe
 from .utils import Calendar
 import calendar  # python standard calendar
-
+#from django.contrib.auth.decorators import login_required
 
 def create_booking(request):
     if request.method == "POST":
@@ -41,8 +41,11 @@ def create_booking(request):
         form = BookingForm()
     return render(request, "appointments/booking_create.html", {"form": form})
 
-
-
+# to check if 
+# @login_required
+# def booking_list(request):
+#     bookings = Booking.objects.filter(booked_by=request.user).order_by("-created_at")
+#     return render(request, "appointments/booking_list.html", {"bookings": bookings})
 def booking_list(request):
     bookings = Booking.objects.all().order_by("-created_at") # latest bookings first (-)
     return render(request, "appointments/booking_list.html", {"bookings": bookings})

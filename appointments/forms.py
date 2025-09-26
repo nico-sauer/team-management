@@ -41,14 +41,22 @@ class BookingForm(forms.ModelForm):
     """
     Validation for start and end times to ensure they are in the future and valid dates.
     """
-    def clean_start(self):
-        start = self.cleaned_data.get("start")
-        if start < timezone.now():
-            raise ValidationError("Start time must be in the future.")
-        return start
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("start")
+        end = cleaned_data.get("end")
+                    
+        now = timezone.now()
+
+        # Start time needs to be in the future
+        if start and start < timezone.now():
+            self.add_error("start", "Start time must be in the future.")
+
+        # End time needs to start after start time
+        if start and end and end <= start:
+            self.add_error("end", "End time must be after start time.")
+
+        return cleaned_data
+        
     
-    def clean_end(self):
-        end = self.cleaned_data.get("end")
-        if end <= self.cleaned_data.get("start"):
-            raise ValidationError("End time must be after start time.")
-        return end
