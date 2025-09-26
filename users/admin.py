@@ -13,4 +13,3 @@ admin.site.register(CustomUser)
 
 
 
-admin.site.register(CustomUser)
