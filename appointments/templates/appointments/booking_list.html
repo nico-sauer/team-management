@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookings</title>
+</head>
+<body>
+    <h2>Team member's bookings</h2>
+
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Event Type</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Participants</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.title }}</td>
+                <td>{{ booking.get_event_type_display }}</td>
+                <td>{{ booking.start }}</td>
+                <td>{{ booking.end }}</td>
+                <td>{{ booking.location }}</td>
+                <td>{{ booking.status }}</td>
+                <td>
+                    {% for participant in booking.participants.all %}
+                        {{ participant }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        -
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{% url 'appointments:edit_booking' booking.pk %}">Edit</a> |
+                    <a href="{% url 'appointments:delete_booking' booking.pk %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No bookings found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="{% url 'appointments:booking' %}">Create a new booking</a></p>
+    
+    <div class="text-right mt-4">
+        <a href="{% url 'appointments:calendar' %}" class="btn btn-primary">
+            To Calendar View
+        </a>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,31 @@
+{% extends 'appointments/cal_base.html' %}
+
+{% block content %}
+
+<div class="container my-4">  
+
+    <h2 class="text-center mb-4">Calendar</h2>
+
+    <div class="clearfix mb-3">
+        <a class="btn btn-info float-left" href="{% url 'appointments:calendar' %}?{{ prev_month }}">
+            Previous Month
+        </a>
+        <a class="btn btn-info float-right" href="{% url 'appointments:calendar' %}?{{ next_month }}">
+            Next Month
+        </a>
+    </div>
+
+    <div class="calendar-container">
+        {{ calendar|safe }}
+    </div>
+
+    <div class="text-left mt-4">
+        <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
+            To Booking Overview
+        </a>
+    </div>
+
+</div>  
+
+{% endblock %}
+
