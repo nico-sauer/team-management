@@ -41,8 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'phonenumber_field',
     'plans',
     'config',
+    'users',
+    'profiles',
+    'appointments',
+    'core',
+    
+    
 ]
 
 MIDDLEWARE = [
@@ -87,7 +94,13 @@ DATABASES = {
         'HOST': os.getenv("DB_HOST"),
         'PORT': os.getenv("DB_PORT")          
     }
+    
 }
+
+if "DATABASE_URL" in os.environ:
+    logger.info("Adding $DATABASE_URL to default DATABASE Django setting.")
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+    DATABASES["default"]["init_command"] = "SET sql_mode='STRICT_TRANS_TABLES'"
 
 
 # Password validation
@@ -130,3 +143,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "users.CustomUser"
