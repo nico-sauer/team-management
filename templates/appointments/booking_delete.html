@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete a booking </title>
-</head>
-<body>
-  <h2>Delete a booking:</h2>
+{% extends "base.html" %}
 
+
+{% block title %}Delete a Booking{% endblock %}
+
+{% block content %}
+  <br>
+  <H2>Delete a Booking</H2>
+  <br>
   <p>Are you sure you want to delete:</p>
    <p> {{ booking.title }} on <strong> {{ booking.start.date }} at {{ booking.start.time }}</strong>? </p>
 
@@ -18,5 +18,4 @@
     <a href="{% url 'appointments:booking_list' %}">Go back</a>
   </form>
 
-</body>
-</html>
+{% endblock %}

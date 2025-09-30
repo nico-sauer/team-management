@@ -1,5 +1,6 @@
 from django import forms
 from .models import Booking
+from users.models import CustomUser
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
@@ -29,34 +30,44 @@ class BookingForm(forms.ModelForm):
             "participants": forms.SelectMultiple(attrs={"class": "form-select"}),
         }
     
-    """
-    Check, if participants are selected before saving the form.
-    """
-    def clean_participants(self):
-        participants = self.cleaned_data.get("participants")
-        if not participants:
-            raise forms.ValidationError("Please select at least one participant.")
-        return participants
-        
-    """
-    Validation for start and end times to ensure they are in the future and valid dates.
-    """
-
+    def __init__(self, *args, **kwargs):
+        # current_user is passed when the form is initialized 
+        self.current_user = kwargs.pop("current_user", None)
+        super().__init__(*args, **kwargs)
+        if self.current_user:
+            # Filter only user from the current user team_id
+            self.fields["participants"].queryset = CustomUser.objects.filter(team_id=self.current_user.team_id)
+            
     def clean(self):
         cleaned_data = super().clean()
         start = cleaned_data.get("start")
         end = cleaned_data.get("end")
-                    
+        participants = cleaned_data.get("participants")
+        
         now = timezone.now()
 
-        # Start time needs to be in the future
-        if start and start < timezone.now():
+        # time-validations
+        if start and start < now:
             self.add_error("start", "Start time must be in the future.")
 
-        # End time needs to start after start time
         if start and end and end <= start:
             self.add_error("end", "End time must be after start time.")
 
-        return cleaned_data
+        # participants-validations, a minimum of on existing teammember needs to be choosen
+        if not participants:
+            self.add_error("participants", "Please select at least one participant.")
+        elif self.current_user:
+            for p in participants:
+                if p.team_id != self.current_user.team_id:
+                    self.add_error(
+                        "participants",
+                        f"{p} is not in the same team as {self.current_user}"
+                    )
+
+        return cleaned_data    
         
+        
+        
+    
+   
     
