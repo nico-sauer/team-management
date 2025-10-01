@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+#  from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from .models import Booking
 
@@ -16,11 +16,11 @@ class Calendar(HTMLCalendar):
 		for booking in bookings_per_day:
       
 			if booking.status == 'pending':
-				d += f'<li>Event status pending</li>'
+				d += f'<li>{booking.start.strftime("%H:%M")}-Event status pending</li>'
 			elif booking.event_type == 'private':
-				d += f'<li>Private event</li>'
+				d += f'<li>{booking.start.strftime("%H:%M")}-Private event</li>'
 			else:
-				d += f'<li> {booking.title} </li>'
+				d += f'<li>{booking.start.strftime("%H:%M")}-{booking.title}</li>'
 
 		if day != 0:
 			return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"

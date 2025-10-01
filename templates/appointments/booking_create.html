@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+
+{% block title %}Create Booking{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -20,7 +26,7 @@
     {% endfor %}
 
     <br>
-    <button type="submit">book</button>
+    <button type="submit" class="btn btn-primary">book</button>
 </form>
     {% if messages or form.errors %}
 
@@ -43,8 +49,7 @@
 
     {% endif %}
 
-    <br><br>
-
+    
     <div class="text-left mt-4">
         <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
             To Booking Overview
@@ -57,5 +62,4 @@
         </a>
     </div>
 
-</body>
-</html>
+{% endblock %}

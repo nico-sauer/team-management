@@ -3,6 +3,7 @@
 import django.contrib.auth.models
 import django.db.models.deletion
 import django.utils.timezone
+import users.models
 from django.db import migrations, models
 
 
@@ -136,7 +137,7 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             managers=[
-                ("objects", django.contrib.auth.models.UserManager()),
+                ("objects", users.models.CustomUserManager()),
             ],
         ),
     ]

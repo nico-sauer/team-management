@@ -1,12 +1,12 @@
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Bookings</title>
-</head>
-<body>
-    <h2>Team member's bookings</h2>
+{% extends "base.html" %}
+
+
+{% block title %}Booking Overview {% endblock %}
+
+{% block content %}
+  <br>
+    <h2>{{request.user.first_name}}'s appointments</h2>
 
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
@@ -49,13 +49,17 @@
             {% endfor %}
         </tbody>
     </table>
-    <p><a href="{% url 'appointments:booking' %}">Create a new booking</a></p>
+    <div class="text-right mt-4">
+        <a href="{% url 'appointments:booking' %}" class="btn btn-primary">
+            Create a new booking
+        </a>
+    </div>
     
     <div class="text-right mt-4">
         <a href="{% url 'appointments:calendar' %}" class="btn btn-primary">
             To Calendar View
         </a>
     </div>
-</body>
-</html>
+
+{% endblock %}
 

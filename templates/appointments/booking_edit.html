@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit a booking </title>
-</head>
-<body>
+{% extends "base.html" %}
+
+
+{% block title %}Edit a Booking{% endblock %}
+
+{% block content %}
+  <br>
   <h2>Edit a booking:</h2>
 
   <form method="POST">
@@ -14,5 +14,4 @@
       <a href="{% url 'appointments:booking_list' %}">Cancel</a>
   </form>
 
-</body>
-</html>
+{% endblock %}
