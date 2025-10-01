@@ -23,11 +23,11 @@ def register_user(request):
             form.save()
             messages.success(request, "Registration successful!")
             return redirect("home")
-         
+            
     else:
         form = CustomUserCreationForm()
         
-    return render(request, 'register.html', {'form':form})
+    return render(request, 'users/register.html', {'form':form})
         
         
 def login_user(request):
@@ -43,9 +43,9 @@ def login_user(request):
             return redirect("/")#after login return to Home page
         else:
             messages.success(request, "There was an error. Try to log in again")
-            return redirect('login')
+            return redirect('/')
     else: 
-         return render(request,'registration/login.html') #add the template to login and render 
+         return render(request,'login.html') #add the template to login and render 
     
         
 def logout_user(request):
