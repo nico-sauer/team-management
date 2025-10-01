@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 
 
 # User = get_user_model()
+# if group= :
 
 
 ROLE_CHOICES =(
@@ -13,7 +14,7 @@ ROLE_CHOICES =(
     ("Manager", "Manager"),
     ("Trainer", "Trainer"),
     ("Physical Therapist", "Physical Therapist"),
-    ("Dietitian", "Dietician"),
+    ("Dietitian", "Dietitian"),
     ("Doctor", "Doctor"),
     ("Athlete", "Athlete"),
 )
@@ -24,7 +25,7 @@ class CustomUserCreationForm(UserCreationForm, forms.Form):
     email = forms.EmailField()
     
     role= forms.ChoiceField(choices=ROLE_CHOICES)
-    team_id = forms.ModelChoiceField(queryset=Team.objects.all())
+    team = forms.ModelChoiceField(queryset=Team.objects.all())
     group = forms.ModelChoiceField(queryset=Group.objects.all())
     
    
@@ -39,7 +40,7 @@ class CustomUserCreationForm(UserCreationForm, forms.Form):
             'password2',
             
             'role',
-            'team_id',
+            'team',
             'group',
         ]
         
