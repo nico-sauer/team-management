@@ -146,11 +146,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.CustomUser"
 
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+''' this email section comment out if you don't to send emails in our app '''
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
+# #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # EMAIL_HOST = os.getenv('EMAIL_HOST')
 # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
