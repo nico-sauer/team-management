@@ -4,13 +4,12 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import CustomUser, Team
-# from profiles.models import staffprofile
-
 
 # CustomUser = get_user_model()
 
+
 @login_required
-@permission_required('auth.add_user', raise_exception=True)
+@permission_required('users.add_customuser', raise_exception=True)
 def register_user(request):
     
     # current_user = request.user give the info of the logged in user
@@ -41,7 +40,7 @@ def login_user(request):
         user = authenticate(email = email, password = password)    
         if user is not None: 
             login(request, user)
-            return redirect("/")
+            return redirect("/")#after login return to Home page
         else:
             messages.success(request, "There was an error. Try to log in again")
             return redirect('login')
@@ -50,10 +49,12 @@ def login_user(request):
     
         
 def logout_user(request):
-    if request.method == "POST":
-        logout(request)
-        messages.success(request, "You were logged out.")
-        return redirect("/")
+    # if request.method == "POST":
+    logout(request)
+    messages.success(request, "You were logged out.")
+    return redirect("/")
         
+def change_password():
+    pass        
         
         
