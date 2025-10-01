@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome, {{ request.user.email }}!</h2>
+    {% if request.user.role == 'athlete' %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Your team: {{ request.user.team_id.team_name }}</h5>
+                <a href="/plans/" class="btn btn-primary me-2">My Plans</a>
+                <a href="/appointments/" class="btn btn-success">My Appointments</a>
+            </div>
+        </div>
+    {% elif request.user.role == 'coach' %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Team: {{ request.user.team_id.team_name }}</h5>
+                <a href="/api/plans/" class="btn btn-primary me-2">Manage Team Plans</a>
+                <a href="/users/" class="btn btn-info">Team Members</a>
+            </div>
+        </div>
+    {% elif request.user.is_superuser %}
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <a href="/admin/" class="btn btn-dark w-100 mb-2">Admin Panel</a>
+                        <a href="/users/" class="btn btn-info w-100 mb-2">All Users</a>
+                        <a href="/teams/" class="btn btn-primary w-100">All Teams</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
