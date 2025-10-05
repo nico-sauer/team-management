@@ -1,12 +1,29 @@
 
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 
 {% block title %}Booking Overview {% endblock %}
 
 {% block content %}
   <br>
     <h2>{{request.user.first_name}}'s appointments</h2>
+    <br>
+    <!--Filter form-->
+    <form method="GET" class="form-inline">
+        <div class="row d-flex align-items-center">
+            {% for field in filter.form %}
+            <div class="form-group col-md-3">
+                {{ field|as_crispy_field }}
+            </div>
+            {% endfor %}
+            <div class="col-md-3">
+                <button class="btn btn-outline-success"
+                    type="submit">FILTER</button>
+                <a href="{% url 'appointments:booking_list' %}"
+                    class="btn btn-outline-danger">RESET</a>  
+            </div>
+        </div>
+    </form> 
 
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>

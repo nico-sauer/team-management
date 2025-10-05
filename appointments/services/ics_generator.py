@@ -1,6 +1,7 @@
 from django.utils import timezone
 import pytz
 
+
 def generate_ics(booking):
     """
     Generates an ICS calendar event for a booking.
@@ -16,7 +17,7 @@ def generate_ics(booking):
 
     dtstart = start_berlin.strftime("%Y%m%dT%H%M%S")
     dtend = end_berlin.strftime("%Y%m%dT%H%M%S")
-    
+
     ics_content = f"""BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//YourApp//EN
@@ -34,4 +35,4 @@ STATUS:{booking.status or "CONFIRMED"}
 END:VEVENT
 END:VCALENDAR"""
 
-    return ics_content.encode("utf-8") # Returns bytes, ready to attach to email
+    return ics_content.encode("utf-8")  # Returns bytes, ready to attach to email
