@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+{% block title %}
+  {{ athlete.first_name }} {{ athlete.last_name }}
+{% endblock %}
+
+
+{% block content %}
+  <h1>{{ athlete.first_name }} {{ athlete.last_name }}</h1>
+    <p>Birthday: {{ athlete.birthday }}</p>
+    <p>Position: {{ athlete.position }}</p>
+    <p>Jersey Number: {{ athlete.number }}</p>
+
+  {% comment %} <p>Phone: {{ athlete.phone }}</p> {% endcomment %}
+ 
+  
+  <p>Back to <a href="/profiles/members">Members</a></p>
+    <p><a href="/profiles/members/medical/{{ athlete.id }}">Medical Records</a></p>
+{% endblock %}        

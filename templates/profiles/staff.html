@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+{% block title %}
+  {{ staff_member.first_name }} {{ staff_member.last_name }}
+{% endblock %}
+
+
+{% block content %}
+  <h1>{{ staff_member.first_name }} {{ staff_member.last_name }}</h1>
+
+  {% comment %} <p>Phone: {{ staff_member.phone }}</p> {% endcomment %}
+ 
+  
+  <p>Back to <a href="/staff">Staff</a></p>
+  
+{% endblock %}        
