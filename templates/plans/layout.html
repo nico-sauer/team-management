@@ -1,0 +1,65 @@
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    
+        <title>{% block title %}Team Management App {% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% comment %} <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/> {% endcomment %}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    </head>
+    <body style="width: 100vw; overflow-x: scroll; color: black;">
+
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black">
+            <a class="navbar-brand" href="{% url 'dashboard' %}" style="color: lightblue">NO-I</a>
+          
+            <div style="text-align: center; margin: 0; padding: 0;">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'addmeal' %}" style="color: lightblue">Add Meal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'addsession' %}" style="color: lightblue">Add Training Session</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'tdee' %}" style="color: lightblue">TDEE Calculator</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'weekly' %}"></a>
+                </li>
+                {% comment %} {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" style="font-weight: bold; color: black">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}" style="font-weight: bold; color: black;">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}" style="font-weight: bold; color: black;">Register</a>
+                    </li>
+                {% endif %} {% endcomment %}
+              </ul>
+            </div>
+          </nav>
+        
+        <div class="body">
+            <div class="container" style="max-width: 100% margin: auto;">
+                <div style="margin: auto; max-width: 100%;">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div> 
+        </div> 
+
+        
+    {% block script %}
+    <script src="{% static 'plans.js' %}"></script>
+    
+    {% endblock %}

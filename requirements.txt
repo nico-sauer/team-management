@@ -1,9 +1,11 @@
 asgiref==3.9.1
 crispy-bootstrap5==2025.6
 distlib==0.4.0
-Django==5.2.4
+Django==5.2.7
+django-auth==0.1.9
 django-autoslug==1.9.9
 django-birthday==0.1.4
+django-extensions==4.1
 django-crispy-forms==2.4
 django-filter==25.1
 django-parler==2.3
@@ -11,6 +13,7 @@ django-phonenumber-field==8.1.0
 django-recurrence==1.11.1
 djangorestframework==3.16.1
 filelock==3.19.1
+isort==6.0.1
 Markdown==3.9
 phonenumbers==9.0.14
 pillow==11.3.0
