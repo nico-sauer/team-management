@@ -9,6 +9,7 @@ urlpatterns = [
     path("register/", views.register_user, name="register"),
     path("login_user/", views.login_user, name="login"),
     path("logout_user/", views.logout_user, name="logout"),
+    path("change_password/", views.change_password, name="change_password"),
 ]
 
 #add to settings.py:

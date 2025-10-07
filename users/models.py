@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import Group
 
 class Team(models.Model):
     team_name = models.CharField(max_length=250)
@@ -28,9 +29,9 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField("email address", unique=True)
     team_id = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
     
     
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
