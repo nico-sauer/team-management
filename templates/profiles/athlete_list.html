@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 style="text-align: center">Athlete Profiles</h1>
+    <div class="column" style="margin: auto">
+    {% for athlete in athletes %}
+        <div class="card" style="width: 350px; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+         <div class="card-body" style="width:350px; margin:auto;">
+            <div style="display: inline; ;">
+                
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png?20170328184010" style=width:100%>    
+            {% comment %} replace with {{ athlete.icon }} {% endcomment %}
+                <p><a href="details/{{ athlete.id }}">{{ athlete.first_name }} {{ athlete.last_name }}</a></p>
+                <p>Birthday: {{ athlete.birthday }}</p>
+                <p>Position: {{ athlete.position }}</p>
+                <p>Jersey Number: {{ athlete.number }}</p>
+    
+            </div> 
+            </div>
+        </div> 
+        {% endfor %}       
+    </div>
+{% endblock %}    

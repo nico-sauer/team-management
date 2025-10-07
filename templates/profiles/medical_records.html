@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+{% block title %}
+  {{ athlete.first_name }} {{ athlete.last_name }}
+{% endblock %}
+
+
+{% block content %}
+ <div class="card" style="width: 100%; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+    <div class="card-body" style="width:100%; margin:auto;">
+        <div style="display: inline; ;">
+            <h1>{{ athlete.first_name }} {{ athlete.last_name }}</h1>
+            <p>Birthday: {{ athlete.birthday }}</p>
+            <p>Height: {{ athlete.height}}</p>
+            <p>Weight: {{ athlete.weight}}</p>
+            <p>Bloodtype: {{ athlete.blood_type}}</p>
+            <p>Allergies: {{athlete.allergies}}</p
+            
+            <form action="" method="post" style="width: 100%">
+                    {% csrf_token %}
+                    {{ form.as_p}}
+                    <button type="submit">Save</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+  
+  {% comment %} <p>Phone: {{ athlete.phone }}</p> {% endcomment %}
+ 
+  
+  <p>Back to <a href="/profiles/members">Members</a></p>
+  
+{% endblock %}        
+
