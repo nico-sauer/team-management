@@ -14,6 +14,8 @@ class BookingForm(forms.ModelForm):
             "location",
             "status",
             "participants",
+            "recurrence",
+            "recurrence_end",
         ]
         widgets = {
             "start": forms.DateTimeInput(

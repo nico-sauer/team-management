@@ -150,9 +150,9 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"    # appointments_app
 CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 
 ''' this email section comment out if you don't to send emails in our app '''
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')

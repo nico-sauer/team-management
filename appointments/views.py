@@ -12,6 +12,9 @@ import calendar  # python standard calendar
 from .services.mailer import send_booking_invite
 from django.db.models import Q
 from appointments.filters import BookingFilter
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import make_aware, get_current_timezone, is_aware
+
 
 def create_booking(request):
     if request.method == "POST":
@@ -39,17 +42,17 @@ def create_booking(request):
                     request, "appointments/booking_create.html", {"form": form}
                 )
 
-            # if form is valid and no conflict found -> save booking, than save m2m relations and show success message
-            booking.save()  # save befor ManytoMany
-            form.save_m2m()  # save ManyToMany participants relation after the database has been saved
-
-            # send automtic e-mail with ics calendar file to each booking participant
+            """ if form is valid and no conflict found
+            1. save booking,
+            2. save m2m relations ("participants)
+            3. send e-mail ics.file to all participants
+            4. show success message"""
+            booking.save()
+            form.save_m2m()
             recipients = [
                 participant.email for participant in booking.participants.all()
             ]
             send_booking_invite(booking, recipients)
-
-            # send a success message about booking
             messages.success(request, "Booking was succesfull")
 
     else:
@@ -63,23 +66,70 @@ def booking_list(request):
     # all bookings where current-user has created or is participants
     current_user = request.user
     bookings = (
-        Booking.objects.filter(Q(booked_by=current_user) | Q(participants=current_user))
+        Booking.objects.filter(Q(booked_by=current_user) |
+                               Q(participants=current_user))
         .distinct()
         .order_by("-created_at")
     )
+
+    # use filter from queryset
     booking_filter = BookingFilter(request.GET, queryset=bookings)
-    
-    context = {
-        "bookings": booking_filter.qs,  # filtered querysets
-        "filter": booking_filter
-    }
-    
-    return render(request, "appointments/booking_list.html", context)   # check
+    bookings = booking_filter.qs
+
+    # define timeframe (e.g. next month)
+    today = date.today()
+    start_date = today - timedelta(days=7)
+    end_date = today + timedelta(days=30)
+
+    # list all bookings and recurrence bookings
+    expanded_bookings = []
+    tz = get_current_timezone()
+
+    for booking in bookings:
+        if booking.recurrence != "none":
+            occurrences = booking.get_occurrences(start_date, end_date)
+            for occ_start in occurrences:
+                duration = booking.end - booking.start
+                occ_end = occ_start + duration
+
+                # ensure aware
+                if not is_aware(occ_start):
+                    occ_start = make_aware(occ_start, tz)
+                if not is_aware(occ_end):
+                    occ_end = make_aware(occ_end, tz)
+
+                # save all references for expanded-bookings
+                expanded_bookings.append({
+                    "booking": booking,
+                    "occurrence": occ_start,
+                    "end_occurrence": occ_end
+                })
+        else:
+            start = booking.start
+            end = booking.end
+            if not is_aware(start):
+                start = make_aware(start, tz)
+            if not is_aware(end):
+                end = make_aware(end, tz)
+            expanded_bookings.append({
+                "booking": booking,
+                "occurrence": start,
+                "end_occurrence": end
+            })
+
+    # sort chronologically
+    expanded_bookings.sort(key=lambda x: x["occurrence"])
+
+    context = {"bookings": expanded_bookings,
+               "filter": booking_filter}
+
+    return render(request, "appointments/booking_list.html", context)
 
 
 @login_required
 def edit_booking(request, pk):
-    booking = Booking.objects.get(pk=pk)
+    booking = get_object_or_404(Booking, pk=pk, booked_by=request.user)
+
     if request.method == "POST":
         form = BookingForm(request.POST, instance=booking)
         if form.is_valid():
@@ -96,15 +146,23 @@ def delete_booking(request, pk):
     if request.method == "POST":
         booking.delete()
         return redirect("appointments:booking_list")
-    return render(request, "appointments/booking_delete.html", {"booking": booking})
+    return render(request,
+                  "appointments/booking_delete.html",
+                  {"booking": booking})
 
 
 # -- Calendar --
+
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
     model = Booking
     template_name = "appointments/calendar.html"
 
+    """create context-dict =
+                        {"object_list":"[]",
+                         "prev-month": "",
+                         "next-month":"",
+                         calendar:""} """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -113,8 +171,24 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         context["prev_month"] = prev_month(d)
         context["next_month"] = next_month(d)
 
-        # Instantiate our calendar class with today's year and date
-        cal = Calendar(d.year, d.month)
+        # timeframe: full month
+        first_day = d.replace(day=1)
+        last_day = first_day + timedelta(
+            days=calendar.monthrange(d.year, d.month)[1] - 1
+        )
+
+        # get all bookings
+        bookings = Booking.objects.all()
+
+        # list of occurences
+        expanded_events = []
+        for booking in bookings:
+            occurrences = booking.get_occurrences(first_day, last_day)
+            for occ in occurrences:
+                expanded_events.append((occ, booking))
+
+        # Instantiate our calendar class with today's year, date and occurences
+        cal = Calendar(d.year, d.month, events=expanded_events)
 
         # Call the formatmonth method, which returns our calendar as a table
         html_cal = cal.formatmonth(withyear=True)

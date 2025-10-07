@@ -41,22 +41,22 @@
         <tbody>
             {% for booking in bookings %}
             <tr>
-                <td>{{ booking.title }}</td>
-                <td>{{ booking.get_event_type_display }}</td>
-                <td>{{ booking.start }}</td>
-                <td>{{ booking.end }}</td>
-                <td>{{ booking.location }}</td>
-                <td>{{ booking.status }}</td>
+                <td>{{ booking.booking.title }}</td>
+                <td>{{ booking.booking.get_event_type_display }}</td>
+                <td>{{ booking.occurrence|date:"Y-m-d H:i" }}</td>
+                <td>{{ booking.end_occurrence|date:"Y-m-d H:i" }}</td>
+                <td>{{ booking.booking.location }}</td>
+                <td>{{ booking.booking.status }}</td>
                 <td>
-                    {% for participant in booking.participants.all %}
+                    {% for participant in booking.booking.participants.all %}
                         {{ participant }}{% if not forloop.last %}, {% endif %}
                     {% empty %}
                         -
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="{% url 'appointments:edit_booking' booking.pk %}">Edit</a> |
-                    <a href="{% url 'appointments:delete_booking' booking.pk %}">Delete</a>
+                    <a href="{% url 'appointments:edit_booking' booking.booking.pk %}">Edit</a> |
+                    <a href="{% url 'appointments:delete_booking' booking.booking.pk %}">Delete</a>
                 </td>
             </tr>
             {% empty %}

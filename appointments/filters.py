@@ -16,8 +16,6 @@ class BookingFilter(django_filters.FilterSet):
         )
     
     
-    
-
     class Meta:
         model = Booking
         fields = ["event_type", "status", "start"]
