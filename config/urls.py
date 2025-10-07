@@ -26,5 +26,5 @@ urlpatterns = [
     path('profiles/', include('profiles.urls')),
     path('appointments/', include('appointments.urls', namespace='appointments')), # HTML
     path('', HomePageView.as_view(), name='home'),
-    path('api/plans/', include('plans.urls', namespace='plans')),
+    path('plans/', include('plans.urls')),
 ]

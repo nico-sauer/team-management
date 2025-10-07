@@ -1,0 +1,124 @@
+{% extends "plans/layout.html" %}
+
+{% block body %}
+<br>
+<h1 style="color: black; size: 15pt; text-align: center;">Add Meal</h1>
+<br><br>
+
+
+<div style="max-width: 600px; margin: auto;">
+
+    {% comment %} {% if not user.is_authenticated %}
+
+    <div class="alert alert-primary" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 20px;">
+        Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in as chef</a> can create a meal plan.<br><br>
+        </p>
+    </div> {% endcomment %}
+
+
+    {% comment %} {% else %} {% endcomment %}
+
+    <form id="singlemealform" method="post" action="{% url 'addmeal' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="mealtitle" style="border: bold" font-weight: bold;">Name</label><br>
+            <input type="text" style="class="form-control" name="mealtitle" id="mealtitle" placeholder="">
+         </div>
+        <div class="form-group" style="text_align: center>
+            <div class="form-group">
+            <label for="dietreq" style="font-weight: bold;">Dietary Requirements</label><br>
+            <select>
+                <option value="14"></option>
+                <option value="1">Vegetarian</option>
+                <option value="2">Vegan</option>
+                <option value="3">Gluten-Free</option>
+                <option value="4">Pescatarian</option>
+                <option value="5">Dairy-Free</option>
+                <option value="6">Placeholder</option>
+                <option value="7">Placeholder</option> 
+            </select> 
+       
+        <br>
+
+                <label for="carbsgrams" style="font-weight: bold;">Carbs</label><br>
+                <input type="text" class="form-control" name="carbgrams" id="carbgrams" placeholder="grams" style="margin-auto: 50px; width: 100px;">
+            
+        
+                <label for="fatgrams" style="font-weight: bold;">Fat </label><br>
+                <input type="text" class="form-control" name="fatgrams" id="fatgrams" placeholder="grams"  style="margin-auto: 50px; width: 100px;">
+            
+        
+
+                <label for="proteingrams" style="font-weight: bold;">Protein</label><br>
+                <input type="text" class="form-control" name="proteingrams" id="proteingrams" placeholder="grams" style="margin-auto: 50px; width: 100px;">
+            
+        
+
+                <label for="calories" style="font-weight: bold;">Calories</label><br>
+                <input type="text" class="form-control" name="calories" id="calories" placeholder="cal" style="margin-auto: 50px; width: 100px;">
+            
+        
+
+        <br>
+        <button type="submit" class="btn btn-dark">Save Meal</button>
+        </div>
+
+
+    </form>
+    {% comment %} {% endif %} {% endcomment %}
+
+
+    <br><br><br>
+    <h3 style="color: black; size: 15pt; text-align: center;">My Meals</h3>
+    <br><br>
+
+    {% if all_meals %}
+
+        {% for meal in all_meals %}
+
+        <div class="card" style="width: 600px; margin-bottom: 20px; border-radius: 8px; border-color: grey; text-align: center;">
+            <div class="card-body" style="width: 600px;">
+                <div>
+                    <h5 class="card-title">{{meal.name}}</h5>
+                </div>
+
+                <div style="display: inline;">
+                    <span style="color: black; font-weight: bolder; margin-right: 5px;">{{meal.calories}} calories</span>
+                    <span>{{meal.totalcarb}}g Carbs -</span>
+                    <span>{{meal.totalfat}}g Fat - </span>
+                    <span>{{meal.totalprotein}}g Protein</span>
+                </div>
+
+                <div style="margin-top: 10px;">
+                <p class="card-text" >{{meal.ingredients}}</p>
+                </div>
+
+                <form method="post" action="{% url 'deletemeal' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.id}}">
+                    <button type="submit" class="btn btn-outline-danger" style="margin-top: 10px;">Delete Meal</button>
+                </form>
+            </div>
+        </div>
+
+        {% endfor %}
+    
+    {% else %}
+
+    <div class="card" style="width:  600px; margin-bottom: 20px; border-radius: 8px; border-color: grey;">
+        <div class="card-body">
+            <p class="card-text" style="font-size:large;">No saved meals.</p>
+        </div>
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+<br><br><br>
+
+
+{% endblock %}
