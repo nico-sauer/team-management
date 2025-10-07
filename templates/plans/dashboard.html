@@ -1,0 +1,851 @@
+{% comment %} {% extends "plans/layout.html" %} {% endcomment %}
+
+{% block body %}
+
+
+<html>
+<head>
+<meta name="viewport" content="width=100vw, initial-scale=1">
+<style>
+* {box-sizing: border-box}
+
+/* Set height of body and the document to 100% */
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: Arial;
+  
+}
+
+/* Style tab links */
+.tablink {
+  background-color: #555;
+  color: grey;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+  
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  color: black;
+  display: none;
+  padding: 100px 20px;
+  height: 100%;
+  margin: auto;
+  text_align: center;
+  
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Home {background-color: white;}
+#Calendar {background-color: white;}
+#Appointments {background-color: white;}
+#MealPlan {background-color: white;}
+#TrainingPlan {background-color: white;}
+</style>
+</head>
+<body style="width: 100%; overflow-x: scroll; color: black;">
+
+<div style="max-width: 100vw; margin: auto;">
+
+
+    <button class="tablink" style="width: 20%" onmouseover="openPage('Home', this, 'black')">Home</button>
+    <button class="tablink" style="width: 20%" onmouseover="openPage('Calendar', this, 'black')" id="defaultOpen">Calendar</button>
+    <button class="tablink" style="width: 20%" onmouseover="openPage('Appointments', this, 'black')">Appointments</button>
+    <button class="tablink" style="width: 20%" onmouseover="openPage('MealPlan', this, 'black')">MealPlan</button>
+    <button class="tablink" style="width: 20%" onmouseover="openPage('TrainingPlan', this, 'black')">TrainingPlan</button>
+
+    <div id="Home" class="tabcontent">
+    <h3>Home</h3>
+    <p>maybe day at a glance.</p>
+    </div>
+
+    <div id="Calendar" class="tabcontent">
+    <h3>Calendar</h3>
+    <p>Placeholder</p> 
+    </div>
+
+    <div id="Appointments" class="tabcontent">
+    <h3>Appointments</h3>
+    <p>Placeholder</p> 
+    </div>
+
+    <div id="MealPlan" class="tabcontent" style="text-align: center">
+    <h3>Meal Plan</h3>
+    <div style="max-width: 600px max-height: 100%; margin: auto;">
+
+        {% comment %} {% if not user.is_authenticated %}
+
+        <div class="alert alert-primary" role="alert" style="width: 600px;">
+            <p style="font-size: large; text-align: center; margin-top: 5px;">
+            Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in</a> can create a weekly plan.<br><br>
+            If you do not have an account, you can <a href="{% url 'register' %}">Create one here.</a>
+            </p>
+        </div> {% endcomment %}
+
+        {% comment %} {% else %} {% endcomment %}
+
+        {% if not all_meals %}
+        
+        <div class="alert alert-primary" role="alert" style="width: 600px;">
+            <p style="font-size: large; text-align: center; margin-top: 2px;">
+            Currently no saved meals <br><br>
+            <a href="{% url 'addmeal' %}" class="alert-link">Add meals</a><br><br>
+            </p>
+        </div>
+
+        {% else %}
+    
+
+        
+
+        {% comment %} {% endif %} {% endcomment %}
+        </div>
+        <br><br>
+        <h1 style="color: gray; size: 15pt; text-align: center;">Meal Plan</h1>
+        <br>
+
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Monday Breakfast</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "monday_breakfast" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7> 
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Monday Lunch</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "monday_lunch" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Monday Dinner</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "monday_dinner" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Monday Snacks</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "monday_snacks" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Tuesday Breakfast</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "tuesday_breakfast" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Tuesday Lunch</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "tuesday_lunch" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Tuesday Dinner</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "tuesday_dinner" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Tuesday Snacks</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "tuesday_snacks" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Wednesday Breakfast</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "wednesday_breakfast" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Wednesday Lunch</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "wednesday_lunch" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Wednesday Dinner</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "wednesday_dinner" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Wednesday Snacks</h7>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "wednesday_snack" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Thursday Breakfast</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "thursday_breakfast" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Thursday Lunch</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "thursday_lunch" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Thursday Dinner</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "thursday_dinner" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Thursday Snacks</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "thursday_snacks" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Friday Breakfast</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "friday_breakfast" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Friday Lunch</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "friday_lunch" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Friday Dinner</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "friday_dinner" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Friday Snacks</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "friday_snacks" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Saturday Breakfast</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "saturday_breakfast" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Saturday Lunch</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "saturday_lunch" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Saturday Dinner</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "saturday_dinner" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Saturday Snacks</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "saturday_snacks" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+    <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Sunday Breakfast</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "sunday_breakfast" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Sunday Lunch</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "sunday_lunch" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Sunday Dinner</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "sunday_dinner" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Sunday Snacks</h6>
+                <div style="display: inline;">
+                    {% for meal in weekly_meals %}
+                    {% if meal.day == "sunday_snacks" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+    
+       
+
+        <br><br>
+        <h1 style="color: gray; size: 15pt; text-align: center;">Macros</h1>
+        <h7 style="color: gray; text-align: center;">Daily Average</h7>
+        <br><br>
+
+        <div style="text-align: center;">
+            <h5 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Calories</h5>
+            <h2 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_calories}}</h2>
+        </div>
+        <br><br><br>
+
+        <div style="text-align: center;">
+            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h7>
+            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_fat}} g</h4>
+        </div>
+        <br><br>
+
+        <div style="text-align: center;">
+            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Carbs</h7>
+            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_carb}} g</h4>
+        </div>
+        <br><br>
+
+        <div style="text-align: center;">
+            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h7>
+            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_protein}} g</h4>
+        </div>
+        <br><br><br>
+
+
+        <h3 style="color: gray; size: 15pt; text-align: center;">Percentage of calories by macros</h3>
+        <br>
+
+        <div style="width: 450px; margin: auto;">
+            <canvas id="myChart"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+            <script>
+                const labels = [
+                'Fat',
+                'Carbs',
+                'Protein',
+                ];
+            
+                const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'My First dataset',
+                    backgroundColor: [
+                        'Orange',
+                        'LimeGreen',
+                        'LightBlue'
+                        ],
+                    borderColor: 'grey',
+                    data: ["{{percentage.fat}}", "{{percentage.carb}}", "{{percentage.protein}}"],
+                }]
+                };
+            
+                const config = {
+                type: 'doughnut',
+                data: data,
+                options: {}
+                };
+            </script>
+
+
+            <script>
+                const calchart = new Chart(
+                document.getElementById('myChart'),
+                config
+                );
+            </script>
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+    
+
+    <div id="TrainingPlan" class="tabcontent">
+    <h3>Training Schedule</h3>
+      {% comment %} {% if not user.is_authenticated %}
+
+        <div class="alert alert-primary" role="alert" style="width: 600px;">
+            <p style="font-size: large; text-align: center; margin-top: 5px;">
+            Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in</a> can create a weekly plan.<br><br>
+            If you do not have an account, you can <a href="{% url 'register' %}">Create one here.</a>
+            </p>
+        </div>
+
+        {% else %} {% endcomment %}
+
+        {% if not all_meals %}
+        
+        <div class="alert alert-primary" role="alert" style="width: 600px;">
+            <p style="font-size: large; text-align: center; margin-top: 5px;">
+            Currently no saved meals <br><br>
+            <a href="{% url 'addmeal' %}" class="alert-link">Add meals</a><br><br>
+            </p>
+        </div>
+
+        {% comment %} {% else %}
+     {% endcomment %}
+
+        
+
+        {% comment %} {% endif %} {% endcomment %}
+        
+
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Monday Morning</h7>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "monday_morning" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7> 
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Monday Afternoon</h7>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "monday_afternon" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h7 class="card-title">Tuesday Morning</h7>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "tuesday_morning" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h7 class="card-title">Tuesday Afternoon</h7>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "tuesday_afternoon" %}
+                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Wednesday Morning</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "wednesday_morning" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Wednesday Afternoon</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "wednesday_afternoon" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Thursday Morning</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "thursday_morning" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Thursday Afternoon</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "thursday_afternoon" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Friday Morning</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "friday_morning" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Friday Afternoon</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "friday_afternoon" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="row"> 
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width:25%;">
+                    <h6 class="card-title">Saturday Morning</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "saturday_morning" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+            <div class="card-body" style="width: 25%;">
+                    <h6 class="card-title">Saturday Afternoon</h6>
+                <div style="display: inline;">
+                    {% for session in weekly_sessions %}
+                    {% if session.day == "saturday_afternoon" %}
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                        <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="row"> 
+            <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+                <div class="card-body" style="width:25%;">
+                        <h6 class="card-title">Sunday Morning</h6>
+                    <div style="display: inline;">
+                        {% for session in weekly_sessions %}
+                        {% if session.day == "sunday_morning" %}
+                        <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                            <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: 25%; margin: 20px; border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+                <div class="card-body" style="width: 25%;">
+                        <h6 class="card-title">Sunday Afternoon</h6>
+                    <div style="display: inline;">
+                        {% for session in weekly_sessions %}
+                        {% if session.day == "sunday_lunch" %}
+                        <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
+                            <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            {% endif %}
+
+    </div>   
+    
+
+    <script>
+    function openPage(pageName,elmnt,color) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].style.backgroundColor = "";
+    }
+    document.getElementById(pageName).style.display = "block";
+    elmnt.style.backgroundColor = color;
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+    </script>
+    
+    </body>
+    </html> 
+    <div style="max-width: 100%; margin: auto;">
+  {% endblock %}
+  
