@@ -1,12 +1,13 @@
 asgiref==3.9.1
 crispy-bootstrap5==2025.6
 distlib==0.4.0
+dj-database-url==3.0.1
 Django==5.2.7
 django-auth==0.1.9
 django-autoslug==1.9.9
 django-birthday==0.1.4
-django-extensions==4.1
 django-crispy-forms==2.4
+django-extensions==4.1
 django-filter==25.1
 django-parler==2.3
 django-phonenumber-field==8.1.0
