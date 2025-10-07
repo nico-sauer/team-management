@@ -3,7 +3,7 @@ import datetime
 from uuid import uuid4
 
 from autoslug import AutoSlugField
-from users.models import CustomUser # imported Custom user 
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -68,7 +68,7 @@ class StaffProfile(models.Model):
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True) #was commented and changed to custom user(null=True before migration)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
     appointment = models.CharField(null=True) #placeholder
@@ -89,7 +89,6 @@ class StaffProfile(models.Model):
     
     
   
-    # in every class should be just one def__str__
     
 class AthleteProfile(models.Model):
     
@@ -105,7 +104,7 @@ class AthleteProfile(models.Model):
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     #user = models.OneToOneField(User, on_delete=models.CASCADE)
-    number = models.PositiveIntegerField(blank=True) #unless we use their jersey number as id for easier searching
+    number = models.PositiveIntegerField(default=0) #unless we use their jersey number as id for easier searching
     position = models.CharField(null=True)
     
     #medical profile info:
