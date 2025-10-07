@@ -2,6 +2,7 @@ from django.urls import path
 from .views import TrainingPlanListCreateView, NutritionPlanListCreateView, MedicalPlanListCreateView
 from .views import UniversalPlanCreateView
 
+app_name = 'plans'
 
 # API endpoints for creating and listing plans
 urlpatterns = [

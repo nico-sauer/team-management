@@ -2,7 +2,7 @@ import datetime
 from uuid import uuid4
 
 from autoslug import AutoSlugField
-from django.contrib.auth.models import User
+from users.models import CustomUser # imported Custom user 
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -41,7 +41,7 @@ class StaffProfile(models.Model):
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True) #was commented and changed to custom user(null=True before migration)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
     appointment = models.CharField(null=True) #placeholder
@@ -60,6 +60,7 @@ class StaffProfile(models.Model):
     def get_phone_number(self):
         return f"{self.phone_number}"
     
+    # in every class should be just one def__str__
     
 class AthleteProfile(models.Model):
     
@@ -72,7 +73,7 @@ class AthleteProfile(models.Model):
 
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True) #был комент
     number = models.PositiveIntegerField(blank=True) #unless we use their jersey number as id for easier searching
     position = models.CharField(null=True)
     height = models.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)

@@ -1,36 +1,85 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Welcome, {{ request.user.email }}!</h2>
-    {% if request.user.role == 'athlete' %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Your team: {{ request.user.team_id.team_name }}</h5>
-                <a href="/plans/" class="btn btn-primary me-2">My Plans</a>
-                <a href="/appointments/" class="btn btn-success">My Appointments</a>
+<style>
+.hero-section {
+    background: url("{% static 'img/main_baner.png' %}") center center/cover no-repeat;
+    min-height: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.hero-overlay {
+    background: rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-align: left;
+    max-width: 600px;
+    margin-left: 60px;
+}
+</style>
+<div class="hero-section mb-5">
+    <div class="hero-overlay"></div>
+    <div class="hero-content py-5">
+        <h1 class="display-2 fw-bold mb-3">Your Team. Your System. One Platform. </h1>
+        {% if request.user.is_authenticated and profile %}
+            {% if profile.role == "Manager" %}
+                <div class="alert alert-info">Welcome, Manager!</div>
+                <a href="{% url 'users:register' %}" class="btn btn-success">Register Team Member</a>
+                <!-- Менеджерские фичи -->
+            {% elif profile.role == "Trainer" %}
+                <div class="alert alert-info">Welcome, Trainer!</div>
+                <!-- Фичи для тренера -->
+            {% elif profile.role == "Dietician" %}
+                <div class="alert alert-info">Welcome, Dietician!</div>
+                <!-- Фичи для диетолога -->
+            {% else %}
+                <div class="alert alert-info">Welcome to Team Management!</div>
+                <!-- Фичи для других ролей -->
+            {% endif %}
+        {% else %}
+            <!-- Контент для гостей -->
+            <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg">Get Started</a>
+        {% endif %}
+    </div>
+</div>
+
+{% if request.user.is_authenticated %}
+    <div class="container my-5">
+        <h2 class="text-center fw-bold mb-5">Features</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Workout Plans</h5>
+                        <p class="card-text">Track your workouts and progress with personalized plans.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% elif request.user.role == 'coach' %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Team: {{ request.user.team_id.team_name }}</h5>
-                <a href="/api/plans/" class="btn btn-primary me-2">Manage Team Plans</a>
-                <a href="/users/" class="btn btn-info">Team Members</a>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Appointments</h5>
+                        <p class="card-text">Manage meetings and training sessions easily.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% elif request.user.is_superuser %}
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <a href="/admin/" class="btn btn-dark w-100 mb-2">Admin Panel</a>
-                        <a href="/users/" class="btn btn-info w-100 mb-2">All Users</a>
-                        <a href="/teams/" class="btn btn-primary w-100">All Teams</a>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Meal Plan</h5>
+                        <p class="card-text">Cech your meal.</p>
                     </div>
                 </div>
             </div>
         </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
 {% endblock %}
