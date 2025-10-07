@@ -36,7 +36,7 @@ def register_user(request):
     else:
         form = CustomUserCreationForm()
         
-    return render(request, 'users/register.html', {'form':form})
+    return render(request, 'registration/register.html', {'form':form})
         
         
 def login_user(request):
@@ -51,18 +51,19 @@ def login_user(request):
             login(request, user)
             return redirect("/")#after login return to Home page
         else:
-            messages.success(request, "There was an error. Try to log in again")
-            return redirect('/')
+            messages.error(request, "There was an error. Try to log in again")
+            return render(request, 'registration/login.html') #changed redirection
     else: 
-         return render(request,'login.html') #add the template to login and render 
+         return render(request, 'registration/login.html') 
     
         
 def logout_user(request):
     # if request.method == "POST":
     logout(request)
     messages.success(request, "You were logged out.")
-    return redirect("/")
+    return render(request, "registration/logged_out.html") #redirect("/") I've created separete html page for logged out user
         
+<<<<<<< HEAD
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -81,3 +82,8 @@ def change_password(request):
     })
         
         
+=======
+def change_password():
+    pass
+
+>>>>>>> 9e93ad4d3fbd8a69c4a4069692c7c08c22147c01
