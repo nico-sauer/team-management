@@ -41,7 +41,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import *
-#from users.models import User
+from users.models import CustomUser
 
 def index(request):
 
@@ -92,7 +92,7 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = CustomUser.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
             return render(request, "plans/register.html", {

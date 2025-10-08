@@ -9,6 +9,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs) 
         profile = None
         user = self.request.user
+        print(user)
         if user.is_authenticated:
             try:
                 profile = StaffProfile.objects.get(user=user)

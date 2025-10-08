@@ -1,7 +1,7 @@
 
 import datetime
 from uuid import uuid4
-
+from users.models import CustomUser
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
@@ -67,11 +67,9 @@ class StaffProfile(models.Model):
 
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
-    appointment = models.CharField(null=True) #placeholder
     
     def __str__(self):
         full_name = self.get_full_name()
@@ -103,7 +101,7 @@ class AthleteProfile(models.Model):
 
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     number = models.PositiveIntegerField(default=0) #unless we use their jersey number as id for easier searching
     position = models.CharField(null=True)
     
@@ -171,8 +169,8 @@ class AthleteProfile(models.Model):
     #     for i in MedicalRecordsData.medical_records():
     #         return list(MedicalRecords))
 
-class MedicalRecords(AthleteProfile):
-    pass
+# class MedicalRecords(AthleteProfile):
+#     pass
     #athlete = models.ForeignKey(AthleteProfile, related_name='medical_records', on_delete=models.CASCADE, blank=True)#TextField(blank=True)#ManyToManyField("self", symmetrical=False) # through="AthleteProfile", through_fields=("medical_records"))#.ForeignKey(AthleteProfile, on_delete=models.CASCADE, related_name="medical_records")
     # prescriptions = models.TextField(blank=True)
     # treatment_details = models.TextField(blank=True)
