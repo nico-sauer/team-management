@@ -1,19 +1,36 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, FirstCustomUserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import CustomUser, Team
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
-# CustomUser = get_user_model()
+
+#add email after user registration
+#check how to move group/team/role from the customuser. first user(group=managers, role=manager)
+#added user (team = manager's team)
 
 
 
-def first_registration_request(request):
-    pass
+def first_registration(request):
+
+    if request.method == 'POST':
+        form = FirstCustomUserCreationForm(request.POST)
+            
+        if form.is_valid():
+    
+            form.save()
+            #send a confirmation email
+            messages.success(request, "Registration successful!")
+            return redirect("home")
+            
+    else:
+        form = FirstCustomUserCreationForm()
+        
+    return render(request, 'registration/register.html', {'form':form})
 
 
 
@@ -29,7 +46,13 @@ def register_user(request):
         form = CustomUserCreationForm(request.POST)
             
         if form.is_valid():
+                 
+            # current_user = request.user #give the info of the logged in user
+            # current_user_id = current_user.id #give the id of the logged in user
+            # manager_team= current_user.team
+        
             form.save()
+            #send a confirmation email
             messages.success(request, "Registration successful!")
             return redirect("home")
             
@@ -51,19 +74,18 @@ def login_user(request):
             login(request, user)
             return redirect("/")#after login return to Home page
         else:
-            messages.error(request, "There was an error. Try to log in again")
-            return render(request, 'registration/login.html') #changed redirection
+            messages.success(request, "There was an error. Try to log in again")
+            return redirect('/')
     else: 
-         return render(request, 'registration/login.html') 
+         return render(request,'registration/login.html') #add the template to login and render 
     
         
 def logout_user(request):
     # if request.method == "POST":
     logout(request)
     messages.success(request, "You were logged out.")
-    return render(request, "registration/logged_out.html") #redirect("/") I've created separete html page for logged out user
+    return redirect("/")
         
-<<<<<<< HEAD
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -77,13 +99,8 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'users/change_password.html', {
+    return render(request, 'registration/change_password.html', {
         'form': form
     })
         
         
-=======
-def change_password():
-    pass
-
->>>>>>> 9e93ad4d3fbd8a69c4a4069692c7c08c22147c01
