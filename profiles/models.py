@@ -1,12 +1,17 @@
+
 import datetime
 from uuid import uuid4
 
 from autoslug import AutoSlugField
-from users.models import CustomUser # imported Custom user 
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+#from model_utils.managers import InheritanceManager, QueryManager
 from phonenumber_field.modelfields import PhoneNumberField
+
+#from django import forms
+
 
 #from users.models import [user models]
 
@@ -28,6 +33,28 @@ TITLE = (
     ("Dr.", "Dr."),
     ("PhD", "PhD",)
 )
+
+
+BLOOD_TYPES = ( 
+            ("", "Select Blood Group"),
+            ("A+", "A+"),
+            ("A-", "A-"),
+            ("B+", "B+"),
+            ("B-", "B-"),
+            ("O+", "O+"),
+            ("O-", "O-"),
+            ("AB+", "AB+"),
+            ("AB-", "AB-"),
+)
+
+GENDER = ( 
+            ("", "Select Gender"),
+            ("Female", "Female"),
+            ("Male", "Male"),
+            ("Other", "Other"),
+)
+    
+    
 class StaffProfile(models.Model):
    
     #id = models.UUIDField(primary_key=True, default=uuid4)
@@ -41,7 +68,7 @@ class StaffProfile(models.Model):
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True) #was commented and changed to custom user(null=True before migration)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
     appointment = models.CharField(null=True) #placeholder
@@ -60,9 +87,12 @@ class StaffProfile(models.Model):
     def get_phone_number(self):
         return f"{self.phone_number}"
     
-    # in every class should be just one def__str__
+    
+  
     
 class AthleteProfile(models.Model):
+    
+    #basic profile info:
     
     #id = models.UUIDField(primary_key=True, default=uuid4)
     icon = models.ImageField#(default='default.jpg', upload_to='profile_images')
@@ -73,23 +103,39 @@ class AthleteProfile(models.Model):
 
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True) #был комент
-    number = models.PositiveIntegerField(blank=True) #unless we use their jersey number as id for easier searching
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    number = models.PositiveIntegerField(default=0) #unless we use their jersey number as id for easier searching
     position = models.CharField(null=True)
+    
+    #medical profile info:
+    gender = models.CharField(choices = GENDER, blank=True)
     height = models.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
     weight = models.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True) 
+    blood_type = models.CharField(choices = BLOOD_TYPES, blank=True)
+    allergies = models.TextField(blank=True, null=True)
+
+    prescriptions = models.TextField(blank=True)
+    treatment_details = models.TextField(blank=True)
+    
+    diagnoses = models.TextField(blank=True, null=True)
+    medical_history = models.TextField(blank=True, null=True)
+    additional_notes = models.TextField(blank=True, null=True)
+   
+    last_updated = models.DateField(null=True, blank=True)
     
     
-    #nutrition data placeholders etc this can/will be refinded at a later stage with keys etc once we know relations
-    #e.g. foreign key fields for plans/records that link to them elsewhere if too long to be reasonable all in one page?
+    #nutrition profile info:
     calories = models.CharField(null=True)
     protein = models.CharField(null=True)
     carbs = models.CharField(null=True)
     fat = models.CharField(null=True)
+    dietary_restrictions = models.TextField(null=True)
+    
     meal_plan = models.TextField(null=True)
     training_plan = models.TextField(null=True)
-    medical_records = models.TextField(null=True)
-
+    
+    #medical_records = QueryManager()
+    
     def __str__(self):
         full_name = self.get_full_name()
         return full_name
@@ -120,5 +166,36 @@ class AthleteProfile(models.Model):
         if self.birthday != None:
             age = datetime.date.today()-self.birthday
             return int((age).days/365.25)
+        
+    # def get_records(self):
+    #     for i in MedicalRecordsData.medical_records():
+    #         return list(MedicalRecords))
 
-
+class MedicalRecords(AthleteProfile):
+    pass
+    #athlete = models.ForeignKey(AthleteProfile, related_name='medical_records', on_delete=models.CASCADE, blank=True)#TextField(blank=True)#ManyToManyField("self", symmetrical=False) # through="AthleteProfile", through_fields=("medical_records"))#.ForeignKey(AthleteProfile, on_delete=models.CASCADE, related_name="medical_records")
+    # prescriptions = models.TextField(blank=True)
+    # treatment_details = models.TextField(blank=True)
+    # last_updated = models.DateField(null=True, blank=True)
+    # allergies = models.TextField(blank=True, null=True)
+    # diagnoses = models.TextField(blank=True, null=True)
+    #past_records = models.ForeignKey("MedicalRecordsArchive", related_name='medical_records', on_delete=models.CASCADE)
+    #slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
+    # class Meta:
+    #     ordering = ["-last_updated"]
+    
+    # def __str__(self):
+    #     return f"{self.athlete}"
+    # def __str__(self):
+    #     medical_records = self.get_records()
+    #     return medical_records
+    
+    # def get_records(self):
+        
+    #     records = {AthleteProfile: record for record in instance}
+    #     return list(records)
+   
+#     class MedicalRecordsArchive(models.Model):
+#         pass
+# #       medical_records = models.ForeignKey(MedicalRecordsArchive, related_name='medical_records', on_delete=models.CASCADE)
+    

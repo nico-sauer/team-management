@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 style="text-align: center">Staff Profiles</h1>
+    <div class="column" style="margin: auto">
+    {% for staff_member in staff %}
+        <div class="card" style="width: 350px; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+         <div class="card-body" style="width:350px; margin:auto;">
+            <div style="display: inline;">
+                
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png?20170328184010" style=width:100%>    
+            {% comment %} replace with {{ staff_member.icon }} {% endcomment %}
+                <p><a href="details/{{ staff_member.id }}">  {{ staff_member.title }} {{ staff_member.first_name }} {{ staff_member.last_name }}</a></p>
+                <p>{{ staff_member.role }}</p>
+                <p>Email: {{ staff_member.email }}</p>
+                <p>Phone: {{ staff_member.phone_number }}</p>
+                <a href="appointments/"><button>Appointment</button></a> <! -- link to appointment booking -->
+                
+                
+    
+            </div> 
+            </div>
+        </div> 
+        {% endfor %}       
+    </div>
+{% endblock %}    

@@ -45,14 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'phonenumber_field',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'plans',
     'config',
     'users',
     'profiles',
     'appointments',
     'core',
-    
-    
 ]
 
 MIDDLEWARE = [
@@ -70,7 +70,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR /"templates"],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,7 +133,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
-
+USE_L10N = True     # software localisation shows dates in local formatting
 USE_TZ = True
 
 
@@ -152,11 +152,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
 
 LOGIN_URL = '/users/login_user/'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"    # appointments_app
+CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 
 ''' this email section comment out if you don't to send emails in our app '''
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
-# #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "appointments" / "sent_emails"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # EMAIL_HOST = os.getenv('EMAIL_HOST')

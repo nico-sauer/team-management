@@ -1,8 +1,22 @@
 from rest_framework import serializers
 
-from .models import AthleteProfile, StaffProfile
+from .models import AthleteProfile, MedicalRecords, StaffProfile
+
+#from plans.models import MedicalRecords
 
 
+# class MedicalRecordsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MedicalRecords
+#         fields = "__all__"
+        #exclude = ["id", "athlete"]
+    
+    # def get_records(self, instance):
+    #     try:
+    #         medical_records = {record.id:record for record in instance}
+    #         return list(medical_records)
+    #     except AssertionError:
+    #       return f"No records."
 # general profile serializers -> basically what the athletes mostly see of other profiles
 class StaffProfileSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -39,7 +53,7 @@ class AthleteProfileSerializer(serializers.HyperlinkedModelSerializer):
     age = serializers.ReadOnlyField(source="get_age")
     number = serializers.ReadOnlyField()
     position = serializers.ReadOnlyField()
-
+    
     class Meta:
         model = AthleteProfile
         fields = [
@@ -51,7 +65,7 @@ class AthleteProfileSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "phone_number",
             "number",
-            "position"
+            "position",
             
         ]
        
@@ -78,7 +92,7 @@ class ManagerAccessStaffSerializer(serializers.HyperlinkedModelSerializer):
         ]
       
 
-class ManagerAccessAthleteSerializer(serializers.HyperlinkedModelSerializer):
+class ManagerAccessAthleteSerializer(serializers.ModelSerializer):
 
     full_name = serializers.ReadOnlyField(source="get_full_name")
     height = serializers.ReadOnlyField()
@@ -108,21 +122,35 @@ class ManagerAccessAthleteSerializer(serializers.HyperlinkedModelSerializer):
             "nutri_plan",
             "meal_plan",
         ]
-       
+
+# class MedicalRecordsDataSerializer(serializers.HyperlinkedModelSerializer):
+#     medical_records = serializers.ReadOnlyField()   
+#     class Meta:
+#         model = MedicalRecordsData
+#         fields = ["medical_records"]
         
-class MedicalStaffAccessSerializer(serializers.HyperlinkedModelSerializer):
+#     records_list = []
+#     for i, records in enumerate(medical_records.objects.all()):
+#         records.medical_records = name_list[i]
+#         records_list.append(records)
+
+# MedicalRecordsDataSerializer(obj_list, many=True).data
+        
+class MedicalRecordsSerializer(serializers.ModelSerializer):
     
-    id = serializers.ReadOnlyField()
+    # id = serializers.ReadOnlyField()
     full_name = serializers.ReadOnlyField(source="get_full_name")
     email = serializers.ReadOnlyField()
     phone_number = serializers.ReadOnlyField(source="get_phone_number")
-    birthday = serializers.ReadOnlyField()
+    # birthday = serializers.ReadOnlyField()
     age = serializers.ReadOnlyField(source="get_age")
-    number = serializers.ReadOnlyField()
-    position = serializers.ReadOnlyField()
-    training_plan = serializers.ReadOnlyField()
-    meal_plan = serializers.ReadOnlyField()
+    # number = serializers.ReadOnlyField()
+    # position = serializers.ReadOnlyField()
+    # training_plan = serializers.ReadOnlyField()
+    # meal_plan = serializers.ReadOnlyField()
     nutri_plan = serializers.ReadOnlyField(source="get_nutri_plan")
+    #last_updated =serializers.ReadOnlyField()
+    #medical_records = serializers.ReadOnlyField()
 
 
     class Meta:
@@ -135,6 +163,7 @@ class MedicalStaffAccessSerializer(serializers.HyperlinkedModelSerializer):
             # "last_name",
             "birthday",
             "age",
+            "gender",
             "email",
             "phone_number",
             "number",
@@ -144,7 +173,16 @@ class MedicalStaffAccessSerializer(serializers.HyperlinkedModelSerializer):
             "nutri_plan",
             "training_plan",
             "meal_plan",
-            "medical_records",
+           # "medical_records",
+            "blood_type",
+            "allergies",
+            #"dietary_restrictions",
+            "prescriptions",
+            "treatment_details",
+            "diagnoses",
+            #"medical_history",
+            "additional_notes",
+            "last_updated",
         ]
             
 class TrainerAccessSerializer(serializers.HyperlinkedModelSerializer):
@@ -211,6 +249,7 @@ class DieticianAccessSerializer(serializers.HyperlinkedModelSerializer):
             "protein",
             "carbs",
             "fat",
+            "dietary_restrictions",
             "meal_plan",
             "training_plan"
         ]
@@ -222,7 +261,7 @@ class ChefAccessSerializer(serializers.HyperlinkedModelSerializer):
     number = serializers.ReadOnlyField()
     nutri_plan = serializers.ReadOnlyField(source="get_nutri_plan")
     birthday = serializers.ReadOnlyField()
-    position = serializers.ReadOnlyField()
+    dietary_restrictions  = serializers.ReadOnlyField()
     
 
     class Meta:
@@ -234,6 +273,7 @@ class ChefAccessSerializer(serializers.HyperlinkedModelSerializer):
             "birthday",
             "number",
             "position",
+            "dietary_restrictions",
             "nutri_plan",
             "meal_plan"  
         ]

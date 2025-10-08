@@ -1,12 +1,29 @@
 
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 
 {% block title %}Booking Overview {% endblock %}
 
 {% block content %}
   <br>
     <h2>{{request.user.first_name}}'s appointments</h2>
+    <br>
+    <!--Filter form-->
+    <form method="GET" class="form-inline">
+        <div class="row d-flex align-items-center">
+            {% for field in filter.form %}
+            <div class="form-group col-md-3">
+                {{ field|as_crispy_field }}
+            </div>
+            {% endfor %}
+            <div class="col-md-3">
+                <button class="btn btn-outline-success"
+                    type="submit">FILTER</button>
+                <a href="{% url 'appointments:booking_list' %}"
+                    class="btn btn-outline-danger">RESET</a>  
+            </div>
+        </div>
+    </form> 
 
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
@@ -24,22 +41,22 @@
         <tbody>
             {% for booking in bookings %}
             <tr>
-                <td>{{ booking.title }}</td>
-                <td>{{ booking.get_event_type_display }}</td>
-                <td>{{ booking.start }}</td>
-                <td>{{ booking.end }}</td>
-                <td>{{ booking.location }}</td>
-                <td>{{ booking.status }}</td>
+                <td>{{ booking.booking.title }}</td>
+                <td>{{ booking.booking.get_event_type_display }}</td>
+                <td>{{ booking.occurrence|date:"Y-m-d H:i" }}</td>
+                <td>{{ booking.end_occurrence|date:"Y-m-d H:i" }}</td>
+                <td>{{ booking.booking.location }}</td>
+                <td>{{ booking.booking.status }}</td>
                 <td>
-                    {% for participant in booking.participants.all %}
+                    {% for participant in booking.booking.participants.all %}
                         {{ participant }}{% if not forloop.last %}, {% endif %}
                     {% empty %}
                         -
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="{% url 'appointments:edit_booking' booking.pk %}">Edit</a> |
-                    <a href="{% url 'appointments:delete_booking' booking.pk %}">Delete</a>
+                    <a href="{% url 'appointments:edit_booking' booking.booking.pk %}">Edit</a> |
+                    <a href="{% url 'appointments:delete_booking' booking.booking.pk %}">Delete</a>
                 </td>
             </tr>
             {% empty %}
