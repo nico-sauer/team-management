@@ -1151,11 +1151,11 @@ for (i = 0; i < coll.length; i++) {
     <br><br><br>
 
 
-    <h3 style="color: gray; size: 15pt; text-align: center;">Percentage of calories by macros</h3>
+    <h3 style="color: gray; size: 15pt; text-align: center;">Macro Distribution</h3>
     <br>
 
     <div style="width: 300px; margin: auto;">
-        <canvas id="myChart"></canvas>
+        <canvas id="MacroChart"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
@@ -1169,11 +1169,11 @@ for (i = 0; i < coll.length; i++) {
             const data = {
               labels: labels,
               datasets: [{
-                label: 'My First dataset',
+                label: 'data',
                 backgroundColor: [
-                    'Orange',
-                    'LimeGreen',
-                    'LightBlue'
+                    '#f024b6',
+                    '#d0ed48',
+                    '#1b96b5'
                     ],
                 borderColor: 'white',
                 data: ["{{percentage.fat}}", "{{percentage.carb}}", "{{percentage.protein}}"],
@@ -1189,8 +1189,8 @@ for (i = 0; i < coll.length; i++) {
 
 
           <script>
-            const myChart = new Chart(
-              document.getElementById('myChart'),
+            const MacroChart = new Chart(
+              document.getElementById('MacroChart'),
               config
             );
           </script>

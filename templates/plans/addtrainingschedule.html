@@ -22,7 +22,7 @@
     <div class="content">
     <div class="alert alert-info" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">
-        Currently no saved meals <br><br>
+        Currently no saved sessions. <br><br>
         <a href="{% url 'addsession' %}" class="alert-link">Add session</a><br><br>
         </p>
     </div>
@@ -206,20 +206,22 @@ for (i = 0; i < coll.length; i++) {
     </div>
 
     <br><br>
-    <h1 style="color: gray; size: 15pt; text-align: center;">Meal Plan</h1>
+    <h1 style="color: gray; size: 15pt; text-align: center;">Schedule</h1>
     <br>
 
     <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday</h6>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "monday" %}
-                <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h6 style="color: darkgray; font-weight: bolder;;">{{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="monday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -229,16 +231,16 @@ for (i = 0; i < coll.length; i++) {
             </div>
         </div>
     </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Tuesday</h6>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "tuesday" %}
-                <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="tuesday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -249,16 +251,16 @@ for (i = 0; i < coll.length; i++) {
         </div>
    
     </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Wednesday</h6>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "wednesday" %}
-                <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="wednesday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -268,16 +270,16 @@ for (i = 0; i < coll.length; i++) {
             </div>
         </div>
     </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday</h6>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "thursday" %}
-                <h6 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h6>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="thursday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -289,16 +291,16 @@ for (i = 0; i < coll.length; i++) {
     </div>
     </div>
     <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h7 class="card-title">Friday</h7>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "friday" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="friday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -308,16 +310,16 @@ for (i = 0; i < coll.length; i++) {
             </div>
         </div>
     </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h7 class="card-title">Saturday</h7>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "saturday" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="saturday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
@@ -328,16 +330,16 @@ for (i = 0; i < coll.length; i++) {
         </div>
    
     </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h7 class="card-title">Sunday</h7>
             <div style="display: inline;">
-                {% for session in weekly_meals %}
+                {% for session in weekly_sessions %}
                 {% if session.day == "sunday" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{session.session.name}}</h7>
-                    <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="sunday">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>

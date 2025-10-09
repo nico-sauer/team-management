@@ -232,7 +232,7 @@ def mealplan(request):
             "percentage": percentage
         }
 
-        return render(request, "plans/dashboard.html", context)
+        return render(request, "plans/mealplan.html", context)
     
 def deletefromplan(request):
 
@@ -492,8 +492,8 @@ def deletefromschedule(request):
 
     context = {
         "all_sessions": all_sessions,
-        "monday_meals": all_sessions,
+        "monday_sessions": all_sessions,
         "weekly_sessions": weekly_sessions,
     }
 
-    return render(request, "plans/trainingplan.html", context)
+    return render(request, "plans/addtrainingschedule.html", context)
