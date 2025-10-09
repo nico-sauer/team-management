@@ -8,16 +8,14 @@
 
 <div style="max-width: 600px; margin: auto;">
 
-    {% comment %} {% if not user.is_authenticated %}
+    {% if not user.is_authenticated %}
 
-    <div class="alert alert-primary" role="alert" style="width: 600px;">
-        <p style="font-size: large; text-align: center; margin-top: 20px;">
-        Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in as chef</a> can create a meal plan.<br><br>
-        </p>
-    </div> {% endcomment %}
+    <div class="alert alert-danger" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 15px;">
+        No permission to edit Meal Plan.</p>
+    </div>
 
-
-    {% comment %} {% else %} {% endcomment %}
+    {% else %}
 
     <form id="singlemealform" method="post" action="{% url 'addmeal' %}">
         {% csrf_token %}
@@ -67,11 +65,11 @@
 
 
     </form>
-    {% comment %} {% endif %} {% endcomment %}
+     {% endif %}
 
 
     <br><br><br>
-    <h3 style="color: black; size: 15pt; text-align: center;">My Meals</h3>
+    <h3 style="color: black; size: 15pt; text-align: center;">Saved Meals</h3>
     <br><br>
 
     {% if all_meals %}
@@ -89,11 +87,9 @@
                     <span>{{meal.totalcarb}}g Carbs -</span>
                     <span>{{meal.totalfat}}g Fat - </span>
                     <span>{{meal.totalprotein}}g Protein</span>
+                    {% comment %} <span>{{meal.dietary_requirements}}</span> {% endcomment %}
                 </div>
 
-                <div style="margin-top: 10px;">
-                <p class="card-text" >{{meal.ingredients}}</p>
-                </div>
 
                 <form method="post" action="{% url 'deletemeal' %}">
                     {% csrf_token %}

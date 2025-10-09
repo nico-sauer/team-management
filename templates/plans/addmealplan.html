@@ -9,11 +9,9 @@
 
     {% if not user.is_authenticated %}
 
-    <div class="alert alert-primary" role="alert" style="width: 600px;">
+    <div class="alert alert-danger" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">
-        Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in</a> can create a weekly plan.<br><br>
-        If you do not have an account, you can <a href="{% url 'register' %}">Create one here.</a>
-        </p>
+        No permission to edit Meal Plan.</p>
     </div>
 
     {% else %}
@@ -21,7 +19,7 @@
     {% if not all_meals %}
     {% comment %} <button type="button" class="collapsible">Create Meal Plan</button> {% endcomment %}
     <div class="content">
-    <div class="alert alert-primary" role="alert" style="width: 600px;">
+    <div class="alert alert-info" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">
         Currently no saved meals <br><br>
         <a href="{% url 'addmeal' %}" class="alert-link">Add meal</a><br><br>
@@ -521,7 +519,7 @@
             <div class="form-inline">
                 <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
                     {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    <option value="{{meal.id}}">{{meal.name}} {{meal.protein}}</option>
                     {% endfor %}
                 </select>
                 <input type="hidden" id="day" name="day" value="sunday_snacks">

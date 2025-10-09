@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "plans/layout.html" %}
 
 {% block body %}
 <br>
@@ -8,98 +8,84 @@
 
 <div style="max-width: 600px; margin: auto;">
 
-    {% comment %} {% if not user.is_authenticated %}
-
-    <div class="alert alert-primary" role="alert" style="width: 600px;">
-        <p style="font-size: large; text-align: center; margin-top: 20px;">
-        Only users that are <a href="{% url 'login' %}" class="alert-link">Logged in as chef</a> can create a meal plan.<br><br>
-        </p>
-    </div> {% endcomment %}
 
 
-    {% comment %} {% else %} {% endcomment %}
-    <h1 style="color: black; size: 15pt; text-align: center;">Add Training Session</h1>
+    {% if not user.is_authenticated %}
+
+        <div class="alert alert-danger" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 15px;">
+        No permission to edit Training Schedule.</p>
+    </div>
+
+
+    {% else %}
 
     <form id="singlesessionform" method="post" action="{% url 'addsession' %}">
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="mealtitle" style="border: bold" font-weight: bold;">Name</label><br>
-            <input type="text" style="class="form-control" name="mealtitle" id="mealtitle" placeholder="">
+            <label for="trainingtitle" style="border: bold" font-weight: bold;">Name</label><br>
+            <input type="text" style="class="form-control" name="trainingtitle" id="trainingtitle" placeholder="">
          </div>
         <div class="form-group" style="text_align: center>
             <div class="form-group">
-            <label for="dietreq" style="font-weight: bold;">Type</label><br>
-            <select>
+            <label for="type" style="font-weight: bold;">Type</label><br>
+            <select class="form-control" name="type" id="type">
                 <option value="14"></option>
-                <option value="1">Cardio</option>
-                <option value="2">Strength</option>
-                <option value="3">Practise</option>
-                <option value="4">Placeholder</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Strength">Strength</option>
+                <option value="Practise">Practise</option>
+                <option value="Practise Game">Practise Game</option>
                 <option value="5">Placeholder</option>
                 <option value="6">Placeholder</option>
                 <option value="7">Placeholder</option> 
             </select> 
-       
+        </div>
         <br>
+                <div>
+                <label for="description" style="font-weight: bold;">Description</label><br>
+                <textarea style="height: 300px", class="form-control" name="description" id="description"placeholder="Add details or instructions."></textarea>
+                </div>
 
-                <label for="carbsgrams" style="font-weight: bold;">Carbs</label><br>
-                <input type="text" class="form-control" name="carbgrams" id="carbgrams" placeholder="grams" style="margin-auto: 50px; width: 100px;">
             
-        
-                <label for="fatgrams" style="font-weight: bold;">Fat </label><br>
-                <input type="text" class="form-control" name="fatgrams" id="fatgrams" placeholder="grams"  style="margin-auto: 50px; width: 100px;">
-            
-        
-
-                <label for="proteingrams" style="font-weight: bold;">Protein</label><br>
-                <input type="text" class="form-control" name="proteingrams" id="proteingrams" placeholder="grams" style="margin-auto: 50px; width: 100px;">
-            
-        
-
-                <label for="calories" style="font-weight: bold;">Calories</label><br>
-                <input type="text" class="form-control" name="calories" id="calories" placeholder="cal" style="margin-auto: 50px; width: 100px;">
-            
-        
+                <div class="form-group col-md-12">
+                <label for="file" style="font-weight: bold">File</label>
+                <input type="file" class="form-control" id="file">
+                </div>
 
         <br>
-        <button type="submit" class="btn btn-dark">Save Meal</button>
+        <button type="submit" class="btn btn-dark" style="padding:5px 20px">Save</button>
         </div>
 
 
     </form>
-    {% comment %} {% endif %} {% endcomment %}
+     {% endif %}
 
 
     <br><br><br>
-    <h3 style="color: black; size: 15pt; text-align: center;">My Meals</h3>
+    <h3 style="color: black; size: 15pt; text-align: center;">Saved Sessions</h3>
     <br><br>
 
-    {% if all_meals %}
+    {% if all_sessions %}
 
-        {% for meal in all_meals %}
+        {% for session in all_sessions %}
 
-        <div class="card" style="width: 600px; margin-bottom: 20px; border-radius: 8px; border-color: gainsboro; text-align: center;">
+        <div class="card" style="width: 600px; margin-bottom: 20px; border-radius: 8px; border-color: grey; text-align: center;">
             <div class="card-body" style="width: 600px;">
                 <div>
-                    <h5 class="card-title">{{meal.name}}</h5>
+                    <h5 class="card-title">{{session.name}}</h5>
                 </div>
-
-                <div style="display: inline;">
-                    <span style="color: black; font-weight: bolder; margin-right: 5px;">{{meal.calories}} calories</span>
-                    <span>{{meal.totalcarb}}g Carbs -</span>
-                    <span>{{meal.totalfat}}g Fat - </span>
-                    <span>{{meal.totalprotein}}g Protein</span>
+                <div>
+                    <p style="color: black; font-weight: bolder; margin-right: 5px;">{{session.type}}</p>
+                    <p>{{session.description}}</p>
+                    
                 </div>
+               
 
-                <div style="margin-top: 10px;">
-                <p class="card-text" >{{meal.ingredients}}</p>
-                </div>
-
-                <form method="post" action="{% url 'deletemeal' %}">
+                <form method="post" action="{% url 'deletesession' %}">
                     {% csrf_token %}
-                    <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.id}}">
-                    <button type="submit" class="btn btn-outline-danger" style="margin-top: 10px;">Delete Meal</button>
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.id}}">
+                    <button type="submit" class="btn btn-outline-danger" style="margin-top: 10px;">Delete Session</button>
                 </form>
             </div>
         </div>
@@ -108,9 +94,9 @@
     
     {% else %}
 
-    <div class="card" style="width:  600px; margin-bottom: 20px; border-radius: 8px; border-color: gainsboro;">
+    <div class="card" style="width: 600px; margin-bottom: 20px; border-radius: 8px; border-color: grey;">
         <div class="card-body">
-            <p class="card-text" style="font-size:large;">No saved trainig sessisons.</p>
+            <p class="card-text" style="font-size:large;">No saved training sessisons.</p>
         </div>
     </div>
 
