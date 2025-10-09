@@ -1,4 +1,3 @@
-
 import datetime
 from uuid import uuid4
 from users.models import CustomUser
@@ -70,14 +69,9 @@ class StaffProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
-    
+    # i've changed def__str__ to one, cause it's showing only last one if there were many and it was a phone_number
     def __str__(self):
-        full_name = self.get_full_name()
-        return full_name
-    
-    def __str__(self):
-        phone_number = self.get_phone_number()
-        return phone_number
+        return f"{self.get_full_name()} ({self.role})"
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -135,20 +129,7 @@ class AthleteProfile(models.Model):
     #medical_records = QueryManager()
     
     def __str__(self):
-        full_name = self.get_full_name()
-        return full_name
-    
-    def __str__(self):
-        phone_number = self.get_phone_number()
-        return phone_number
-    
-    def __str__(self):
-        nutri_plan = self.get_nutri_plan()
-        return nutri_plan
-
-    def __str__(self):
-        age = self.get_age()
-        return age
+        return f"{self.get_full_name()} #{self.number}"
     
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -196,4 +177,4 @@ class AthleteProfile(models.Model):
 #     class MedicalRecordsArchive(models.Model):
 #         pass
 # #       medical_records = models.ForeignKey(MedicalRecordsArchive, related_name='medical_records', on_delete=models.CASCADE)
-    
+

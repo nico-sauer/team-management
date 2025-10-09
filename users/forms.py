@@ -21,10 +21,12 @@ class CustomUserCreationForm(UserCreationForm):
     
     role= forms.ChoiceField(choices=ROLE_CHOICES)
     
-    team = forms.ModelChoiceField(queryset=Team.objects.all())
+    team = forms.ModelChoiceField(queryset=Team.objects.all(), required=False)
     
-    group = forms.ModelChoiceField(queryset=Group.objects.all())
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), required=False)
+    new_group_name = forms.CharField(required=False, label="Create new group")
     
+    new_team_name = forms.CharField(required=False, label="Create new team")
    
     class Meta:
         model = CustomUser
@@ -44,17 +46,28 @@ class CustomUserCreationForm(UserCreationForm):
         
     def save(self, commit=True):
         user = super().save(commit=False)
-        group = self.cleaned_data['group']
-        
-        # manager_user_id = current_user.id give the id of the logged in user
-    # manager_team= staffprofile.objects.get(pk=user_id).filter(team_id)
-        # if user.team != team
-        
+        new_team_name = self.cleaned_data.get('new_team_name')
+        new_group_name = self.cleaned_data.get('new_group_name')
+
+        # team
+        if new_team_name:
+            team = Team.objects.create(team_name=new_team_name)
+            user.team = team
+        elif self.cleaned_data.get('team'):
+            user.team = self.cleaned_data['team']
+
+        # group
+        if new_group_name:
+            group = Group.objects.create(name=new_group_name)
+        elif self.cleaned_data.get('group'):
+            group = self.cleaned_data['group']
+        else:
+            group = None
+
         if commit:
             user.save()
-            user.groups.add(group)
-        # user.groups.set([group]) if we want more then one group to one user
-            
+            if group:
+                user.groups.add(group)
         return user
     
 
@@ -65,9 +78,8 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
     email = forms.EmailField()
     
     role= forms.ChoiceField(choices=ROLE_CHOICES, initial='Manager', required=False)
-    team = forms.CharField(max_length=250)
+    team = forms.ModelChoiceField(queryset=Team.objects.all(), required=False)
     
-    # team = forms.ModelChoiceField(queryset=Team.objects.all())
     group = forms.ModelChoiceField(queryset=Group.objects.all(), initial= 'Managers', required=False),
     
     class Meta:

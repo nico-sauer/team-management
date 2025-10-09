@@ -7,15 +7,25 @@ class HomePageView(TemplateView):
     
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
-        profile = None
         user = self.request.user
+        profile = None
+        athletes = []
+
         if user.is_authenticated:
-            # Try all profile types
-            for ProfileModel in [StaffProfile, AthleteProfile]:
+            # Check for staff profile first
+            try:
+                profile = StaffProfile.objects.get(user=user)
+            except StaffProfile.DoesNotExist:
+                # If not staff, check for athlete profile
                 try:
-                    profile = ProfileModel.objects.get(user=user)
-                    break
-                except ProfileModel.DoesNotExist:
-                    continue
-        context['profile'] = profile        
+                    profile = AthleteProfile.objects.get(user=user)
+                except AthleteProfile.DoesNotExist:
+                    profile = None
+
+            # If trainer, get athletes in their team
+            if profile and getattr(profile, "role", None) == "Trainer":
+                athletes = AthleteProfile.objects.filter(team=profile.team)
+
+        context['profile'] = profile
+        context['athletes'] = athletes
         return context

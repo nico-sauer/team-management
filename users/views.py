@@ -37,29 +37,21 @@ def first_registration(request):
 @login_required
 @permission_required('users.add_customuser', raise_exception=True)
 def register_user(request):
-    
+    # if no teams exist, use the FirstCustomUserCreationForm
+    if Team.objects.count() == 0:
+        form_class = FirstCustomUserCreationForm
+    else:
+        form_class = CustomUserCreationForm
 
-    #make a form that will be in the homepage that a person can make a register request
-    #and will get initial registration from the admin
-    
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-            
+        form = form_class(request.POST)
         if form.is_valid():
-                 
-            # current_user = request.user #give the info of the logged in user
-            # current_user_id = current_user.id #give the id of the logged in user
-            # manager_team= current_user.team
-        
             form.save()
-            #send a confirmation email
             messages.success(request, "Registration successful!")
             return redirect("home")
-            
     else:
-        form = CustomUserCreationForm()
-        
-    return render(request, 'registration/register.html', {'form':form})
+        form = form_class()
+    return render(request, 'registration/register.html', {'form': form})
         
         
 def login_user(request):
@@ -102,5 +94,4 @@ def change_password(request):
     return render(request, 'registration/change_password.html', {
         'form': form
     })
-        
-        
+
