@@ -22,47 +22,52 @@ class Calendar(HTMLCalendar):
         last_day = next_month - timedelta(days=1)
         return first_day, last_day
 
-    # formats a day as a <td>
     def formatday(self, day, bookings):
-        # use placeholder for weekdays out of the month
         if day == 0:
-            return "<td></td>"  # empty weekday field (out of month)
+            return "<td></td>"
 
-        # get all bookings of each month day
         current_date = date(self.year, self.month, day)
         d = ""
 
-        # get normal one-time bookings
-        bookings_per_day = bookings.filter(start__day=day)
+        # only one-time_bookings
+        one_time_bookings = bookings.filter(
+            recurrence="none", start__date=current_date)
 
-        # check fo recurring bookings and list them
+        # recurring bookings
         recurring_bookings = []
         for booking in bookings.exclude(recurrence="none"):
             occurrences = booking.get_occurrences(current_date, current_date)
             if occurrences:
                 recurring_bookings.append(booking)
 
-        # get all bookings (one-time and recurring bookings)
-        all_bookings = list(bookings_per_day) + recurring_bookings
+        # all bookings without duplicates one-time & recurring bookings
+        all_bookings = list(
+            {b.id: b for b in list(one_time_bookings)
+             + recurring_bookings}.values())
 
-        # sort bookings(b) regarding starttime
+        # sort chronologically by start_time
         all_bookings.sort(key=lambda b: b.start)
 
         css_class = (
-            "private" if any(b.event_type == "private" for b in all_bookings)
-            else ""
+            "private"
+            if any(b.event_type == "private" for b in all_bookings) else ""
         )
 
         for booking in all_bookings:
             local_start = localtime(booking.start)
             local_end = localtime(booking.end)
-            time_str = f"{local_start.strftime("%H:%M")}-{local_end.strftime("%H:%M")}"
+            time_str = f"{
+                local_start.strftime('%H:%M')}-{local_end.strftime('%H:%M')}"
             if booking.status == "pending":
-                d += f'<li>{time_str} Event status pending</li>'
+                d += f"<li>{time_str} Event status pending</li>"
             elif booking.event_type == "private":
-                d += f'<li class="private">{time_str} Private {booking.booked_by}</li>'
+                d += (f"<li class='private'>{time_str}"
+                      f" Private {booking.booked_by}</li>")
+            elif booking.event_type == "training":
+                d += (f"<li class='training'>{time_str}"
+                      f" {booking.title}</li>")
             else:
-                d += f'<li>{time_str} {booking.title}</li>'
+                d += f"<li class='other'>{time_str} {booking.title}</li>"
 
         return f"<td class='{css_class}'><span class='date'>{day}</span><ul>{d}</ul></td>"
 

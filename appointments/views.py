@@ -35,7 +35,8 @@ def create_booking(request):
                 )
                 messages.error(
                     request,
-                    f"Find another timeslot, as {conflicts_names} is/are already booked.",
+                    (f"Find another timeslot, as {conflicts_names}"
+                     f" is/are already booked."),
                 )
                 # form not valid so render the form again
                 return render(
@@ -152,7 +153,6 @@ def delete_booking(request, pk):
 
 
 # -- Calendar --
-
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
     model = Booking
