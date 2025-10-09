@@ -54,13 +54,14 @@ class Meals(models.Model):
     totalprotein = models.PositiveIntegerField(default=0)
     calories = models.PositiveIntegerField(default=0)
     chef= models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True) # or just user when we have roles etc 
-
+    #might have to add dietary requirement the meal fits
 
 
 class WeeklyMealPlan(models.Model):
     day = models.TextField(max_length=10)
     meal = models.ForeignKey(Meals, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    
 
 
 
@@ -69,9 +70,12 @@ class TrainingSessions(models.Model):
     type = models.CharField(blank=True, null=True) # choices or just examples as placeholder
     description = models.TextField(max_length=2500, default="", blank=True, null=True)
     trainer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    #maybe add file
+    
 
 class WeeklySessions(models.Model):
     day = models.TextField(max_length=10)
+    #maybe add datetime
     session = models.ForeignKey(TrainingSessions, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
 

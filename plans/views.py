@@ -60,8 +60,9 @@ def addmeal(request):
     
     if request.method == "GET":
 
-        # query that user's meals
-        if request.user.is_authenticated:
+        # TODO this will change to if user is authenticated as a chef basically
+        
+        if request.user.is_authenticated: 
             all_meals = Meals.objects.filter(chef = request.user)
             no_user = False
         else:
@@ -104,10 +105,7 @@ def addmeal(request):
         # save meal
         meal = Meals(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories, chef = chef)
         meal.save()
-
-        # query that user's meals
         all_meals = Meals.objects.filter(chef = request.user)
-        #print(all_meals)
 
         context = {
             "all_meals": all_meals
@@ -116,11 +114,8 @@ def addmeal(request):
         return render(request, "plans/addmeal.html", context)
 
 def deletemeal(request):
-
-    # query that user's meals
     all_meals = Meals.objects.filter(chef = request.user)
-
-    # Find meal by id and delete from Meals object
+    # get meal by id and delete from meals object
     meal_id = request.POST.get("mealtodelete")
     meal_to_delete = Meals.objects.get(pk=meal_id)
     meal_to_delete.delete()
@@ -132,8 +127,10 @@ def deletemeal(request):
     return render(request, "plans/addmeal.html", context)
 
 def addmealplan(request):
+    
+     # TODO change to if user is authenticated as a chef again
 
-    user = request.user
+    user = request.user 
     macros = {}
     percentage = {}
 
@@ -144,7 +141,7 @@ def addmealplan(request):
             all_meals = Meals.objects.filter(chef = user)
             weekly_meals = WeeklyMealPlan.objects.filter(user = user)
 
-            # Calculate Macros and percentage
+            # calculate macros/percentage
             macros = calculate_macros(weekly_meals)
             percentage = calculate_percentage(macros)
 
@@ -168,7 +165,7 @@ def addmealplan(request):
 
     else:
 
-        # query that user's meals
+        
         if request.user.is_authenticated:
             all_meals = Meals.objects.filter(chef = request.user)
             no_user = False
@@ -176,19 +173,19 @@ def addmealplan(request):
             all_meals = None
             no_user = True
 
-        # get form inputs for weekly model
+        # get form inputs for weekly meal plan model
         day = request.POST.get("day")
         meal_id = request.POST["meal_select"]
         meal_select = Meals.objects.get(pk = meal_id)
         user = request.user
 
-        # save weekly 
+    
         weekly = WeeklyMealPlan(day = day, meal = meal_select, user = user)
         weekly.save()
 
         weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
 
-        # Calculate Macros
+        # calculate macros
         macros = calculate_macros(weekly_meals)
         percentage = calculate_percentage(macros)
 
@@ -203,7 +200,7 @@ def addmealplan(request):
         return render(request, "plans/addmealplan.html", context)
 
 def mealplan(request):
-    #view just to check mealplan without editing rights?
+    #basic view just to check mealplan without editing rights for anyone who isnt role chef
     user = request.user
     macros = {}
     percentage = {}
@@ -215,7 +212,7 @@ def mealplan(request):
             all_meals = Meals.objects.filter(chef = user)
             weekly_meals = WeeklyMealPlan.objects.filter(user = user)
 
-            #Calculate Macros and percentage
+            #calculate macros and percentage
             macros = calculate_macros(weekly_meals)
             percentage = calculate_percentage(macros)
 
@@ -235,11 +232,11 @@ def mealplan(request):
             "percentage": percentage
         }
 
-        return render(request, "plans/dashboard.html", context)
+        return render(request, "plans/mealplan.html", context)
     
 def deletefromplan(request):
 
-    # Find meal id and delete from WeeklyMealPlan object
+
     meal_id = request.POST.get("mealtodelete")
     meal_object = Meals.objects.get(pk = meal_id)
     daydelete = request.POST.get("daydelete")
@@ -248,11 +245,10 @@ def deletefromplan(request):
     object_to_delete = meal_to_delete.first()
     object_to_delete.delete()
 
-    # query that user's meals
     all_meals = Meals.objects.filter(chef = request.user)
     weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
 
-    # Calculate Macros
+    # calculate macros again
     macros = calculate_macros(weekly_meals)
     percentage = calculate_percentage(macros)
 
@@ -327,6 +323,7 @@ def calculate_percentage(macros):
 
 def addsession(request):
 
+    # TODO change basic user authentications to trainer role
     if request.method == "GET":
 
         # query that user's meals
@@ -347,35 +344,23 @@ def addsession(request):
     else:
 
         # get inputs from form
-        trainingtitle = request.POST["trainingtitle"]
-        trainingdescription = request.POST["trainingdescription"]
-        trainingtype = request.POST.get("trainingtype") #choices between cross-training like strength, cardio, flexibility 
+        name = request.POST["trainingtitle"]
+        description = request.POST["description"]
+        type = request.POST.get("type") #choices between cross-training like strength, cardio, flexibility 
                                                         #and whatever you call training the actual sport. maybe typing in the type would be better
         
-       
-
-        # Default quantities are 0
-        if not carb_grams:
-            carb_grams = 0
-        if not fat_grams:
-            fat_grams = 0
-        if not protein_grams:
-            protein_grams = 0
-        if not calories:
-            calories = 0
-        #print(carb_grams)
-
-        #variables to save in training session model
+    
         trainer = request.user
-        name = trainingtitle
-
-        
-
+        # name = trainingtitle
+        # description =  trainingdescription
+        # type = trainingtype
+       
+    
         # save training
-        session = TrainingSessions(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories, trainer = trainer)
+        session = TrainingSessions(name = name, type = type, description = description, trainer = trainer)
         session.save()
 
-        # query that user's meals
+        
         all_sessions = TrainingSessions.objects.filter(trainer = request.user)
         #print(all_sessions)
 
@@ -391,9 +376,9 @@ def deletesession(request):
     all_sessions = TrainingSessions.objects.filter(trainer = request.user)
 
     # Find session by id and delete from TrainingSessions object
-    trainingsessions_id = request.POST.get("trainingtodelete")
-    training_to_delete = TrainingSessions.objects.get(pk=trainingsessions_id)
-    training_to_delete.delete()
+    trainingsessions_id = request.POST.get("sessiontodelete")
+    session_to_delete = TrainingSessions.objects.get(pk=trainingsessions_id)
+    session_to_delete.delete()
 
     context = {
         "all_sessions": all_sessions
@@ -402,6 +387,8 @@ def deletesession(request):
     return render(request, "plans/addsession.html", context)
 
 def addtrainingschedule(request):
+    
+    # TODO change to trainer role 
 
     user = request.user
    
@@ -411,7 +398,7 @@ def addtrainingschedule(request):
         #
         if request.user.is_authenticated:
             all_sessions = TrainingSessions.objects.filter(trainer = user)
-            weekly_sessions = WeeklySessions.objects.filter(traininguser = user)
+            weekly_sessions = WeeklySessions.objects.filter(user = user)
             no_user = False
         else:
             all_sessions = None
@@ -437,17 +424,17 @@ def addtrainingschedule(request):
             all_sessions = None
             no_user = True
 
-        # get form inputs for weekly model
+    
         day = request.POST.get("day")
         trainingsessions_id = request.POST["session_select"]
         session_select = TrainingSessions.objects.get(pk = trainingsessions_id)
         user = request.user
 
-        # save weekly 
-        weekly = WeeklySessions(day = day, session = session_select, traininguser = user)
+        # save to weekly schedule
+        weekly = WeeklySessions(day = day, session = session_select, user = user)
         weekly.save()
 
-        weekly_sessions = WeeklySessions.objects.filter(traininguser = request.user)
+        weekly_sessions = WeeklySessions.objects.filter(user = request.user)
 
       
 
@@ -461,21 +448,16 @@ def addtrainingschedule(request):
         return render(request, "plans/addtrainingschedule.html", context)
 
 def trainingplan(request):
-    #view just to check mealplan without editing rights?
+    #view just to check mealplan without editing rights so anyone who is authenticated as part of the team
     user = request.user
-    # macros = {}
-    # percentage = {}
+    
 
     if request.method == "GET":
 
         # query that user's meals
         if request.user.is_authenticated:
             all_sessions = TrainingSessions.objects.filter(trainer = user)
-            weekly_sessions = WeeklySessions.objects.filter(traininguser = user)
-
-            # Calculate Macros and percentage
-            # macros = calculate_macros(weekly_sessions)
-            # percentage = calculate_percentage(macros)
+            weekly_sessions = WeeklySessions.objects.filter(user = user)
 
             no_user = False
         else:
@@ -494,25 +476,24 @@ def trainingplan(request):
     
 def deletefromschedule(request):
 
-    # Find session id and delete from WeeklySessions object
-    trainingsessions_id = request.POST.get("trainingtodelete")
+    trainingsessions_id = request.POST.get("sessiontodelete")
     session_object = TrainingSessions.objects.get(pk = trainingsessions_id)
     daydelete = request.POST.get("daydelete")
 
-    training_to_delete = WeeklySessions.objects.filter(session = session_object, traininguser = request.user, day = daydelete)
-    object_to_delete = training_to_delete.first()
+    session_to_delete = WeeklySessions.objects.filter(session = session_object, user = request.user, day = daydelete)
+    object_to_delete = session_to_delete.first()
     object_to_delete.delete()
 
    
     all_sessions = TrainingSessions.objects.filter(trainer = request.user)
-    weekly_sessions = WeeklySessions.objects.filter(traininguser = request.user)
+    weekly_sessions = WeeklySessions.objects.filter(user = request.user)
 
  
 
     context = {
         "all_sessions": all_sessions,
-        "monday_meals": all_sessions,
+        "monday_sessions": all_sessions,
         "weekly_sessions": weekly_sessions,
     }
 
-    return render(request, "plans/trainingplan.html", context)
+    return render(request, "plans/addtrainingschedule.html", context)
