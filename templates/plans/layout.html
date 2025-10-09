@@ -31,11 +31,14 @@
                   <a class="nav-link" href="{% url 'tdee' %}" style="color: lightblue">TDEE Calculator</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'weekly' %}"></a>
+                    <a class="nav-link" href="{% url 'addmealplan' %}" style="color:lightblue">Add MealPlan</a>
+                </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'addtrainingschedule' %}" style="color:lightblue">Add Training Schedule</a>
                 </li>
                 {% comment %} {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}" style="font-weight: bold; color: black">Log Out</a>
+                        <a class="nav-link" href="{% url 'weekly' %}" style="font-weight: bold; color: lightblue">Add Meal Plan</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
@@ -44,7 +47,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'register' %}" style="font-weight: bold; color: black;">Register</a>
                     </li>
-                {% endif %} {% endcomment %}
+                {% endif %}  {% endcomment %}
               </ul>
             </div>
           </nav>

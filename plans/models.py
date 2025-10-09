@@ -44,6 +44,7 @@ from users.models import CustomUser
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from users.models import CustomUser
 
 
 class Meals(models.Model):

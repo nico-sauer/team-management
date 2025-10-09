@@ -1,11 +1,12 @@
 {% extends "plans/layout.html" %}
-
+{% load static %}
 {% block body %}
 
 
 <html>
 <head>
 <meta name="viewport" content="width=100vw, initial-scale=1">
+
 <style>
 * {box-sizing: border-box}
 
@@ -59,6 +60,7 @@ body, html {
 #MealPlan {background-color: white;}
 #TrainingPlan {background-color: white;}
 </style>
+ 
 </head>
 <body style="width: 100%; overflow-x: scroll; color: black;">
 
@@ -71,6 +73,8 @@ body, html {
     <button class="tablink" style="width: 20%" onmouseover="openPage('MealPlan', this, 'black')">MealPlan</button>
     <button class="tablink" style="width: 20%" onmouseover="openPage('TrainingPlan', this, 'black')">TrainingPlan</button>
 
+
+
     <div id="Home" class="tabcontent">
     <h3>Home</h3>
     <p>maybe day at a glance.</p>
@@ -78,12 +82,37 @@ body, html {
 
     <div id="Calendar" class="tabcontent">
     <h3>Calendar</h3>
-    <p>Placeholder</p> 
+    
+    <div class="container my-4">  
+
+        <h2 class="text-center mb-4">Calendar</h2>
+
+        <div class="clearfix mb-3">
+            <a class="btn btn-info float-left" href="{% url 'appointments:calendar' %}?{{ prev_month }}">
+                Previous Month
+            </a>
+            <a class="btn btn-info float-right" href="{% url 'appointments:calendar' %}?{{ next_month }}">
+                Next Month
+            </a>
+        </div>
+
+        <div class="calendar-container">
+            {{ calendar|safe }}
+        </div>
+
+        <div class="text-left mt-4">
+            <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
+                To Booking Overview
+            </a>
+        </div>
+
+    </div>  
+    
     </div>
 
     <div id="Appointments" class="tabcontent">
     <h3>Appointments</h3>
-    <p>Placeholder</p> 
+     <div id="includedContent"></div>
     </div>
 
     <div id="MealPlan" class="tabcontent" style="text-align: center">
