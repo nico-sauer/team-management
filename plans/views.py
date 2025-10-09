@@ -5,10 +5,7 @@
 # from django.views.generic.edit import CreateView
 # from .models import UniversalPlan
 # from .forms import UniversalPlanForm 
-
-from django.views.generic import TemplateView # we will move it to the core app later
-class HomePageView(TemplateView): #
-    template_name = 'home.html' #
+ #
 
 # # API view for listing and creating TrainingPlan objects.
 # # - GET: Returns a list of all training plans.
@@ -46,62 +43,11 @@ from users.models import CustomUser
 def index(request):
 
     if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("weekly"))
+        return HttpResponseRedirect(reverse("dashboard"))
 
     else:
-        return render(request, "plans/login.html")
+        return render(request, "registration/login.html")
 
-
-def login_view(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "plans/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "plans/login.html")
-
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
-
-
-def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "plans/register.html", {
-                "message": "Passwords must match."
-            })
-
-        # Attempt to create new user
-        try:
-            user = CustomUser.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "plans/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "plans/register.html")
 
     
 def tdee(request):
@@ -111,12 +57,12 @@ def tdee(request):
     return render(request, "plans/tdee.html", context)
 
 def addmeal(request):
-
+    
     if request.method == "GET":
 
         # query that user's meals
         if request.user.is_authenticated:
-            all_meals = Meals.objects.filter(user = request.user)
+            all_meals = Meals.objects.filter(chef = request.user)
             no_user = False
         else:
             all_meals = None
@@ -150,17 +96,17 @@ def addmeal(request):
             calories = 0
      
         # define variables to save in meal model
-        #chef = request.user
+        chef = request.user
         name = mealtitle
 
      
 
         # save meal
-        meal = Meals(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories)#, chef = chef)
+        meal = Meals(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories, chef = chef)
         meal.save()
 
         # query that user's meals
-        all_meals = Meals.objects.all()#.filter(chef = request.user)
+        all_meals = Meals.objects.filter(chef = request.user)
         #print(all_meals)
 
         context = {
@@ -185,7 +131,7 @@ def deletemeal(request):
 
     return render(request, "plans/addmeal.html", context)
 
-def weekly(request):
+def addmealplan(request):
 
     user = request.user
     macros = {}
@@ -196,7 +142,7 @@ def weekly(request):
         # query that user's meals
         if request.user.is_authenticated:
             all_meals = Meals.objects.filter(chef = user)
-            weekly_meals = WeeklyMealPlan.objects.filter(mealuser = user)
+            weekly_meals = WeeklyMealPlan.objects.filter(user = user)
 
             # Calculate Macros and percentage
             macros = calculate_macros(weekly_meals)
@@ -237,10 +183,10 @@ def weekly(request):
         user = request.user
 
         # save weekly 
-        weekly = WeeklyMealPlan(day = day, meal = meal_select, mealuser = user)
+        weekly = WeeklyMealPlan(day = day, meal = meal_select, user = user)
         weekly.save()
 
-        weekly_meals = WeeklyMealPlan.objects.filter(mealuser = request.user)
+        weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
 
         # Calculate Macros
         macros = calculate_macros(weekly_meals)
@@ -267,7 +213,7 @@ def mealplan(request):
         # query that user's meals
         if request.user.is_authenticated:
             all_meals = Meals.objects.filter(chef = user)
-            weekly_meals = WeeklyMealPlan.objects.filter(mealuser = user)
+            weekly_meals = WeeklyMealPlan.objects.filter(user = user)
 
             #Calculate Macros and percentage
             macros = calculate_macros(weekly_meals)
@@ -298,13 +244,13 @@ def deletefromplan(request):
     meal_object = Meals.objects.get(pk = meal_id)
     daydelete = request.POST.get("daydelete")
 
-    meal_to_delete = WeeklyMealPlan.objects.filter(meal = meal_object, mealuser = request.user, day = daydelete)
+    meal_to_delete = WeeklyMealPlan.objects.filter(meal = meal_object, user = request.user, day = daydelete)
     object_to_delete = meal_to_delete.first()
     object_to_delete.delete()
 
     # query that user's meals
     all_meals = Meals.objects.filter(chef = request.user)
-    weekly_meals = WeeklyMealPlan.objects.filter(mealuser = request.user)
+    weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
 
     # Calculate Macros
     macros = calculate_macros(weekly_meals)
@@ -437,7 +383,7 @@ def addsession(request):
             "all_sessions": all_sessions
         }
 
-        return render(request, "plans/addsesseion.html", context)
+        return render(request, "plans/addsession.html", context)
 
 def deletesession(request):
 
@@ -453,9 +399,9 @@ def deletesession(request):
         "all_sessions": all_sessions
     }
 
-    return render(request, "plans/addtraining.html", context)
+    return render(request, "plans/addsession.html", context)
 
-def weeklyschedule(request):
+def addtrainingschedule(request):
 
     user = request.user
    
@@ -512,7 +458,7 @@ def weeklyschedule(request):
 
         }
 
-        return render(request, "plans/addmealplan.html", context)
+        return render(request, "plans/addtrainingschedule.html", context)
 
 def trainingplan(request):
     #view just to check mealplan without editing rights?

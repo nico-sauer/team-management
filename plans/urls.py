@@ -2,7 +2,7 @@ from django.urls import path
 from .views import *
 from . import views
 
-app_name = 'plans'
+
 
 # API endpoints for creating and listing plans
 urlpatterns = [
@@ -21,7 +21,8 @@ urlpatterns = [
     path("tdee", views.tdee, name="tdee"),
     path("addmeal", views.addmeal, name="addmeal"),
     path("addsession", views.addmeal, name="addsession"),
-    path("weekly", views.weekly, name="weekly"),
+    path("addmealplan", views.addmealplan, name="addmealplan"),
+    path("addtrainingschedule", views.addmealplan, name="addtrainingschedule"),
     path("deletemeal", views.deletemeal, name="deletemeal"),
     path("deletefromplan", views.deletefromplan, name="deletefromplan"),
     path("dashboard", views.mealplan, name="dashboard"),
