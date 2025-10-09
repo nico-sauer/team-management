@@ -2,6 +2,8 @@ from django import forms
 from .models import Booking
 from users.models import CustomUser
 from django.utils import timezone
+from datetime import datetime, time
+
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -29,7 +31,12 @@ class BookingForm(forms.ModelForm):
             "event_type": forms.Select(attrs={"class": "form-select"}),
             "status": forms.Select(attrs={"class": "form-select"}),
             "participants": forms.SelectMultiple(attrs={"class": "form-select"}),
+            "recurrence_end": forms.DateInput(
+                attrs={"type": "date", "class": "form-control"}
+            ),
         }
+        labels = {"recurrence_end": "Recurrence end date:",
+                  }
 
     def __init__(self, *args, **kwargs):
         # current_user is passed when the form is initialized
@@ -45,6 +52,7 @@ class BookingForm(forms.ModelForm):
         cleaned_data = super().clean()
         start = cleaned_data.get("start")
         end = cleaned_data.get("end")
+        recurrence_end = cleaned_data.get("recurrence_end")
         participants = cleaned_data.get("participants")
 
         now = timezone.now()
@@ -56,9 +64,26 @@ class BookingForm(forms.ModelForm):
         if start and end and end <= start:
             self.add_error("end", "End time must be after start time.")
 
-        # participants-validations, a minimum of on existing teammember needs to be choosen
+        # assure recurrence_end is in datetime format
+        if recurrence_end and isinstance(recurrence_end, datetime) is False:
+            recurrence_end = datetime.combine(recurrence_end, time.min)
+
+        # assure that all times are timezone aware
+        if recurrence_end and timezone.is_naive(recurrence_end):
+            recurrence_end = timezone.make_aware(
+                recurrence_end, timezone.get_current_timezone())
+
+        # get sure recurrence_end is after start-date
+        if start and recurrence_end:
+            if recurrence_end <= start:
+                self.add_error(
+                    "recurrence_end",
+                    "Recurrence end date must be after the start date."
+                )
+        # participants-validations, team-check & min-amount of participants
         if not participants:
-            self.add_error("participants", "Please select at least one participant.")
+            self.add_error(
+                "participants", "Please select at least one participant.")
         elif self.current_user:
             for p in participants:
                 if p.team_id != self.current_user.team_id:

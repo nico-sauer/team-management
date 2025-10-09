@@ -99,3 +99,28 @@ a {
     display: inline-block;
     list-style: none;
 }
+
+/* ---------------------------
+   Training appointments
+---------------------------- */
+.calendar td ul li.training {
+    background-color: #118a15 !important;
+    color: white !important;
+    border-radius: 4px;
+    padding: 2px 4px;
+    display: inline-block;
+    list-style: none;
+}
+
+/* ---------------------------
+   Other appointments
+---------------------------- */
+.calendar td ul li.other {
+    background-color: transparent !important; 
+    color: black !important; 
+    border: 1px solid black; 
+    border-radius: 4px; 
+    padding: 2px 4px;
+    display: inline-block;
+    list-style: none;
+}
