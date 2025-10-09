@@ -9,14 +9,13 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs) 
         profile = None
         user = self.request.user
-        print(user)
         if user.is_authenticated:
-            try:
-                profile = StaffProfile.objects.get(user=user)
-            except StaffProfile.DoesNotExist:
+            # Try all profile types
+            for ProfileModel in [StaffProfile, AthleteProfile]:
                 try:
-                    profile = AthleteProfile.objects.get(user=user)
-                except AthleteProfile.DoesNotExist:
-                    profile = None
+                    profile = ProfileModel.objects.get(user=user)
+                    break
+                except ProfileModel.DoesNotExist:
+                    continue
         context['profile'] = profile        
         return context

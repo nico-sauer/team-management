@@ -1,7 +1,7 @@
 /* Global layout */
 body,
 html {
-  background: #232526;
+  background: linear-gradient(120deg, #232526 0%, #414345 100%);
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -173,8 +173,9 @@ main.container-fluid {
 }
 .card {
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   margin: 0 10px;
 }
 .card-title {
@@ -200,4 +201,18 @@ main.container-fluid {
   border-radius: 0;
   box-shadow: none;
   padding: 60px 0 0 0;
+}
+
+.btn-success {
+  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: #185a9d;
 }

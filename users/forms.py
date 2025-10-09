@@ -14,7 +14,7 @@ ROLE_CHOICES =(
     ("Athlete", "Athlete"),
 )
 
-class CustomUserCreationForm(UserCreationForm, forms.Form):
+class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
     email = forms.EmailField()
