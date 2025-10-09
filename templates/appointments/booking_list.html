@@ -20,7 +20,9 @@
                 <button class="btn btn-outline-success"
                     type="submit">FILTER</button>
                 <a href="{% url 'appointments:booking_list' %}"
-                    class="btn btn-outline-danger">RESET</a>  
+                    class="btn btn-outline-danger">RESET</a>
+                <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}"
+                    class="btn btn-outline-primary">CREATE PDF</a>      
             </div>
         </div>
     </form> 

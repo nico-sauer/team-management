@@ -10,4 +10,5 @@ urlpatterns = [
     path("bookings/<int:pk>/delete", views.delete_booking,
          name="delete_booking"),
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
+    path("booking_pdf/", views.booking_pdf, name="booking_pdf"),
 ]
