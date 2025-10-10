@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from .models import Team, CustomUser
 from django.contrib.auth.models import Group
+from profiles.models import StaffProfile, AthleteProfile
 
 ROLE_CHOICES =(
     
@@ -48,6 +49,7 @@ class CustomUserCreationForm(UserCreationForm):
         user = super().save(commit=False)
         new_team_name = self.cleaned_data.get('new_team_name')
         new_group_name = self.cleaned_data.get('new_group_name')
+        role = self.cleaned_data.get('role')
 
         # team
         if new_team_name:
@@ -68,6 +70,23 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
             if group:
                 user.groups.add(group)
+
+            # creating profile
+            if role in ["Manager", "Trainer", "Physical Therapist", "Dietitian", "Doctor", "Chef"]:
+                StaffProfile.objects.create(
+                    user=user,
+                    first_name=self.cleaned_data['first_name'],
+                    last_name=self.cleaned_data['last_name'],
+                    role=role,
+                    
+                )
+            elif role == "Athlete":
+                AthleteProfile.objects.create(
+                    user=user,
+                    first_name=self.cleaned_data['first_name'],
+                    last_name=self.cleaned_data['last_name'],
+                    #
+                )
         return user
     
 
