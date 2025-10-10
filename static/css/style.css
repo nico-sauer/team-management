@@ -1,7 +1,10 @@
-/* Global layout */
+/* ===========================
+   Global Layout & Body
+   =========================== */
 body,
 html {
   background: linear-gradient(120deg, #232526 0%, #414345 100%);
+  color: #f8f9fa;
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -9,7 +12,9 @@ html {
   overflow-x: hidden;
 }
 
-/* Main content container */
+/* ===========================
+   Main Content Container
+   =========================== */
 main.container-fluid {
   margin: 0;
   padding: 0;
@@ -18,36 +23,99 @@ main.container-fluid {
   background: transparent;
 }
 
-/* Hamburger menu icon */
-.hamburger-icon {
-  display: inline-block;
-  width: 24px;
-  height: 18px;
-}
-.hamburger-icon span {
-  display: block;
-  height: 3px;
-  width: 100%;
-  background: #fff;
-  margin-bottom: 5px;
-  border-radius: 2px;
-  transition: background 0.2s;
-}
-.hamburger-icon span:last-child {
-  margin-bottom: 0;
-}
-.btn-outline-light:focus .hamburger-icon span,
-.btn-outline-light:hover .hamburger-icon span {
-  background: #007bff;
-}
-
-/* Hamburger button alignment */
-.btn-outline-light.btn-sm.dropdown-toggle {
+/* ===========================
+   Hero Section
+   =========================== */
+.hero-section {
+  padding-top: 80px;
+  background: url("../img/main_baner.png") center center/cover no-repeat;
+  min-height: 420px;
+  width: 100vw;
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+}
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: left;
+  max-width: 700px;
+  margin-left: 60px;
+  padding: 60px 0;
 }
 
-/* Tabs styles */
+/* ===========================
+   Features Section
+   =========================== */
+.features-section {
+  background: #232526;
+  width: 100vw;
+  padding: 40px 0 60px 0;
+}
+.features-section h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+
+/* ===========================
+   Card Styles
+   =========================== */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  margin: 0 10px;
+}
+.card-title {
+  font-weight: bold;
+  color: #232526;
+}
+.card-text {
+  color: #232526;
+}
+.row.justify-content-center {
+  margin: 0;
+}
+
+/* ===========================
+   Button Styles
+   =========================== */
+.btn-success {
+  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.btn-outline-dark,
+.btn-dark {
+  border-radius: 20px;
+  font-weight: 600;
+}
+.collapsible {
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* ===========================
+   Tabs
+   =========================== */
 .tab-buttons {
   width: 100vw;
   margin: 0;
@@ -86,7 +154,7 @@ main.container-fluid {
 .tab-buttons-header {
   width: 100vw;
   margin: 0;
-  padding: 0 0 0 0;
+  padding: 0;
   display: flex;
   border-bottom: 2px solid #393e42;
   background: #232526;
@@ -127,66 +195,33 @@ main.container-fluid {
   padding: 0;
 }
 
-/* Hero section */
-.hero-section {
-  padding-top: 80px; /* Adjust this value until "MANAGER" is fully visible */
-  background: url("../img/main_baner.png") center center/cover no-repeat;
-  min-height: 420px;
-  width: 100vw;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+/* Hamburger menu icon */
+.hamburger-icon {
+  display: inline-block;
+  width: 24px;
+  height: 18px;
 }
-.hero-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100%;
-  margin: 0;
+.hamburger-icon span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 5px;
+  border-radius: 2px;
+  transition: background 0.2s;
 }
-.hero-content {
-  position: relative;
-  z-index: 2;
-  color: #fff;
-  text-align: left;
-  max-width: 700px;
-  margin-left: 60px;
-  padding: 60px 0;
+.hamburger-icon span:last-child {
+  margin-bottom: 0;
+}
+.btn-outline-light:focus .hamburger-icon span,
+.btn-outline-light:hover .hamburger-icon span {
+  background: #007bff;
 }
 
-/* Features section */
-.features-section {
-  background: #232526;
-  width: 100vw;
-  padding: 40px 0 60px 0;
-}
-.features-section h2 {
-  color: #fff;
-  text-align: center;
-  margin-bottom: 40px;
-  font-weight: bold;
-}
-.card {
-  background: #fff;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  margin: 0 10px;
-}
-.card-title {
-  font-weight: bold;
-  color: #232526;
-}
-.card-text {
-  color: #232526;
-}
-.row.justify-content-center {
-  margin: 0;
+/* Hamburger button alignment */
+.btn-outline-light.btn-sm.dropdown-toggle {
+  display: flex;
+  align-items: center;
 }
 
 /* Other tabs */
@@ -203,16 +238,13 @@ main.container-fluid {
   padding: 60px 0 0 0;
 }
 
-.btn-success {
-  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
 h2 {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   color: #185a9d;
+}
+
+body {
+  background: #232526;
+  color: #f8f9fa;
 }

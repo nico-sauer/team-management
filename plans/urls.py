@@ -2,7 +2,7 @@ from django.urls import path
 from .views import *
 from . import views
 
-
+#app_name = "plans" # added app_name for namespacing
 
 # API endpoints for creating and listing plans
 urlpatterns = [
