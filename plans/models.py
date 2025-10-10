@@ -71,10 +71,11 @@ class TrainingSessions(models.Model):
     description = models.TextField(max_length=2500, default="", blank=True, null=True)
     trainer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     #maybe add file
-    #add day 
+    
 
 class WeeklySessions(models.Model):
     day = models.TextField(max_length=10)
+    #maybe add datetime
     session = models.ForeignKey(TrainingSessions, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
 

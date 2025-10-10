@@ -7,57 +7,74 @@ from .models import CustomUser, Team
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+from django.core.exceptions import ValidationError
 
 #add email after user registration
-#check how to move group/team/role from the customuser. first user(group=managers, role=manager)
-#added user (team = manager's team)
-
 
 
 def first_registration(request):
-
-    if request.method == 'POST':
-        form = FirstCustomUserCreationForm(request.POST)
-            
-        if form.is_valid():
     
-            form.save()
-            #send a confirmation email
-            messages.success(request, "Registration successful!")
-            return redirect("home")
-            
-    else:
-        form = FirstCustomUserCreationForm()
+    if request.method == 'POST':
+        form = FirstCustomUserCreationForm(request.POST)         
+        try: 
+            if form.is_valid():
         
+                form.save()
+                #send a confirmation email
+                messages.success(request, "Registration successful!")
+                return redirect("home")
+        except ValidationError:
+            messages.success(request, "The team is already exist, please enter a new team")
+            form = FirstCustomUserCreationForm()
+        
+                
+    else:
+        form = FirstCustomUserCreationForm()    
+            
     return render(request, 'registration/register.html', {'form':form})
-
+    
+        
 
 
 @login_required
 @permission_required('users.add_customuser', raise_exception=True)
 def register_user(request):
     
-
-    #make a form that will be in the homepage that a person can make a register request
-    #and will get initial registration from the admin
+    
     
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-            
-        if form.is_valid():
-                 
-            # current_user = request.user #give the info of the logged in user
-            # current_user_id = current_user.id #give the id of the logged in user
-            # manager_team= current_user.team
+        # current_user = request.user
+        form = CustomUserCreationForm(data=request.POST,current_user=request.user)
         
-            form.save()
-            #send a confirmation email
-            messages.success(request, "Registration successful!")
-            return redirect("home")
+        
+        if form.is_valid():
+            
+         #  if Team.objects.filter(team_name = team):
+          #     raise ValidationError("The team is already exist, please enter another team")
+           
+            
+        #     current_user = request.user #give the info of the logged in user(Manager)
+        #     current_user_team= current_user.team_id.id#id of the manager's team
+        #   #manager_team= Team.objects.get(pk = current_user_team) 
+          
+            
+        #     manager_team = Team.objects.filter(id= current_user_team) 
+            
+        #     if form.team_id.id==current_user_team:
+               #form.team_id_id = form.team.id
+                
+                form.save()
+            # #send a confirmation email
+            #     messages.success(request, "Registration successful!")
+            #     return redirect("home")
+            # else:
+            #     messages.success(request, "You can only add users for your own team. please add user again and choose your team")
+            #     form = CustomUserCreationForm()
+            
+                # form.delete()
             
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm(current_user=request.user)
         
     return render(request, 'registration/register.html', {'form':form})
         

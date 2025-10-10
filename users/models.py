@@ -4,7 +4,11 @@ from django.contrib.auth.models import Group
 
 class Team(models.Model):
     team_name = models.CharField(max_length=250)
-    manager = models.CharField(max_length=250, blank=True)
+    
+    # team = models.CharField(max_length=250)
+    # manager = models.CharField(max_length=250, blank=True)
+    manager = models.OneToOneField('CustomUser', on_delete=models.SET_NULL, null=True, blank=True, related_name='manager_team')
+    
     def __str__(self):
         return self.team_name
 
@@ -28,8 +32,9 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField("email address", unique=True)
-    team_id = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
+    team_id = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True, related_name= 'members') #to fix to team
     group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
+    # team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True) #to fix to team
     
     
     USERNAME_FIELD = "email"
