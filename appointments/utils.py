@@ -61,8 +61,11 @@ class Calendar(HTMLCalendar):
             if booking.status == "pending":
                 d += f"<li>{time_str} Event status pending</li>"
             elif booking.event_type == "private":
+                username = (
+                    str(booking.booked_by).split("@")[0]
+                    if booking.booked_by else "Unknown")
                 d += (f"<li class='private'>{time_str}"
-                      f" Private {booking.booked_by}</li>")
+                      f" Private {username}</li>")
             elif booking.event_type == "training":
                 d += (f"<li class='training'>{time_str}"
                       f" {booking.title}</li>")
