@@ -8,6 +8,8 @@
     {% load static %}
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_head %}{% endblock %}
 </head>
 
 <body class="bg-light">
