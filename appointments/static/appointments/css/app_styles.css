@@ -188,6 +188,28 @@ main.container-fluid {
   margin: 0;
 }
 
+/* All columns in one row to baseline */
+.row.align-items-end > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Buttons next to each other with gap */
+.row.align-items-end > .col-md-3.button-container {
+    display: flex;
+    flex-direction: row;  
+    align-items: flex-end; 
+    gap: 0.5rem;
+}
+
+/* Buttons on basline */
+.button-row {
+    display: flex;
+    align-items: flex-end; 
+    gap: 0.5rem;           
+}
+
 /* Other tabs */
 #News,
 #Contact,

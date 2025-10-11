@@ -22,7 +22,7 @@ class Calendar(HTMLCalendar):
         last_day = next_month - timedelta(days=1)
         return first_day, last_day
 
-    def formatday(self, day, bookings):
+    def formatday(self, day, weekday, bookings):
         if day == 0:
             return "<td></td>"
 
@@ -53,21 +53,19 @@ class Calendar(HTMLCalendar):
             # "has-private" if any(b.event_type == "private" for b in
             #                      all_bookings) else ""
         )
-        # optional 
-        day_url = f"/appointments/day_view/?date={self.year}-{self.month:02d}-{day:02d}"
-        
+
         for booking in all_bookings:
             local_start = localtime(booking.start)
             local_end = localtime(booking.end)
             time_str = f"{
                 local_start.strftime('%H:%M')}-{local_end.strftime('%H:%M')}"
-            
+
             if booking.booked_by.first_name and booking.booked_by.last_name:
                 username = (f"{booking.booked_by.first_name[0]}."
                             f" {booking.booked_by.last_name}")
             else:
                 username = str(booking.booked_by)
-             
+
             if booking.status == "pending":
                 d += f"<li class='pending'>{time_str} Event pending</li>"
             elif booking.event_type == "private":
@@ -83,7 +81,7 @@ class Calendar(HTMLCalendar):
     def formatweek(self, theweek, bookings):
         week = ""
         for d, weekday in theweek:
-            week += self.formatday(d, bookings)
+            week += self.formatday(d, weekday, bookings)
         return f"<tr> {week} </tr>"
 
     # formats a month as a complete table

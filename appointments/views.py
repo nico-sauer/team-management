@@ -70,7 +70,7 @@ def create_booking(request):
 
 @login_required
 def booking_list(request):
-    # all bookings where current-user has created or is participants
+    # all bookings where current-user has created or is participant
     current_user = request.user
     bookings = (
         Booking.objects.filter(Q(booked_by=current_user) |
@@ -79,9 +79,9 @@ def booking_list(request):
         .order_by("-created_at")
     )
 
-    # use filter from queryset
+    # use filter from database via queryset
     booking_filter = BookingFilter(request.GET, queryset=bookings)
-    bookings = booking_filter.qs
+    filtered_bookings = booking_filter.qs
 
     # define timeframe (e.g. next month)
     today = date.today()
@@ -92,7 +92,7 @@ def booking_list(request):
     expanded_bookings = []
     tz = get_current_timezone()
 
-    for booking in bookings:
+    for booking in filtered_bookings:
         if booking.recurrence != "none":
             occurrences = booking.get_occurrences(start_date, end_date)
             for occ_start in occurrences:
@@ -124,17 +124,44 @@ def booking_list(request):
                 "end_occurrence": end
             })
 
+    # additional filter for expanded_bookings
+    day_view_str = request.GET.get("day_view")
+    week_view_str = request.GET.get("week_view_from")
+
+    if day_view_str:
+        try:
+            day_view_date = datetime.strptime(day_view_str, "%Y-%m-%d").date()
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if eb["occurrence"].date() == day_view_date
+            ]
+        except ValueError:
+            pass
+
+    if week_view_str:
+        try:
+            week_view_date = datetime.strptime(week_view_str, "%Y-%m-%d").date()
+            end_date = week_view_date + timedelta(days=7)
+            
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if week_view_date <= eb["occurrence"].date() < end_date
+            ]
+        except ValueError:
+            pass
+
     # sort chronologically
     expanded_bookings.sort(key=lambda x: x["occurrence"])
 
-    context = {"bookings": expanded_bookings,
-               "filter": booking_filter}
+    context = {
+        "bookings": expanded_bookings,
+        "filter": booking_filter
+    }
 
     return render(request, "appointments/booking_list.html", context)
 
 
 # ---print booking_list to pfd.file ---
-
 
 @login_required
 def booking_pdf(request):
