@@ -1,0 +1,204 @@
+/* Global layout */
+body,
+html {
+  background: #232526;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Main content container */
+main.container-fluid {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  background: transparent;
+}
+
+/* Hamburger menu icon */
+.hamburger-icon {
+  display: inline-block;
+  width: 24px;
+  height: 18px;
+}
+.hamburger-icon span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 5px;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.hamburger-icon span:last-child {
+  margin-bottom: 0;
+}
+.btn-outline-light:focus .hamburger-icon span,
+.btn-outline-light:hover .hamburger-icon span {
+  background: #007bff;
+}
+
+/* Hamburger button alignment */
+.btn-outline-light.btn-sm.dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+/* Tabs styles */
+.tab-buttons {
+  width: 100vw;
+  margin: 0;
+  display: flex;
+  border-bottom: 2px solid #393e42;
+}
+.tablink {
+  background-color: #232526;
+  color: #fff;
+  border: 1px solid #393e42;
+  border-bottom: none;
+  cursor: pointer;
+  padding: 18px 0;
+  font-size: 18px;
+  width: 25%;
+  transition: background 0.2s, border 0.2s;
+}
+.tablink:not(:last-child) {
+  border-right: none;
+}
+.tablink.active,
+.tablink:hover {
+  background-color: #393e42;
+  border-top: 2px solid #007bff;
+  color: #fff;
+}
+.tabcontent {
+  display: none;
+  padding: 0;
+  min-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Header tabs styles */
+.tab-buttons-header {
+  width: 100vw;
+  margin: 0;
+  padding: 0 0 0 0;
+  display: flex;
+  border-bottom: 2px solid #393e42;
+  background: #232526;
+  min-height: 42px;
+}
+
+.tablink-header {
+  background-color: #232526;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.2s, border 0.2s;
+  border-radius: 0;
+  margin: 0 2px;
+}
+
+.tablink-header.active,
+.tablink-header:hover {
+  background-color: #393e42;
+  color: #fff;
+  border-bottom: 2px solid #007bff;
+}
+
+/* Home tab */
+#HomeTab {
+  background-color: #232526;
+  color: #fff;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+/* Hero section */
+.hero-section {
+  padding-top: 80px; /* Adjust this value until "MANAGER" is fully visible */
+  background: url("../img/main_baner.png") center center/cover no-repeat;
+  min-height: 420px;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: left;
+  max-width: 700px;
+  margin-left: 60px;
+  padding: 60px 0;
+}
+
+/* Features section */
+.features-section {
+  background: #232526;
+  width: 100vw;
+  padding: 40px 0 60px 0;
+}
+.features-section h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  margin: 0 10px;
+}
+.card-title {
+  font-weight: bold;
+  color: #232526;
+}
+.card-text {
+  color: #232526;
+}
+.row.justify-content-center {
+  margin: 0;
+}
+
+/* Other tabs */
+#News,
+#Contact,
+#About {
+  background-color: #232526;
+  color: #fff;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 60px 0 0 0;
+}
+

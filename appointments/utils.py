@@ -49,26 +49,31 @@ class Calendar(HTMLCalendar):
         all_bookings.sort(key=lambda b: b.start)
 
         css_class = (
-            "private"
-            if any(b.event_type == "private" for b in all_bookings) else ""
+            # "private"
+            # "has-private" if any(b.event_type == "private" for b in
+            #                      all_bookings) else ""
         )
-
+        # optional 
+        day_url = f"/appointments/day_view/?date={self.year}-{self.month:02d}-{day:02d}"
+        
         for booking in all_bookings:
             local_start = localtime(booking.start)
             local_end = localtime(booking.end)
             time_str = f"{
                 local_start.strftime('%H:%M')}-{local_end.strftime('%H:%M')}"
+            
+            if booking.booked_by.first_name and booking.booked_by.last_name:
+                username = (f"{booking.booked_by.first_name[0]}."
+                            f" {booking.booked_by.last_name}")
+            else:
+                username = str(booking.booked_by)
+             
             if booking.status == "pending":
-                d += f"<li>{time_str} Event status pending</li>"
+                d += f"<li class='pending'>{time_str} Event pending</li>"
             elif booking.event_type == "private":
-                username = (
-                    str(booking.booked_by).split("@")[0]
-                    if booking.booked_by else "Unknown")
-                d += (f"<li class='private'>{time_str}"
-                      f" Private {username}</li>")
+                d += f"<li class='private'>{time_str} Private<br>{username}</li>"
             elif booking.event_type == "training":
-                d += (f"<li class='training'>{time_str}"
-                      f" {booking.title}</li>")
+                d += f"<li class='training'>{time_str} {booking.title}</li>"
             else:
                 d += f"<li class='other'>{time_str} {booking.title}</li>"
 

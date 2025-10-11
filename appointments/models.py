@@ -50,7 +50,9 @@ class Booking(models.Model):
         CustomUser, blank=True, related_name="participating_bookings")
 
     recurrence = models.CharField(
-        max_length=20, choices=RECURRENCES, default="none")
+        max_length=20, choices=RECURRENCES, default="none",
+        help_text=("Select daily, weekly or monthly for repeating events, "
+                   "or ignore rubric recurrence/end."))
     recurrence_end = models.DateField(null=True, blank=True, 
                                       help_text="Repetition until when?")
 

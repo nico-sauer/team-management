@@ -189,7 +189,10 @@ def booking_pdf(request):
                     "occurrence": occ_start,
                     "end_occurrence": occ_end,
                     "status": booking.status,
-                    "participants": ", ".join([str(p) for p in booking.participants.all()]),
+                    "participants": ", ".join(
+                        (f"{p.first_name[0]}. {p.last_name}"
+                         if p.first_name and p.last_name
+                         else p.email for p in booking.participants.all())),
                 })
         else:
             start = booking.start
@@ -203,8 +206,11 @@ def booking_pdf(request):
                 "occurrence": start,
                 "end_occurrence": end,
                 "status": booking.status,
-                "participants": ", ".join([str(p) for p in booking.participants.all()]),
-            })
+                "participants": ", ".join(
+                    (f"{p.first_name[0]}. {p.last_name}"
+                        if p.first_name and p.last_name
+                        else p.email for p in booking.participants.all())),
+                    })
 
     # Sort chronologically by start time
     expanded_bookings.sort(key=lambda x: x["occurrence"])
