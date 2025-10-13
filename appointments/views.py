@@ -142,7 +142,7 @@ def booking_list(request):
         try:
             week_view_date = datetime.strptime(week_view_str, "%Y-%m-%d").date()
             end_date = week_view_date + timedelta(days=7)
-            
+
             expanded_bookings = [
                 eb for eb in expanded_bookings
                 if week_view_date <= eb["occurrence"].date() < end_date
@@ -184,11 +184,15 @@ def booking_pdf(request):
     current_user = request.user
 
     bookings = (
-        Booking.objects.filter(Q(booked_by=current_user) | Q(participants=current_user))
+        Booking.objects.filter(
+            Q(booked_by=current_user) |
+            Q(participants=current_user)
+        )
         .distinct()
         .order_by("-created_at")
     )
 
+    # filter regarding event_type from databas entries
     booking_filter = BookingFilter(request.GET, queryset=bookings)
     bookings = booking_filter.qs
 
@@ -199,6 +203,7 @@ def booking_pdf(request):
 
     expanded_bookings = []
 
+    # check for expanded bookings
     for booking in bookings:
         if booking.recurrence != "none":
             occurrences = booking.get_occurrences(start_date, end_date)
@@ -238,6 +243,31 @@ def booking_pdf(request):
                         if p.first_name and p.last_name
                         else p.email for p in booking.participants.all())),
                     })
+
+    # filter regarding day_view und week_view_from
+    day_view_str = request.GET.get("day_view")
+    week_view_str = request.GET.get("week_view_from")
+
+    if day_view_str:
+        try:
+            day_view_date = datetime.strptime(day_view_str, "%Y-%m-%d").date()
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if eb["occurrence"].date() == day_view_date
+            ]
+        except ValueError:
+            pass
+
+    if week_view_str:
+        try:
+            week_view_date = datetime.strptime(week_view_str, "%Y-%m-%d").date()
+            end_date = week_view_date + timedelta(days=7)
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if week_view_date <= eb["occurrence"].date() < end_date
+            ]
+        except ValueError:
+            pass
 
     # Sort chronologically by start time
     expanded_bookings.sort(key=lambda x: x["occurrence"])
