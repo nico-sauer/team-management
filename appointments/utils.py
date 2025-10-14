@@ -62,19 +62,24 @@ class Calendar(HTMLCalendar):
             else:
                 username = str(booking.booked_by)
 
-            if booking.status == "pending":
-                d += f"<li class='pending'>{time_str} Event pending</li>"
-            elif booking.status == "rejected":
-                d += f"<li class='rejected'>{time_str} {booking.title} rejected </li>"
+            if booking.status == "rejected":
+                d += (
+                    f"<li class='rejected'>{time_str} {booking.title}"
+                    f"rejected </li>"
+                )
             elif booking.event_type == "private":
-                d += f"<li class='private'>{time_str} Private<br>{username}</li>"
+                d += (
+                    f"<li class='private'>{time_str} "
+                    f"Private<br>{username}</li>")
             elif booking.event_type == "training":
                 d += f"<li class='training'>{time_str} {booking.title}</li>"
 
             else:
                 d += f"<li class='other'>{time_str} {booking.title}</li>"
 
-        return f"<td class='{css_class}'><span class='date'>{day}</span><ul>{d}</ul></td>"
+        return (
+            f"<td class='{css_class}'><span class='date'>{day}</span><ul>{d}"
+            f"</ul></td>")
 
     # formats a week as a <tr>
     def formatweek(self, theweek, bookings):
@@ -93,7 +98,8 @@ class Calendar(HTMLCalendar):
             end__gte=first_day,
         )
 
-        cal = '<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal = ('<table border="0" cellpadding="0" cellspacing="0"'
+               'class="calendar">\n')
         cal += f"{self.formatmonthname(
             self.year, self.month, withyear=withyear)}\n"
         cal += f"{self.formatweekheader()}\n"
@@ -103,9 +109,10 @@ class Calendar(HTMLCalendar):
         return cal
 
 
-# expanded bookings
+# get expanded bookings for booking_list & booking_list_pdf
 def expand_bookings(filtered_bookings, start_date, end_date):
-    """Expand recurring and non-recurring bookings into individual occurrences."""
+    """Expand recurring and non-recurring bookings
+    into individual occurrences."""
     tz = get_current_timezone()
     expanded = []
 

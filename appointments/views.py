@@ -320,3 +320,35 @@ def next_month(d):
     last = d.replace(day=days_in_month)
     nxt = last + timedelta(days=1)
     return f"month={nxt.year}-{nxt.month}"
+
+
+
+
+@login_required
+def booking_day_view(request):
+    """Display all of the logged-in user’s bookings (including recurring ones)
+    for today."""
+
+    current_user = request.user
+    today = date.today()
+
+    # Base queryset: only the user’s own bookings
+    bookings = Booking.objects.filter(
+        Q(booked_by=current_user) | Q(participants=current_user)
+    ).distinct()
+
+    # Expand recurring events within today’s range
+    expanded_bookings = expand_bookings(
+        bookings, start_date=today, end_date=today + timedelta(days=1)
+    )
+
+    # Keep only today’s occurrences
+    today_occurrences = [
+        eb for eb in expanded_bookings if eb["occurrence"].date() == today
+    ]
+
+    context = {
+        "bookings_today": today_occurrences,
+        "today": today
+        }
+    return render(request, "appointments/booking_day_view.html", context)
