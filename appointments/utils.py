@@ -54,8 +54,10 @@ class Calendar(HTMLCalendar):
         for booking in all_bookings:
             local_start = localtime(booking.start)
             local_end = localtime(booking.end)
-            time_str = f"{
-                local_start.strftime('%H:%M')}-{local_end.strftime('%H:%M')}"
+            time_str = (
+                f"{local_start.strftime('%H:%M')}-"
+                f"{local_end.strftime('%H:%M')}"
+            )
 
             if booking.booked_by.first_name and booking.booked_by.last_name:
                 username = (f"{booking.booked_by.first_name[0]}."
