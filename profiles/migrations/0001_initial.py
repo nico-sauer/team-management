@@ -48,20 +48,5 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
-        migrations.CreateModel(
-            name='StaffProfile',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('icon', models.ImageField(default='default.jpg', upload_to='profile_images')),
-                ('title', models.CharField(blank=True, choices=[('Dr.', 'Dr.'), ('PhD', 'PhD')])),
-                ('first_name', models.CharField(max_length=30, verbose_name='First Name')),
-                ('last_name', models.CharField(max_length=30, verbose_name='Last Name')),
-                ('birthday', models.DateField(null=True)),
-                ('slug', autoslug.fields.AutoSlugField(always_update=True, editable=False, populate_from='get_full_name', unique=True)),
-                ('email', models.EmailField(max_length=254, verbose_name='Email Address')),
-                ('phone_number', phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='Phone Number')),
-                ('role', models.CharField(blank=True, choices=[('Manager', 'Manager'), ('Trainer', 'Trainer'), ('Physical Therapist', 'Physical Therapist'), ('Dietician', 'Dietician'), ('Doctor', 'Doctor'), ('Chef', 'Chef')])),
-                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
+     
     ]
