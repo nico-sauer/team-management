@@ -3,7 +3,7 @@ from calendar import HTMLCalendar
 from .models import Booking
 from datetime import date, timedelta
 from django.utils.timezone import localtime
-
+from django.utils.timezone import make_aware, get_current_timezone, is_aware
 
 class Calendar(HTMLCalendar):
     def __init__(self, year=None, month=None, events=None):
@@ -48,11 +48,7 @@ class Calendar(HTMLCalendar):
         # sort chronologically by start_time
         all_bookings.sort(key=lambda b: b.start)
 
-        css_class = (
-            # "private"
-            # "has-private" if any(b.event_type == "private" for b in
-            #                      all_bookings) else ""
-        )
+        css_class = ""
 
         for booking in all_bookings:
             local_start = localtime(booking.start)
@@ -68,10 +64,13 @@ class Calendar(HTMLCalendar):
 
             if booking.status == "pending":
                 d += f"<li class='pending'>{time_str} Event pending</li>"
+            elif booking.status == "rejected":
+                d += f"<li class='rejected'>{time_str} {booking.title} rejected </li>"
             elif booking.event_type == "private":
                 d += f"<li class='private'>{time_str} Private<br>{username}</li>"
             elif booking.event_type == "training":
                 d += f"<li class='training'>{time_str} {booking.title}</li>"
+
             else:
                 d += f"<li class='other'>{time_str} {booking.title}</li>"
 
@@ -102,3 +101,45 @@ class Calendar(HTMLCalendar):
             cal += f"{self.formatweek(week, events)}\n"
         cal += "</table>"
         return cal
+
+
+# expanded bookings
+def expand_bookings(filtered_bookings, start_date, end_date):
+    """Expand recurring and non-recurring bookings into individual occurrences."""
+    tz = get_current_timezone()
+    expanded = []
+
+    for booking in filtered_bookings:
+        if booking.recurrence != "none":
+            occurrences = booking.get_occurrences(start_date, end_date)
+            for occ_start in occurrences:
+                duration = booking.end - booking.start
+                occ_end = occ_start + duration
+
+                if not is_aware(occ_start):
+                    occ_start = make_aware(occ_start, tz)
+                if not is_aware(occ_end):
+                    occ_end = make_aware(occ_end, tz)
+
+                expanded.append({
+                    "booking": booking,
+                    "occurrence": occ_start,
+                    "end_occurrence": occ_end,
+                })
+        else:
+            start = booking.start
+            end = booking.end
+            if not is_aware(start):
+                start = make_aware(start, tz)
+            if not is_aware(end):
+                end = make_aware(end, tz)
+
+            expanded.append({
+                "booking": booking,
+                "occurrence": start,
+                "end_occurrence": end,
+            })
+
+    # Sort by occurrence start
+    expanded.sort(key=lambda x: x["occurrence"])
+    return expanded
