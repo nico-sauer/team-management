@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
 
 LOGIN_URL = '/users/login_user/'
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"    # appointments_app
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5"]    # appointments_app
 CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 
 ''' this email section comment out if you don't to send emails in our app '''

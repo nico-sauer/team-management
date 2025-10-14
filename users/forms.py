@@ -198,6 +198,13 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
                 raise ValidationError("The team is already exist, please enter another team")
             else : 
                 user.save()
+                # Create StaffProfile for the manager
+                StaffProfile.objects.create(
+                    user=user,
+                    first_name=self.cleaned_data['first_name'],
+                    last_name=self.cleaned_data['last_name'],
+                    role=role,
+                )
                 # team = Team.objects.create(team_name = team, manager = user.first_name)
                 
                 team_id = Team.objects.create(team_name = team_name, manager = user)
