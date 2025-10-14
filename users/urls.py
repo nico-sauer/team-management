@@ -11,6 +11,7 @@ urlpatterns = [
     path("logout_user/", views.logout_user, name="logout"),
     path("change_password/", views.change_password, name="change_password"),
     path("first_registration/", views.first_registration, name="first_registration")
+    
 ]
 
 #add to settings.py:

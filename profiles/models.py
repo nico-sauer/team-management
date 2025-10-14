@@ -1,6 +1,6 @@
 import datetime
 from uuid import uuid4
-from users.models import CustomUser
+
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 #from model_utils.managers import InheritanceManager, QueryManager
 from phonenumber_field.modelfields import PhoneNumberField
+
+from users.models import CustomUser
 
 #from django import forms
 
@@ -57,16 +59,16 @@ GENDER = (
 class StaffProfile(models.Model):
    
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField#(default='default.jpg', upload_to='profile_images')
+    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
     title = models.CharField(choices= TITLE, blank=True)
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
-    #birthday = models.DateField(null=True, blank=False)
+    birthday = models.DateField(null=True, blank=False)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
 
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null= True, blank=True)
 
     role = models.CharField(choices = ROLE_CHOICES, blank=True)
     # i've changed def__str__ to one, cause it's showing only last one if there were many and it was a phone_number
@@ -87,16 +89,15 @@ class AthleteProfile(models.Model):
     #basic profile info:
     
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField#(default='default.jpg', upload_to='profile_images')
+    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
     birthday = models.DateField(null=True, blank=False)
-
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    number = models.PositiveIntegerField(default=0) #unless we use their jersey number as id for easier searching
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    number = models.PositiveIntegerField(default=0) 
     position = models.CharField(null=True)
     
     #medical profile info:
@@ -113,18 +114,15 @@ class AthleteProfile(models.Model):
     medical_history = models.TextField(blank=True, null=True)
     additional_notes = models.TextField(blank=True, null=True)
    
-    last_updated = models.DateField(null=True, blank=True)
+    last_updated = models.DateField(auto_now=True) 
     
     
     #nutrition profile info:
-    calories = models.CharField(null=True)
-    protein = models.CharField(null=True)
-    carbs = models.CharField(null=True)
-    fat = models.CharField(null=True)
-    dietary_restrictions = models.TextField(null=True)
-    
-    meal_plan = models.TextField(null=True)
-    training_plan = models.TextField(null=True)
+    calories = models.CharField(null=True, blank=True)
+    protein = models.CharField(null=True, blank=True)
+    carbs = models.CharField(null=True, blank=True)
+    fat = models.CharField(null=True, blank=True)
+    dietary_restrictions = models.TextField(null=True, blank=True)
     
     #medical_records = QueryManager()
     
@@ -146,35 +144,3 @@ class AthleteProfile(models.Model):
             age = datetime.date.today()-self.birthday
             return int((age).days/365.25)
         
-    # def get_records(self):
-    #     for i in MedicalRecordsData.medical_records():
-    #         return list(MedicalRecords))
-
-# class MedicalRecords(AthleteProfile):
-#     pass
-    #athlete = models.ForeignKey(AthleteProfile, related_name='medical_records', on_delete=models.CASCADE, blank=True)#TextField(blank=True)#ManyToManyField("self", symmetrical=False) # through="AthleteProfile", through_fields=("medical_records"))#.ForeignKey(AthleteProfile, on_delete=models.CASCADE, related_name="medical_records")
-    # prescriptions = models.TextField(blank=True)
-    # treatment_details = models.TextField(blank=True)
-    # last_updated = models.DateField(null=True, blank=True)
-    # allergies = models.TextField(blank=True, null=True)
-    # diagnoses = models.TextField(blank=True, null=True)
-    #past_records = models.ForeignKey("MedicalRecordsArchive", related_name='medical_records', on_delete=models.CASCADE)
-    #slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
-    # class Meta:
-    #     ordering = ["-last_updated"]
-    
-    # def __str__(self):
-    #     return f"{self.athlete}"
-    # def __str__(self):
-    #     medical_records = self.get_records()
-    #     return medical_records
-    
-    # def get_records(self):
-        
-    #     records = {AthleteProfile: record for record in instance}
-    #     return list(records)
-   
-#     class MedicalRecordsArchive(models.Model):
-#         pass
-# #       medical_records = models.ForeignKey(MedicalRecordsArchive, related_name='medical_records', on_delete=models.CASCADE)
-
