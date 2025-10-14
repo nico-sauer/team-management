@@ -5,6 +5,7 @@ from datetime import date, timedelta
 from django.utils.timezone import localtime
 from django.utils.timezone import make_aware, get_current_timezone, is_aware
 
+
 class Calendar(HTMLCalendar):
     def __init__(self, year=None, month=None, events=None):
         self.year = year

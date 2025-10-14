@@ -10,28 +10,26 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("profiles", "0001_initial"),
+        ("appointments", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="athleteprofile",
-            name="user",
-            field=models.OneToOneField(
-                blank=True,
-                null=True,
+            model_name="booking",
+            name="booked_by",
+            field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
+                related_name="bookings_by",
                 to=settings.AUTH_USER_MODEL,
             ),
         ),
         migrations.AddField(
-            model_name="staffprofile",
-            name="user",
-            field=models.OneToOneField(
+            model_name="booking",
+            name="participants",
+            field=models.ManyToManyField(
                 blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
+                related_name="participating_bookings",
                 to=settings.AUTH_USER_MODEL,
             ),
         ),
