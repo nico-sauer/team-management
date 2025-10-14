@@ -48,30 +48,11 @@ def register_user(request):
         
         
         if form.is_valid():
-            
-         #  if Team.objects.filter(team_name = team):
-          #     raise ValidationError("The team is already exist, please enter another team")
-           
-            
-        #     current_user = request.user #give the info of the logged in user(Manager)
-        #     current_user_team= current_user.team_id.id#id of the manager's team
-        #   #manager_team= Team.objects.get(pk = current_user_team) 
-          
-            
-        #     manager_team = Team.objects.filter(id= current_user_team) 
-            
-        #     if form.team_id.id==current_user_team:
-               #form.team_id_id = form.team.id
-                
-                form.save()
-            # #send a confirmation email
-            #     messages.success(request, "Registration successful!")
-            #     return redirect("home")
-            # else:
-            #     messages.success(request, "You can only add users for your own team. please add user again and choose your team")
-            #     form = CustomUserCreationForm()
-            
-                # form.delete()
+            user = form.save()
+            if user.role == "Manager":
+                from django.contrib.auth.models import Permission
+                permission = Permission.objects.get(codename="add_customuser")
+                user.user_permissions.add(permission)
             
     else:
         form = CustomUserCreationForm(current_user=request.user)
