@@ -31,7 +31,7 @@ def first_registration(request):
     else:
         form = FirstCustomUserCreationForm()    
             
-    return render(request, 'registration/register.html', {'form':form})
+    return render(request, 'registration/first_register.html', {'form':form})
     
         
 

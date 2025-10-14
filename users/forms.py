@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Team, CustomUser
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from profiles.models import StaffProfile, AthleteProfile
 
 
 
@@ -114,14 +115,14 @@ class CustomUserCreationForm(UserCreationForm):
         new_group_name = self.cleaned_data.get('new_group_name')
         role = self.cleaned_data.get('role')
 
-        # team
+        # Team assignment
         if new_team_name:
-            team = Team.objects.create(team_name=new_team_name)
-            user.team = team
-        elif self.cleaned_data.get('team'):
-            user.team = self.cleaned_data['team']
+            team = Team.objects.create(team_name=new_team_name, manager=self.current_user)
+            user.team_id = team
+        elif self.cleaned_data.get('team_id'):
+            user.team_id = self.cleaned_data['team_id']
 
-        # group
+        # Group assignment
         if new_group_name:
             group = Group.objects.create(name=new_group_name)
         elif self.cleaned_data.get('group'):
@@ -129,52 +130,28 @@ class CustomUserCreationForm(UserCreationForm):
         else:
             group = None
 
-        group = self.cleaned_data['group']
-        
-        # manager_user_id = current_user.id give the id of the logged in user
-    # manager_team= staffprofile.objects.get(pk=user_id).filter(team_id)
-        # if user.team != team
-        
-        # if commit:
-        #     user.save()
-        #     user.groups.add(group)
-        # # user.groups.set([group]) if we want more then one group to one user
-            
-        # return user
-    
         if commit:
             user.save()
             if group:
                 user.groups.add(group)
+                user.group = group
+                user.save()
 
-            # creating profile
+            # Profile creation
             if role in ["Manager", "Trainer", "Physical Therapist", "Dietitian", "Doctor", "Chef"]:
                 StaffProfile.objects.create(
                     user=user,
                     first_name=self.cleaned_data['first_name'],
                     last_name=self.cleaned_data['last_name'],
                     role=role,
-                    
                 )
             elif role == "Athlete":
                 AthleteProfile.objects.create(
                     user=user,
                     first_name=self.cleaned_data['first_name'],
                     last_name=self.cleaned_data['last_name'],
-                    #
                 )
-            user.group = group
-            user.groups.add(group)
-            user.save()
-            
         return user
-
-                # team = Team.objects.create(team_name = team, manager = user.first_name) #can be change to get_or_create if we want the manager to use an existing team. manager can also be foreign key(change in Team)
-                # user.team_id=team
-                # group= Group.objects.get(name='Managers')
-                # user.group = group
-                # user.groups.add(group)
-                # user.save()
     
 
 #A form for the first team member that register(Manager)
@@ -188,7 +165,7 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
     team_name = forms.CharField(max_length=250)
     
    #group = forms.ModelChoiceField(queryset=Group.objects.filter(name = 'Managers' ))  
-    group = forms.ModelChoiceField(queryset=Group.objects.all(), initial= 'Managers', required=False),
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), initial='Managers', required=False)
     
     
     
