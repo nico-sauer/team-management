@@ -53,29 +53,26 @@ class Meals(models.Model):
     totalcarb = models.PositiveIntegerField(default=0)
     totalprotein = models.PositiveIntegerField(default=0)
     calories = models.PositiveIntegerField(default=0)
-    chef= models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True) # or just user when we have roles etc 
-    #might have to add dietary requirement the meal fits
+    chef = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True) 
+    dietary_requirements = models.TextField(blank=True, null=True)
 
 
 class WeeklyMealPlan(models.Model):
     day = models.TextField(max_length=10)
     meal = models.ForeignKey(Meals, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    
-
 
 
 class TrainingSessions(models.Model):
     name = models.TextField(max_length=50, blank=True, null=True)
-    type = models.CharField(blank=True, null=True) # choices or just examples as placeholder
+    type = models.CharField(blank=True, null=True) 
     description = models.TextField(max_length=2500, default="", blank=True, null=True)
     trainer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    #maybe add file
-    
+
 
 class WeeklySessions(models.Model):
     day = models.TextField(max_length=10)
-    #maybe add datetime
+    time = models.DateTimeField(blank=True, null=True)
     session = models.ForeignKey(TrainingSessions, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
 
