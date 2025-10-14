@@ -11,4 +11,5 @@ urlpatterns = [
          name="delete_booking"),
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
     path("booking_pdf/", views.booking_pdf, name="booking_pdf"),
+    path("booking_day_view/", views.booking_day_view, name="booking_day_view"),
 ]

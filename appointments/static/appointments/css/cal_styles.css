@@ -92,7 +92,7 @@ a {
    Private appointments
 ---------------------------- */
 .calendar td ul li.private {
-    background-color: #f44336 !important;
+    background-color: #368ff4 !important;
     color: white !important;
     border-radius: 4px;
     padding: 2px 4px;
@@ -106,6 +106,24 @@ a {
 .calendar td ul li.training {
     background-color: #118a15 !important;
     color: white !important;
+    border-radius: 4px;
+    padding: 2px 4px;
+    display: inline-block;
+    list-style: none;
+}
+
+
+/* ---------------------------
+   Rejected appointments
+---------------------------- */
+.calendar td ul li.rejected,
+.calendar td ul li.rejected * {
+    background-color: #777 !important;
+    color: #fff !important;      
+    opacity: 0.7;
+    text-decoration: line-through !important;
+    text-decoration-thickness: 2px;
+    border: 1px  rgb(90, 87, 87); 
     border-radius: 4px;
     padding: 2px 4px;
     display: inline-block;
