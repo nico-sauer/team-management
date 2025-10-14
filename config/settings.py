@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from django.contrib.messages import constants as messages
 from pathlib import Path
 import logging
 import dj_database_url
@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
 
 LOGIN_URL = '/users/login_user/'
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"    # appointments_app
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5"]    # appointments_app
 CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 
 ''' this email section comment out if you don't to send emails in our app '''

@@ -52,8 +52,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 table, th, td {
   border:1px solid black;
-  width: 100%;
-  table-layout:fixed
+   width: 100%;
+    table-layout:fixed
  
   display: inline-block;
 }
@@ -75,18 +75,18 @@ tr:nth-child(even) {
 
 rel="stylesheet"
 
-href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css">
+href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css">
 
 </head>
-<div class="card" style="width: 100%; margin: 20px auto;  border-radius: 8px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+<div class="card" style="width: 100%; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
     <div class="card-body" style="width:100%; margin:auto; text-align: left;">
         <div style="display: inline;">
             <h1>{{ athlete.first_name }} {{ athlete.last_name }}</h1>
           <div>
-          <table style="width:200px; height: 100%; margins: auto">
+          <table style="width:200px; height: 100%" margins: auto>
           
             <tr>
-              <td colspan="1">Name: {{ athlete.first_name }} {{ athlete.last_name }}</td>
+              <td>Name: {{ athlete.first_name }} {{ athlete.last_name }}</td>
             </tr>
             <tr>
               <td>Birthday: {{ athlete.birthday}}</td>
@@ -101,9 +101,26 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
               <td>Weight: {{ athlete.weight }}kg</td> 
             </tr>
             <tr>
-              <td>Bloodtype: {{ athlete.blood_type}}</td>
+              <td>Bloodtype: {{ athlete.blood_type}}</td> 
             </tr>
             
+          </table>
+          <div>
+          <table style="width:30%; height: 100%"; margins: auto>
+          
+            <tr>
+              <td>Average TDEE: {{ athlete.calories}}</td>
+            </tr>
+            <tr>
+              <td>Protein Target: {{ athlete.protein}}</td>
+            </tr>
+            <tr>
+              <td>Carb Target: {{ athlete.carbs}}</td>
+            </tr>
+            <tr>
+              <td>Fat Target: {{ athlete.fat}}</td>
+            </tr>
+           
           </table>
           </div>
           
@@ -113,10 +130,10 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
                    
             <table style="width:80%; margins: auto">
               <tr>
-                <th>Prescriptions</th>
+                <th>Dietary Restrictions</th>
               </tr>
               <tr>
-                <td>{{athlete.prescriptions}}</td>
+                <td>{{athlete.dietary_restrictions}}</td>
               </tr>
               
             </table>
@@ -133,51 +150,22 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
             </table>
             
             
-            <table style="width:80%; margins: auto">
-              <tr>
-                <th>Diaganoses</th>
-              </tr>
-              <tr>
-                <td>{{athlete.diagnoses}}</td>
-              </tr>
-              
-            </table>
-            <br>
-            <div class=medical_records>
-            <table style="width:80%; margins: auto">
-              <tr>
-              <th>Treatment Details</th>  
-              </tr>
-              <tr>
-                <td>{{athlete.treatment_details}}</td>  
-              </tr>
-              
-            </table>
-            <table style="width:80%; margins: auto">
-              <tr>
-                <th>Medical History</th>  
-              </tr>
-              <tr>
-                <td>{{athlete.medical_history}}</td> 
-              </tr>
-              
-            </table>
+            
             <table style="width:80%; margins: auto">
               <tr>
                 <th>Additional Notes</th>
               </tr>
               <tr>
-                <td>{{athlete.additional_notes}}</td> 
+                <td>{{athlete.additional_notes}}</td>
+                
               </tr>
-            
-            </table>
               
-              <p style="font-weight: bolder">Last updated on {{ athlete.last_updated}}</p>
-          
+            </table>
+                <p style="font-weight: bolder">Last updated on {{ athlete.last_updated}}</p>
           </div>
           </div>
           <div>
-        <button id="myBtn">Edit</button>
+        <button id="myBtn">Open Modal</button>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -189,15 +177,14 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
                   {% csrf_token %}
                   
                  
-                  <div class="form-group col-md-3">{{ form.height|as_crispy_field }}</div>
-                  <div class="form-group col-md-3">{{ form.weight|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.gender|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.prescriptions|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.allergies|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.diagnoses|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.treatment_details|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.medical_history|as_crispy_field }}</div>
-                  <div class="form-group col-md-12">{{ form.additional_notes|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.height|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.weight|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.calories|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.protein|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.carbs|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.fat|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.dietary_restrictions|as_crispy_field }}</div>
+                  
                  
                   <button type="submit">Save</button>
             </form>
@@ -245,4 +232,3 @@ window.onclick = function(event) {
   <p>Back to <a href="/profiles/athletes">Members</a></p>
   
 {% endblock %}        
-

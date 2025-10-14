@@ -8,30 +8,50 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+import os
 
 #add email after user registration
 
 
+# def send_registrtion_email():
+#     email = EmailMessage(
+#     subject='Welcom to Team Management',
+#     body='Hello,you were registered to Team Management App.f'<a href=http://127.0.0.1:8000/</a>',
+#     from_email='TeamManagement@example.com',
+#     to=['edengoldstein5@gmail.com'],
+#         )
+#     email.send()
+                
+
 def first_registration(request):
     
     if request.method == 'POST':
-        form = FirstCustomUserCreationForm(request.POST)         
+        form = FirstCustomUserCreationForm(request.POST)
+                 
         try: 
             if form.is_valid():
         
                 form.save()
                 #send a confirmation email
                 messages.success(request, "Registration successful!")
-                return redirect("home")
+                
+                # registered_name = form.cleaned_data['first_name']
+                # registered_email = form.cleaned_data['email']
+                # registered_team = form.cleaned_data['team_id']
+                # html = render_to_string('registration/emails/registersuccess.html', {'name':registered_name, 'email':registered_email, 'team':registered_team})
+                # send_mail(subject='Team Management App Registration', message=f'{registered_name} Welcome to Team Management! You registered our App succesfully.', from_email='teammanagement@mail.com', recipient_list=[f'{registered_email}',], html_message=html)
+                return redirect("users:login")
         except ValidationError:
-            messages.success(request, "The team is already exist, please enter a new team")
+            messages.error(request, "The team is already exist, please enter a new team")
             form = FirstCustomUserCreationForm()
         
                 
     else:
         form = FirstCustomUserCreationForm()    
             
-    return render(request, 'registration/register.html', {'form':form})
+    return render(request, 'registration/first_register.html', {'form':form})
     
         
 
@@ -43,7 +63,7 @@ def register_user(request):
     
     
     if request.method == 'POST':
-        # current_user = request.user
+        
         form = CustomUserCreationForm(data=request.POST,current_user=request.user)
         
         
@@ -53,6 +73,9 @@ def register_user(request):
                 from django.contrib.auth.models import Permission
                 permission = Permission.objects.get(codename="add_customuser")
                 user.user_permissions.add(permission)
+        if form.is_valid():  
+                form.save()
+           
             
     else:
         form = CustomUserCreationForm(current_user=request.user)
@@ -70,9 +93,10 @@ def login_user(request):
         user = authenticate(email = email, password = password)    
         if user is not None: 
             login(request, user)
+            messages.success(request, "You are login")
             return redirect("/")#after login return to Home page
         else:
-            messages.success(request, "There was an error. Try to log in again")
+            messages.error(request, "There was an error. Try to log in again")
             return redirect('/')
     else: 
          return render(request,'registration/login.html') #add the template to login and render 

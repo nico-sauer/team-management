@@ -3,8 +3,25 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-
-
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% else %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+       
+        {% endfor %}
+    {% endif %} 
+</div>
 
 <!-- Home tab -->
 <div id="HomeTab" class="tabcontent">
@@ -35,7 +52,7 @@
                     <div class="alert alert-info">Welcome to Team Management!</div>
                 {% endif %}
             {% else %}
-                <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg">Get Started</a>
+                <a href="{% url 'users:first_registration' %}" class="btn btn-primary btn-lg">Get Started</a>
             {% endif %}
         </div>
     </div>

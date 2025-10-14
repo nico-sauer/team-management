@@ -32,39 +32,61 @@ def athlete_list(request):
   }
   return HttpResponse(template.render(context, request))
 
-
-def athlete_details(request, id):
-  athlete = AthleteProfile.objects.get(id=id)
-  template = loader.get_template('profiles/athlete.html')
-  
-  context = {
-    'athlete': athlete,
-  }
-  return HttpResponse(template.render(context, request))
-
-
-def post(request, id):
-    template = loader.get_template('profiles/athlete.html')
-    athlete = get_object_or_404(AthleteProfile, id=id)
-    serializer = MedicalRecordsSerializer(athlete, data=request.data)
-    context = {
-    'athlete': athlete,
-    }
-    if not serializer.is_valid():
-        return Response({'serializer': serializer, 'profile': athlete})
-    serializer.save()
-    return HttpResponse(template.render(context, request))
-
-def medical_records(request, id):
-    athlete = AthleteProfile.objects.get(id=id)
-    if request.method == "POST":
+def athlete_details(request, id=None):
+    athlete = AthleteProfile.objects.filter(pk=id).first()
+    form = AthleteProfileForm(instance=athlete)
     #template = loader.get_template('profiles/medical_records.html')
-        form = AthleteProfileForm(instance=athlete)
+    if request.method == "POST":
+    
+        form = AthleteProfileForm(request.POST, instance=athlete)
         if form.is_valid():
             form.save()
-            return redirect('medical-records', athlete(id))
-    else:
-        form = AthleteProfileForm(instance=athlete)
+            #return redirect('profiles/medical_records', athlete(id))
+        else:
+            form=AthleteProfileForm(instance=athlete)
+        
+        
+    context = {
+    'athlete': athlete,
+    'form': form
+   }
+    # if request.method == "POST":
+    return render(request, 'profiles/athlete.html', context)
+# def athlete_details(request, id):
+#   athlete = AthleteProfile.objects.get(id=id)
+#   template = loader.get_template('profiles/athlete.html')
+  
+#   context = {
+#     'athlete': athlete,
+#   }
+#   return HttpResponse(template.render(context, request))
+
+
+# def post(request, id):
+#     template = loader.get_template('profiles/athlete.html')
+#     athlete = get_object_or_404(AthleteProfile, id=id)
+#     serializer = MedicalRecordsSerializer(athlete, data=request.data)
+#     context = {
+#     'athlete': athlete,
+#     }
+#     if not serializer.is_valid():
+#         return Response({'serializer': serializer, 'profile': athlete})
+#     serializer.save()
+#     return HttpResponse(template.render(context, request))
+
+def medical_records(request, id=None):
+    athlete = AthleteProfile.objects.filter(pk=id).first()
+    form = AthleteProfileForm(instance=athlete)
+    #template = loader.get_template('profiles/medical_records.html')
+    if request.method == "POST":
+    
+        form = AthleteProfileForm(request.POST, instance=athlete)
+        if form.is_valid():
+            form.save()
+            #return redirect('profiles/medical_records', athlete(id))
+        else:
+            form=AthleteProfileForm(instance=athlete)
+        
         
     context = {
     'athlete': athlete,
@@ -73,6 +95,26 @@ def medical_records(request, id):
     # if request.method == "POST":
     return render(request, 'profiles/medical_records.html', context)
 
+def dietary(request, id=None):
+    athlete = AthleteProfile.objects.filter(pk=id).first()
+    form = AthleteProfileForm(instance=athlete)
+    #template = loader.get_template('profiles/medical_records.html')
+    if request.method == "POST":
+    
+        form = AthleteProfileForm(request.POST, instance=athlete)
+        if form.is_valid():
+            form.save()
+            #return redirect('profiles/medical_records', athlete(id))
+        else:
+            form=AthleteProfileForm(instance=athlete)
+        
+        
+    context = {
+    'athlete': athlete,
+    'form': form
+   }
+    # if request.method == "POST":
+    return render(request, 'profiles/dietary.html', context)
   
 #   context = {
 #     'athlete': athlete,
@@ -90,16 +132,27 @@ def staff_list(request):
   return HttpResponse(template.render(context, request))
 
 
-def staff_details(request, id):
-  staff_member = StaffProfile.objects.get(id=id)
-  template = loader.get_template('profiles/staff.html')
-  
-  context = {
+
+def staff_details(request, id=None):
+    staff_member = StaffProfile.objects.filter(pk=id).first()
+    form = StaffProfileForm(instance=staff_member)
+    #template = loader.get_template('profiles/medical_records.html')
+    if request.method == "POST":
+    
+        form = StaffProfileForm(request.POST, instance=staff_member)
+        if form.is_valid():
+            form.save()
+            #return redirect('profiles/medical_records', staff_member(id))
+        else:
+            form=StaffProfileForm(instance=staff_member)
+        
+        
+    context = {
     'staff_member': staff_member,
-  }
-  return HttpResponse(template.render(context, request))
-
-
+    'form': form
+   }
+    # if request.method == "POST":
+    return render(request, 'profiles/staff.html', context)
 
 
     
@@ -219,7 +272,7 @@ class ManagerAccessAthleteViewSet(viewsets.ModelViewSet):
 
     queryset = AthleteProfile.objects.all()
     serializer_class = ManagerAccessAthleteSerializer
-    http_method_names = ["list", "post","get", "put","head"]
+    http_method_names = ["list", "post","get", "put","head", "delete"]
     #permission_classes = [IsAdminUser]
     #authentication_classes = [TokenAuthentication] 
     
