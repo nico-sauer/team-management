@@ -35,10 +35,7 @@ def first_registration(request):
                 form.save()
                 #send a confirmation email
                 messages.success(request, "Registration successful!")
-                # registered_email = form.cleaned_data['email']
-                # registered_name = form.cleaned_data['']
-                # send_registrtion_email()
-                return redirect("home")
+                return redirect("users:login")
         except ValidationError:
             messages.error(request, "The team is already exist, please enter a new team")
             form = FirstCustomUserCreationForm()
@@ -47,7 +44,7 @@ def first_registration(request):
     else:
         form = FirstCustomUserCreationForm()    
             
-    return render(request, 'registration/register.html', {'form':form})
+    return render(request, 'registration/first_register.html', {'form':form})
     
         
 
