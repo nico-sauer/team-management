@@ -22,7 +22,7 @@ def first_registration(request):
                 form.save()
                 #send a confirmation email
                 messages.success(request, "Registration successful!")
-                return redirect("home")
+                return redirect("users:login")
         except ValidationError:
             messages.success(request, "The team is already exist, please enter a new team")
             form = FirstCustomUserCreationForm()
