@@ -1,5 +1,7 @@
-from django.forms import ModelForm
 from django import forms
+from django.forms import ModelForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, Submit
 
 from .models import AthleteProfile, StaffProfile
 
@@ -29,18 +31,13 @@ class Gender(ModelForm):
         
 class AthleteProfileForm(ModelForm):
     #allergies = forms.TextInput() 
-    last_updated =forms.DateField(widget=forms.SelectDateWidget)
+    #last_updated =forms.DateField(widget=forms.SelectDateWidget)
     class Meta:
         model = AthleteProfile
-        fields = [
-            'height',
-            'weight',
-            'blood_type',
-            'allergies',
-            'prescriptions',
-            'treatment_details',
-            'diagnoses',
-            'additional_notes',
-            'last_updated'
-            ]
+        fields = '__all__'
         
+class StaffProfileForm(ModelForm):
+    
+    class Meta:
+        model = StaffProfile
+        fields = "__all__"

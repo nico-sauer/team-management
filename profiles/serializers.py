@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AthleteProfile , StaffProfile
+from .models import AthleteProfile, StaffProfile
 
 #from plans.models import MedicalRecords
 
