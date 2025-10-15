@@ -108,6 +108,9 @@ def logout_user(request):
     messages.success(request, "You were logged out.")
     return redirect("/")
         
+
+
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -116,7 +119,7 @@ def change_password(request):
                 
             update_session_auth_hash(request, user)  #keep user logged in after change password
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('profile') #return the user to his profile
+            return redirect('/') #return the user to his profile
         else:
             messages.error(request, 'Please correct the error below.')
     else:
