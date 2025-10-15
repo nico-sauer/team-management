@@ -67,6 +67,12 @@ def register_user(request):
         form = CustomUserCreationForm(data=request.POST,current_user=request.user)
         
         
+        if form.is_valid():
+            user = form.save()
+            if user.role == "Manager":
+                from django.contrib.auth.models import Permission
+                permission = Permission.objects.get(codename="add_customuser")
+                user.user_permissions.add(permission)
         if form.is_valid():  
                 form.save()
            
