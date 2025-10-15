@@ -164,9 +164,9 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
     role= forms.ChoiceField(choices=MANAGER_CHOICES, required=False)
     team_name = forms.CharField(max_length=250)
     
-   #group = forms.ModelChoiceField(queryset=Group.objects.filter(name = 'Managers' ))  
-    group = forms.ModelChoiceField(queryset=Group.objects.all(), initial='Managers', required=False)
     
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), initial='Managers', required=False)
+    # group = forms.ModelChoiceField(queryset=all_groups.get(name = 'Managers' )) 
     
     
     class Meta:

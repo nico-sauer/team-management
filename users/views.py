@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import os
+from django.conf import settings
 
 #add email after user registration
 
@@ -37,11 +38,11 @@ def first_registration(request):
                 #send a confirmation email
                 messages.success(request, "Registration successful!")
                 
-                # registered_name = form.cleaned_data['first_name']
-                # registered_email = form.cleaned_data['email']
+                registered_name = form.cleaned_data['first_name']
+                registered_email = form.cleaned_data['email']
                 # registered_team = form.cleaned_data['team_id']
-                # html = render_to_string('registration/emails/registersuccess.html', {'name':registered_name, 'email':registered_email, 'team':registered_team})
-                # send_mail(subject='Team Management App Registration', message=f'{registered_name} Welcome to Team Management! You registered our App succesfully.', from_email='teammanagement@mail.com', recipient_list=[f'{registered_email}',], html_message=html)
+                html = render_to_string('registration/emails/registersuccess.html', {'name':registered_name, 'email':registered_email,})
+                send_mail(subject='Team Management App Registration', message=f'{registered_name} Welcome to Team Management! You registered our App succesfully.', from_email=settings.EMAIL_HOST_USER, recipient_list=[f'{registered_email}',], html_message=html)
                 return redirect("users:login")
         except ValidationError:
             messages.error(request, "The team is already exist, please enter a new team")

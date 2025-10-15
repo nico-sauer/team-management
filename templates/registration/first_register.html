@@ -2,6 +2,25 @@
 {% load crispy_forms_tags %}
 {% block title %} First registration {% endblock %}
 {% block content %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% else %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+       
+        {% endfor %}
+    {% endif %} 
+</div>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
