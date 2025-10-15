@@ -63,7 +63,7 @@ class StaffProfile(models.Model):
     title = models.CharField(choices= TITLE, blank=True)
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
-    #birthday = models.DateField(null=True, blank=False)
+    birthday = models.DateField(null=True, blank=False)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
 
     email = models.EmailField(("Email Address"))
