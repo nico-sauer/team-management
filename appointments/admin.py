@@ -12,5 +12,5 @@ class BookingAdmin(admin.ModelAdmin):
         "status",
         "booked_by",
         "location",
-        "recurrence"
+        "recurrence",
     ]

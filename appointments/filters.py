@@ -27,8 +27,7 @@ class BookingFilter(django_filters.FilterSet):
     #     ),
     #     label="Start date (from)",
     #     )
-    
-    
+
     class Meta:
         model = Booking
         fields = ["event_type"]

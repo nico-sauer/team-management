@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import CustomUser
 from datetime import timedelta, date
+
 # from django.utils.timezone import make_aware, get_current_timezone, is_aware
 import calendar
 
@@ -33,27 +34,34 @@ class Booking(models.Model):
     ]
 
     title = models.CharField(max_length=100, blank=True)
-    event_type = models.CharField(max_length=50, choices=EVENT_TYPES,
-                                  default="meeting")
+    event_type = models.CharField(max_length=50, choices=EVENT_TYPES, default="meeting")
     booked_by = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="bookings_by"
     )
     start = models.DateTimeField()
     end = models.DateTimeField()
     location = models.CharField(max_length=100, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES,
-                              default="confirmed")
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default="confirmed"
+    )
     created_at = models.DateTimeField(auto_now_add=True, null=False)
 
     participants = models.ManyToManyField(
-        CustomUser, blank=True, related_name="participating_bookings")
+        CustomUser, blank=True, related_name="participating_bookings"
+    )
 
     recurrence = models.CharField(
-        max_length=20, choices=RECURRENCES, default="none",
-        help_text=("Select daily, weekly or monthly for repeating events, "
-                   "or ignore rubric recurrence/end."))
-    recurrence_end = models.DateField(null=True, blank=True, 
-                                      help_text="Repetition until when?")
+        max_length=20,
+        choices=RECURRENCES,
+        default="none",
+        help_text=(
+            "Select daily, weekly or monthly for repeating events, "
+            "or ignore rubric recurrence/end."
+        ),
+    )
+    recurrence_end = models.DateField(
+        null=True, blank=True, help_text="Repetition until when?"
+    )
 
     def __str__(self):
         return (
@@ -64,12 +72,12 @@ class Booking(models.Model):
     """ checks, if a participant has another booking at the same time.
     If yes, return a list with 'conflicting' participants. """
 
-
     def is_conflicting(self, participants=None):
         if participants is None:
             raise ValueError("Participants must not be empty.")
 
         from datetime import timedelta
+
         conflicts = []
         from_date = self.start.date() - timedelta(days=1)
         to_date = self.end.date() + timedelta(days=1)
@@ -77,8 +85,7 @@ class Booking(models.Model):
         for participant in participants:
             # all datatbase bookings
             bookings = Booking.objects.filter(
-                participants=participant,
-                status__in=["confirmed"]
+                participants=participant, status__in=["confirmed"]
             ).exclude(id=self.id)
 
             for other in bookings:
@@ -98,7 +105,6 @@ class Booking(models.Model):
                             break
 
         return list(set(conflicts))
-
 
     def get_occurrences(self, from_date=None, to_date=None):
         """
@@ -121,14 +127,16 @@ class Booking(models.Model):
         delta = {
             "daily": timedelta(days=1),
             "weekly": timedelta(weeks=1),
-            "monthly": None,    # special case, as diff amount of days exists
+            "monthly": None,  # special case, as diff amount of days exists
         }.get(self.recurrence)
 
         while occurance_date <= recurrence_end:
             if from_date <= occurance_date <= to_date:
-                dt = self.start.replace(year=occurance_date.year,
-                                        month=occurance_date.month,
-                                        day=occurance_date.day)
+                dt = self.start.replace(
+                    year=occurance_date.year,
+                    month=occurance_date.month,
+                    day=occurance_date.day,
+                )
                 occurrences.append(dt)
 
             # calculate next monthly date
