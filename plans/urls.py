@@ -29,5 +29,6 @@ urlpatterns = [
     path("deletefromschedule", views.deletefromschedule, name="deletefromschedule"),
     path("dashboard", views.mealplan, name="dashboard"),
     path("mealplan", views.mealplan, name="mealplan"),
+    path("trainingschedule", views.trainingschedule, name="trainingschedule"),
 ]
 

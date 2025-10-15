@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block body %}
+<br>
+<h3 style="color: black; size: 15pt; text-align: center;">Create Schedule</h3>
+<br>
+
+<div style="max-width: 100vw; margin: auto;">
+
+    {% if not user.is_authenticated %}
+
+        <div class="alert alert-danger" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 15px;">
+        No permission to edit Training Schedule.</p>
+    </div>
+
+
+    {% else %}
+
+    {% if not all_sessions %}
+    {% comment %} <button type="button" class="collapsible">Create Meal Plan</button> {% endcomment %}
+    <div class="content">
+    <div class="alert alert-info" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 15px;">
+        Currently no saved sessions. <br><br>
+        <a href="{% url 'addsession' %}" class="alert-link">Add session</a><br><br>
+        </p>
+    </div>
+
+    {% else %}
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: lightblue;
+}
+</style>
+</head>
+<body>
+<button type="button" class="collapsible">Add Sessions</button>
+<div class="content">
+  <form id="monday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group" >
+            <label for="monday" style="font-weight: bold;">Monday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="monday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+    <form id="tuesday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="tuesday" style="font-weight: bold;">Tuesday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="tuesday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+    <form id="wednesday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="wednesday" style="font-weight: bold;">Wednesday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="wednesday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+    <form id="thursday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="thursday" style="font-weight: bold;">Thursday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" placeholder="Select"  style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="thursday" >
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+</form>
+
+
+  <form id="friday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="friday" style="font-weight: bold;">Friday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="friday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+    <form id="saturday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="saturday" style="font-weight: bold;">Saturday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="saturday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+    <form id="sunday" method="post" action="{% url 'addtrainingschedule' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="sunday" style="font-weight: bold;">Sunday</label><br>
+            <div class="form-inline">
+                <select class="form-control" name="session_select" id="session_select" style="width: 300px;">
+                    {% for session in all_sessions %}
+                    <option value="{{session.id}}">{{session.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="sunday">
+                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
+            </div>
+        </div>
+            
+    </form>
+
+
+<script>
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
+    
+
+   
+
+    
+
+    {% endif %}
+    </div>
+
+    <br><br>
+    <h1 style="color: gray; size: 15pt; text-align: center;">Schedule</h1>
+    <br>
+
+    <div class="row"> 
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Monday</h6>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "monday" %}
+                <h6 style="color: darkgray; font-weight: bolder;;">{{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="monday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Tuesday</h6>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "tuesday" %}
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="tuesday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+   
+    </div>
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Wednesday</h6>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "wednesday" %}
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="wednesday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Thursday</h6>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "thursday" %}
+                <h6 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h6>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="thursday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row"> 
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h7 class="card-title">Friday</h7>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "friday" %}
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="friday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h7 class="card-title">Saturday</h7>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "saturday" %}
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="saturday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+   
+    </div>
+    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h7 class="card-title">Sunday</h7>
+            <div style="display: inline;">
+                {% for session in weekly_sessions %}
+                {% if session.day == "sunday" %}
+                <h7 style="color: gray; font-weight: bolder;;">{{session.session.name}}</h7>
+                    <form method="post" action="{% url 'deletefromschedule' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessiontodelete" name="sessiontodelete" value="{{session.session.id}}">
+                    <input type="hidden" id="daydelete" name="daydelete" value="sunday">
+                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    </form>
+                    <br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    </div>
+
+
+</div> 
+
+
+
+    {% endif %}
+
+    <br><br><br>
+    
+   <p><a href="/plans/addtrainingschedule">Edit</a></p>
+{% endblock %}
