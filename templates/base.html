@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -33,9 +32,8 @@
                 {% endif %}
             </div>
         </div>
+        {% if request.user.is_authenticated %}
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black">
-            <a class="navbar-brand" href="{% url 'home' %}" style="color: lightblue">NO-I</a>
-          
             <div style="text-align: center; margin: 0; padding: 0;">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -51,13 +49,13 @@
                     <a class="nav-link" href="/plans/mealplan" style="color:lightblue">Meal Plan</a>
                 </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/plans/trainingschedule
-                    " style="color:lightblue">Training Schedule</a>
+                    <a class="nav-link" href="/plans/trainingschedule" style="color:lightblue">Training Schedule</a>
                 </li>
              
               </ul>
             </div>
           </nav>
+          {% endif %}
         
         <div class="body">
             <div class="container" style="max-width: 100vw margin: auto;">
@@ -96,4 +94,4 @@
     </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
-</html> 
+</html>
