@@ -7,16 +7,32 @@
     <!-- Bootstrap CSS for responsive design -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-    {% load static %}
+ 
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-
+    <meta name="viewport" content="width=100vw, initial-scale=1">
     {% block extra_head %}{% endblock %}
 </head>
 
 <body class="bg-dark">
- <body style="width: 100vw; overflow-x: scroll; color: black; background-color: black;">
-
+ <body style="width: 100vw; color: black; background-color: black; margin: auto;" display="inline">
+      <header class="bg-dark text-white py-2 mb-0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <h1 class="h4 mb-0">Team Management App</h1>
+            <div class="d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                    <span class="me-2 small">{{ request.user.email }}</span>
+                    <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:logout' %}">Logout</a>
+                    {% if request.user.is_superuser %}
+                        <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:register' %}">Register user</a>
+                    {% elif profile and profile.role == "Manager" %}
+                        <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:change_password' %}">Change password</a>
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-sm btn-outline-light me-2" href="{% url 'users:login' %}">Login</a>
+                {% endif %}
+            </div>
+        </div>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black">
             <a class="navbar-brand" href="{% url 'home' %}" style="color: lightblue">NO-I</a>
           
@@ -44,31 +60,15 @@
           </nav>
         
         <div class="body">
-            <div class="container" style="max-width: 100% margin: auto;">
-                <div style="margin: auto; max-width: 100%;">
+            <div class="container" style="max-width: 100vw margin: auto;">
+                <div style="margin: auto; max-width: 100vw;">
                     {% block body %}
                     {% endblock %}
                 </div>
             </div> 
         </div> 
     <!-- Site header with navigation -->
-    <header class="bg-dark text-white py-2 mb-0">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-            <h1 class="h4 mb-0">Team Management App</h1>
-            <div class="d-flex align-items-center">
-                {% if request.user.is_authenticated %}
-                    <span class="me-2 small">{{ request.user.email }}</span>
-                    <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:logout' %}">Logout</a>
-                    {% if request.user.is_superuser %}
-                        <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:register' %}">Register user</a>
-                    {% elif profile and profile.role == "Manager" %}
-                        <a class="btn btn-sm btn-outline-light ms-2" href="{% url 'users:change_password' %}">Change password</a>
-                    {% endif %}
-                {% else %}
-                    <a class="btn btn-sm btn-outline-light me-2" href="{% url 'users:login' %}">Login</a>
-                {% endif %}
-            </div>
-        </div>
+  
         <!-- Tabs in header -->
         {% comment %} <nav class="tab-buttons-header d-flex justify-content-center align-items-center bg-dark border-bottom">
             <button class="tablink tablink-header" onclick="openPage('HomeTab', this, '#232526')" >Home</button>
@@ -78,7 +78,7 @@
         </nav> {% endcomment %}
     </header>
 
-    <main class="container-fluid">
+    <div class="container-fluid">
         {% block content %}
         {% endblock %}
         {% block back_button %}
@@ -86,7 +86,7 @@
             <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
         </div>
         {% endblock %}
-    </main>
+    </div>
     <footer class="text-center text-muted mt-5 mb-3">
         &copy; {{ now|date:"Y" }} Team Management.
         {% if request.user.is_superuser %}
