@@ -447,7 +447,7 @@ def addtrainingschedule(request):
 
         return render(request, "plans/addtrainingschedule.html", context)
 
-def trainingplan(request):
+def trainingschedule(request):
     #view just to check mealplan without editing rights so anyone who is authenticated as part of the team
     user = request.user
     
@@ -472,7 +472,7 @@ def trainingplan(request):
             
         }
 
-        return render(request, "plans/dashboard.html", context)
+        return render(request, "plans/trainingschedule.html", context)
     
 def deletefromschedule(request):
 
