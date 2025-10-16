@@ -7,9 +7,17 @@
   <br>
   <H2>Delete a Booking</H2>
   <br>
+     {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <br>
   <p>Are you sure you want to delete:</p>
    <p> {{ booking.title }} on <strong> {{ booking.start.date }} at {{ booking.start.time }}</strong>? </p>
-
+  <br>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}

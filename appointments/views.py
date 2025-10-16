@@ -22,6 +22,12 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django.http import FileResponse
 import io
 
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.mail import EmailMessage
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
+
 def create_booking(request):
     if request.method == "POST":
         form = BookingForm(request.POST, current_user=request.user)
@@ -59,7 +65,7 @@ def create_booking(request):
             recipients = [
                 participant.email for participant in booking.participants.all()
             ]
-            send_booking_invite(booking, recipients)
+            # send_booking_invite(booking, recipients)
             messages.success(request, "Booking was succesfull")
 
     else:
@@ -123,6 +129,39 @@ def booking_list(request):
     }
 
     return render(request, "appointments/booking_list.html", context)
+
+# ---send booking invitation via e-mail button, opt. with attachment
+
+@login_required
+def send_booking_invite_view(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    if request.method == "POST":
+        comment = request.POST.get("comment", "")
+        attachment = request.FILES.get("attachment")
+
+        recipients = [p.email for p in booking.participants.all()]
+        subject = f"Invitation: {booking.title}"
+        body = (f"Hello,\n\n Please find attached the invitation to "
+                f"'{booking.title}'.\n\n{comment}")
+
+        # Generate ics_file
+        ics_file = send_booking_invite(booking, recipients, generate_only=True)
+
+        # Send email manually
+        email = EmailMessage(subject, body, to=recipients)
+        email.attach("invitation.ics", ics_file.read(), "text/calendar")
+
+        if attachment:
+            email.attach(attachment.name, attachment.read(), attachment.content_type)
+
+        email.send()
+
+        messages.success(request, "E-mail with ics.file was send succesfully.")
+
+
+    return render(request, "appointments/send_invite.html", {"booking": booking})
+
 
 
 # ---print booking_list to pfd.file ---
@@ -249,13 +288,41 @@ def edit_booking(request, pk):
 
 @login_required
 def delete_booking(request, pk):
-    booking = Booking.objects.get(pk=pk)
+    booking = get_object_or_404(Booking, pk=pk)
+
+    # Only email creator is allowed to delete the booking.
+    if booking.booked_by != request.user:
+        name = booking.booked_by.get_full_name() or booking.booked_by.username
+        messages.warning(
+            request,
+            (
+                f"Sorry, only the appointment creator ({name}) "
+                f"is allowed to delete this appointment. "
+                f"Please contact the creator if you need a change."
+            ),
+        )
+
+    # Delete, if the appointment creator sends a delete request
     if request.method == "POST":
         booking.delete()
-        return redirect("appointments:booking_list")
-    return render(request,
-                  "appointments/booking_delete.html",
-                  {"booking": booking})
+        messages.success(request, "The booking was deleted succesfully.")
+
+    return render(
+        request,
+        "appointments/booking_delete.html",
+        {"booking": booking}
+    )
+
+
+# @login_required
+# def delete_booking(request, pk):
+#     booking = Booking.objects.get(pk=pk)
+#     if request.method == "POST":
+#         booking.delete()
+#         return redirect("appointments:booking_list")
+#     return render(request,
+#                   "appointments/booking_delete.html",
+#                   {"booking": booking})
 
 
 # -- Calendar --
