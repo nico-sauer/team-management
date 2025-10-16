@@ -1,6 +1,6 @@
 #  from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from .models import Booking
+from .models import BookingInstance
 from datetime import date, timedelta
 from django.utils.timezone import localtime
 from django.utils.timezone import make_aware, get_current_timezone, is_aware
@@ -30,50 +30,36 @@ class Calendar(HTMLCalendar):
         current_date = date(self.year, self.month, day)
         d = ""
 
-        # only one-time_bookings
-        one_time_bookings = bookings.filter(recurrence="none", start__date=current_date)
-
-        # recurring bookings
-        recurring_bookings = []
-        for booking in bookings.exclude(recurrence="none"):
-            occurrences = booking.get_occurrences(current_date, current_date)
-            if occurrences:
-                recurring_bookings.append(booking)
-
-        # all bookings without duplicates one-time & recurring bookings
-        all_bookings = list(
-            {b.id: b for b in list(one_time_bookings) + recurring_bookings}.values()
-        )
+        # all BookingInstances for the current day
+        day_instances = [
+            inst for inst in bookings if inst.occurrence_date == current_date]
 
         # sort chronologically by start_time
-        all_bookings.sort(key=lambda b: b.start)
+        day_instances.sort(key=lambda inst: inst.start)
 
         css_class = ""
 
-        for booking in all_bookings:
-            local_start = localtime(booking.start)
-            local_end = localtime(booking.end)
-            time_str = (
-                f"{local_start.strftime('%H:%M')}-" f"{local_end.strftime('%H:%M')}"
-            )
-
-            if booking.booked_by.first_name and booking.booked_by.last_name:
-                username = (
-                    f"{booking.booked_by.first_name[0]}."
-                    f" {booking.booked_by.last_name}"
-                )
-            else:
-                username = str(booking.booked_by)
+        for inst in day_instances:
+            booking = inst.booking
+            local_start = localtime(inst.start)
+            local_end = localtime(inst.end)
+            time_str = f"{local_start.strftime('%H:%M')}-{
+                local_end.strftime('%H:%M')}"
+            username = (
+                f"{booking.booked_by.first_name[0]}. "
+                f"{booking.booked_by.last_name}"
+                if booking.booked_by.first_name and booking.booked_by.last_name
+                else str(booking.booked_by)
+            )    
 
             if booking.status == "rejected":
-                d += (
-                    f"<li class='rejected'>{time_str} {booking.title}" f"rejected </li>"
-                )
+                d += (f"<li class='rejected'>{time_str} {booking.title}"
+                      f" rejected</li>")
             elif booking.event_type == "private":
-                d += f"<li class='private'>{time_str} " f"Private<br>{username}</li>"
+                d += (f"<li class='private'>{time_str}"
+                      f" Private <br>{username}</li>")
             elif booking.event_type == "training":
                 d += f"<li class='training'>{time_str} {booking.title}</li>"
-
             else:
                 d += f"<li class='other'>{time_str} {booking.title}</li>"
 
@@ -94,17 +80,19 @@ class Calendar(HTMLCalendar):
         first_day, last_day = self.get_month_date_range()
 
         # only bookings, which are in this month range
-        events = Booking.objects.filter(
-            start__lte=last_day,
-            end__gte=first_day,
-        )
+        instances = BookingInstance.objects.filter(
+            occurrence_date__gte=first_day,
+            occurrence_date__lte=last_day,
+            is_cancelled=False
+        ).select_related('booking')
 
-        cal = '<table border="0" cellpadding="0" cellspacing="0"' 'class="calendar">\n'
+        cal = (
+            '<table border="0" cellpadding="0" cellspacing="0"''class="calendar">\n')
         cal += f"{self.formatmonthname(
             self.year, self.month, withyear=withyear)}\n"
         cal += f"{self.formatweekheader()}\n"
         for week in self.monthdays2calendar(self.year, self.month):
-            cal += f"{self.formatweek(week, events)}\n"
+            cal += f"{self.formatweek(week, instances)}\n"
         cal += "</table>"
         return cal
 

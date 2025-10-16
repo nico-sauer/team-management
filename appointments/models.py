@@ -2,13 +2,7 @@ from django.db import models
 from users.models import CustomUser
 from datetime import timedelta, date
 
-# from django.utils.timezone import make_aware, get_current_timezone, is_aware
 import calendar
-
-""" 
-Team members can create a booking if all participants
-they request to have this timeslot not already booked.
-"""
 
 
 class Booking(models.Model):
@@ -69,10 +63,10 @@ class Booking(models.Model):
             or f"{self.event_type} ({self.start} - {self.end}) @ {self.location}"
         )
 
-    """ checks, if a participant has another booking at the same time.
-    If yes, return a list with 'conflicting' participants. """
-
     def is_conflicting(self, participants=None):
+        """ checks, if a participant has another booking at the same time.
+        If yes, return a list with 'conflicting' participants. """
+
         if participants is None:
             raise ValueError("Participants must not be empty.")
 
@@ -148,4 +142,65 @@ class Booking(models.Model):
                 occurance_date = date(year, next_month, day)
             else:
                 occurance_date += delta
-        return occurrences
+        return occurrences  # [datetime(2025,10,01,10,0)/2025-10-01 09:00:00]
+
+    def generate_booking_instances(self):
+        """Create database entries for BookingInstance
+           from Booking model and get_occurences()"""
+        if self.recurrence == "none":
+            # get/or create on-time booking, if not already exist
+            BookingInstance.objects.get_or_create(
+                booking=self,
+                occurrence_date=self.start.date(),
+                defaults={
+                    "start": self.start,
+                    "end": self.end,
+                },
+            )
+            return
+
+        from_date = self.start.date()
+        to_date = self.recurrence_end or from_date
+        occurrences = self.get_occurrences(from_date, to_date)
+
+        for occ_start in occurrences:
+            BookingInstance.objects.get_or_create(
+                booking=self,
+                occurrence_date=occ_start.date(),
+                defaults={
+                    "start": occ_start,
+                    "end": occ_start + (self.end - self.start),
+                },
+            )
+
+
+class BookingInstance(models.Model):
+    """creating a table with all booking instances, to have
+       the chance to delete and change single events (incl. recurring)
+       from one database table. Before recurring events didn't exist in a DB"""
+    booking = models.ForeignKey(
+        'Booking',
+        on_delete=models.CASCADE,
+        related_name='all_booking_instances'
+    )
+    occurrence_date = models.DateField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+
+    # optional, if you want to track booking_changes
+    is_cancelled = models.BooleanField(default=False)
+    is_modified = models.BooleanField(default=False)
+
+    # optional, if title, start or end should be changed
+    override_title = models.CharField(null=True, blank=True)
+    override_start = models.DateTimeField(null=True, blank=True)
+    override_end = models.DateTimeField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('booking', 'occurrence_date')
+        ordering = ['start']
+
+    def __str__(self):
+        return f"{self.booking.title} ({self.occurrence_date})"

@@ -1,29 +1,46 @@
 {% extends "base.html" %}
 
-
 {% block title %}Delete a Booking{% endblock %}
 
 {% block content %}
-  <br>
-  <H2>Delete a Booking</H2>
-  <br>
-     {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  <br>
-  <p>Are you sure you want to delete:</p>
-   <p> {{ booking.title }} on <strong> {{ booking.start.date }} at {{ booking.start.time }}</strong>? </p>
-  <br>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Delete</button>
-    &nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;&nbsp; 
-    <a href="{% url 'appointments:booking_list' %}">Go back</a>
-  </form>
+<br>
+<h2>Delete a Booking</h2>
+<br>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<br>
+
+{% if instance %}
+  <p>
+    Are you sure you want to <strong>cancel this single occurrence</strong> of 
+    "<strong>{{ booking.title }}</strong>" on 
+    <strong>{{ instance.occurrence_date }}</strong> 
+    ({{ instance.start|time:"H:i" }}-{{ instance.end|time:"H:i" }})?
+  </p>
+{% else %}
+  <p>
+    Are you sure you want to <strong>delete the entire series</strong> 
+    "<strong>{{ booking.title }}</strong>" 
+    (starting {{ booking.start|date:"Y-m-d" }})?
+  </p>
+{% endif %}
+
+<br>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">
+    {% if instance %}Cancel Occurrence{% else %}Delete Entire Series{% endif %}
+  </button>
+  &nbsp;&nbsp;&nbsp;
+  <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">Go Back</a>
+</form>
 
 {% endblock %}
