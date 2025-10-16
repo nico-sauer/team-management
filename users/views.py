@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import os
+from django.contrib.auth.models import Permission
 
 #add email after user registration
 
@@ -26,31 +27,23 @@ import os
                 
 
 def first_registration(request):
-    
     if request.method == 'POST':
         form = FirstCustomUserCreationForm(request.POST)
-                 
         try: 
             if form.is_valid():
-        
-                form.save()
-                #send a confirmation email
+                user = form.save()
+                # add the permission to the manager to add new users
+                if user.role == "Manager":
+                    permission = Permission.objects.get(codename="add_customuser")
+                    user.user_permissions.add(permission)
+                    user.save()
                 messages.success(request, "Registration successful!")
-                
-                # registered_name = form.cleaned_data['first_name']
-                # registered_email = form.cleaned_data['email']
-                # registered_team = form.cleaned_data['team_id']
-                # html = render_to_string('registration/emails/registersuccess.html', {'name':registered_name, 'email':registered_email, 'team':registered_team})
-                # send_mail(subject='Team Management App Registration', message=f'{registered_name} Welcome to Team Management! You registered our App succesfully.', from_email='teammanagement@mail.com', recipient_list=[f'{registered_email}',], html_message=html)
                 return redirect("users:login")
         except ValidationError:
             messages.error(request, "The team is already exist, please enter a new team")
             form = FirstCustomUserCreationForm()
-        
-                
     else:
         form = FirstCustomUserCreationForm()    
-            
     return render(request, 'registration/first_register.html', {'form':form})
     
         
@@ -59,28 +52,21 @@ def first_registration(request):
 @login_required
 @permission_required('users.add_customuser', raise_exception=True)
 def register_user(request):
-    
-    
-    
     if request.method == 'POST':
-        
-        form = CustomUserCreationForm(data=request.POST,current_user=request.user)
-        
-        
+        form = CustomUserCreationForm(data=request.POST, current_user=request.user)
         if form.is_valid():
             user = form.save()
-            if user.role == "Manager":
-                from django.contrib.auth.models import Permission
-                permission = Permission.objects.get(codename="add_customuser")
-                user.user_permissions.add(permission)
-        if form.is_valid():  
-                form.save()
-           
-            
+            messages.success(request, "User registered successfully!")
+            return redirect('/')  # Redirect to home page after registration
+        else:
+            # Clear previous messages before adding a new error
+            storage = messages.get_messages(request)
+            for _ in storage:
+                pass  # This clears the message queue
+            messages.error(request, "There was an error in the registration, please try again")
     else:
         form = CustomUserCreationForm(current_user=request.user)
-        
-    return render(request, 'registration/register.html', {'form':form})
+    return render(request, 'registration/register.html', {'form': form})
         
         
 def login_user(request):

@@ -16,20 +16,16 @@
                         {{ form.password1|as_crispy_field }}
                         {{ form.password2|as_crispy_field }}
                         {{ form.role|as_crispy_field }}
-
-                        <label for="id_team_id">Choose team:</label>
                         {{ form.team_id|as_crispy_field }}
-                        <label for="id_new_team_name">Or create new team:</label>
                         {{ form.new_team_name|as_crispy_field }}
-                        {{ form.team|as_crispy_field }}
-                        <label for="id_group">Choose group:</label>
-                        {{ form.team_id|as_crispy_field }}
                         {{ form.group|as_crispy_field }}
+                        {{ form.new_group_name|as_crispy_field }}
                         <button type="submit" class="btn btn-success w-100">Register</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>  {% endcomment %}
+</div>  
+
 {% endblock %}
