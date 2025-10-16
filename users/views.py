@@ -8,6 +8,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+import os
+from django.contrib.auth.models import Permission
 from django.conf import settings
 
 # add email after user registration
@@ -25,14 +27,17 @@ from django.conf import settings
 
 
 def first_registration(request):
-
-    if request.method == "POST":
+    if request.method == 'POST':
         form = FirstCustomUserCreationForm(request.POST)
 
         try:
             if form.is_valid():
-
-                form.save()
+                user = form.save()
+                # add the permission to the manager to add new users
+                if user.role == "Manager":
+                    permission = Permission.objects.get(codename="add_customuser")
+                    user.user_permissions.add(permission)
+                    user.save()
                 messages.success(request, "Registration successful!")
                 # send a confirmation email
                 registered_name = form.cleaned_data["first_name"]
@@ -59,16 +64,28 @@ def first_registration(request):
                 request, "The team is already exist, please enter a new team"
             )
             form = FirstCustomUserCreationForm()
-
     else:
-        form = FirstCustomUserCreationForm()
-
-    return render(request, "registration/first_register.html", {"form": form})
+        form = FirstCustomUserCreationForm()    
+    return render(request, 'registration/first_register.html', {'form':form})
+    
+        
 
 
 @login_required
 @permission_required("users.add_customuser", raise_exception=True)
 def register_user(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(data=request.POST, current_user=request.user)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "User registered successfully!")
+            return redirect('/')  # Redirect to home page after registration
+        else:
+            # Clear previous messages before adding a new error
+            storage = messages.get_messages(request)
+            for _ in storage:
+                pass  # This clears the message queue
+            messages.error(request, "There was an error in the registration, please try again")
 
     if request.method == "POST":
 
@@ -108,10 +125,9 @@ def register_user(request):
 
     else:
         form = CustomUserCreationForm(current_user=request.user)
-
-    return render(request, "registration/register.html", {"form": form})
-
-
+    return render(request, 'registration/register.html', {'form': form})
+        
+        
 def login_user(request):
 
     if request.method == "POST":
@@ -138,8 +154,10 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You were logged out.")
     return redirect("/")
+        
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)

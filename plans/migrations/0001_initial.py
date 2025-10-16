@@ -28,6 +28,15 @@ class Migration(migrations.Migration):
                 ("totalprotein", models.PositiveIntegerField(default=0)),
                 ("calories", models.PositiveIntegerField(default=0)),
                 ("dietary_requirements", models.TextField(blank=True, null=True)),
+                (
+                    "chef",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -43,6 +52,13 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("calories", models.PositiveIntegerField(default=0)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -65,6 +81,15 @@ class Migration(migrations.Migration):
                         blank=True, default="", max_length=2500, null=True
                     ),
                 ),
+                (
+                    "trainer",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -80,6 +105,24 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("day", models.TextField(max_length=10)),
+                (
+                    "meal",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="plans.meals",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -96,6 +139,24 @@ class Migration(migrations.Migration):
                 ),
                 ("day", models.TextField(max_length=10)),
                 ("time", models.DateTimeField(blank=True, null=True)),
+                (
+                    "session",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="plans.trainingsessions",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
