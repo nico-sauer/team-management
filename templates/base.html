@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,16 +7,16 @@
     <!-- Bootstrap CSS for responsive design -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-    {% load static %}
+ 
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-
+    <meta name="viewport" content="width=100vw, initial-scale=1">
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="bg-light">
-    <!-- Site header with navigation -->
-    <header class="bg-dark text-white py-2 mb-0">
+<body class="bg-dark">
+ <body style="width: 100vw; color: black; background-color: black; margin: auto;" display="inline">
+      <header class="bg-dark text-white py-2 mb-0">
         <div class="container-fluid d-flex align-items-center justify-content-between">
             <h1 class="h4 mb-0">Team Management App</h1>
             <div class="d-flex align-items-center">
@@ -32,16 +33,52 @@
                 {% endif %}
             </div>
         </div>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black">
+            <a class="navbar-brand" href="{% url 'home' %}" style="color: lightblue">NO-I</a>
+          
+            <div style="text-align: center; margin: 0; padding: 0;">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/appointments/calendar" style="color: lightblue">Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profiles/athletes" style="color: lightblue">Athletes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/profiles/staff" style="color: lightblue">Staff</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/plans/mealplan" style="color:lightblue">Meal Plan</a>
+                </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/plans/trainingschedule
+                    " style="color:lightblue">Training Schedule</a>
+                </li>
+             
+              </ul>
+            </div>
+          </nav>
+        
+        <div class="body">
+            <div class="container" style="max-width: 100vw margin: auto;">
+                <div style="margin: auto; max-width: 100vw;">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div> 
+        </div> 
+    <!-- Site header with navigation -->
+  
         <!-- Tabs in header -->
-        <nav class="tab-buttons-header d-flex justify-content-center align-items-center bg-dark border-bottom">
+        {% comment %} <nav class="tab-buttons-header d-flex justify-content-center align-items-center bg-dark border-bottom">
             <button class="tablink tablink-header" onclick="openPage('HomeTab', this, '#232526')" >Home</button>
             <button class="tablink tablink-header" onclick="openPage('News', this, '#232526')">News</button>
             <button class="tablink tablink-header" onclick="openPage('Contact', this, '#232526')">Contact</button>
             <button class="tablink tablink-header" onclick="openPage('About', this, '#232526')">About</button>
-        </nav>
+        </nav> {% endcomment %}
     </header>
 
-    <main class="container-fluid">
+    <div class="container-fluid">
         {% block content %}
         {% endblock %}
         {% block back_button %}
@@ -49,7 +86,7 @@
             <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
         </div>
         {% endblock %}
-    </main>
+    </div>
     <footer class="text-center text-muted mt-5 mb-3">
         &copy; {{ now|date:"Y" }} Team Management.
         {% if request.user.is_superuser %}
@@ -59,4 +96,4 @@
     </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
-</html>
+</html> 

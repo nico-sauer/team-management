@@ -4,4 +4,13 @@ from .models import Booking
 # Register your models here.
 
 
-admin.site.register(Booking)
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "event_type",
+        "status",
+        "booked_by",
+        "location",
+        "recurrence"
+    ]

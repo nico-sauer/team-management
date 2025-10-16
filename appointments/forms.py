@@ -42,6 +42,10 @@ class BookingForm(forms.ModelForm):
         # current_user is passed when the form is initialized
         self.current_user = kwargs.pop("current_user", None)
         super().__init__(*args, **kwargs)
+        self.fields['participants'].label_from_instance = (
+            lambda u: f"{u.first_name[0]}. {u.last_name}" if u.first_name
+            and u.last_name else u.email
+            )
         if self.current_user:
             # Filter only user from the current user team_id
             self.fields["participants"].queryset = CustomUser.objects.filter(

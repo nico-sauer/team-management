@@ -13,7 +13,7 @@ from .services.mailer import send_booking_invite
 from django.db.models import Q
 from appointments.filters import BookingFilter
 from django.shortcuts import get_object_or_404
-from django.utils.timezone import make_aware, get_current_timezone, is_aware
+from .utils import expand_bookings
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
@@ -70,7 +70,7 @@ def create_booking(request):
 
 @login_required
 def booking_list(request):
-    # all bookings where current-user has created or is participants
+    # all bookings where current-user has created or is participant
     current_user = request.user
     bookings = (
         Booking.objects.filter(Q(booked_by=current_user) |
@@ -79,62 +79,53 @@ def booking_list(request):
         .order_by("-created_at")
     )
 
-    # use filter from queryset
+    # use filter from database via queryset
     booking_filter = BookingFilter(request.GET, queryset=bookings)
-    bookings = booking_filter.qs
+    filtered_bookings = booking_filter.qs
 
     # define timeframe (e.g. next month)
     today = date.today()
     start_date = today - timedelta(days=7)
-    end_date = today + timedelta(days=30)
+    end_date = today + timedelta(days=30)   #
 
-    # list all bookings and recurrence bookings
-    expanded_bookings = []
-    tz = get_current_timezone()
+    expanded_bookings = expand_bookings(
+        filtered_bookings, start_date, end_date)
 
-    for booking in bookings:
-        if booking.recurrence != "none":
-            occurrences = booking.get_occurrences(start_date, end_date)
-            for occ_start in occurrences:
-                duration = booking.end - booking.start
-                occ_end = occ_start + duration
+    # additional filter for expanded_bookings
+    day_view_str = request.GET.get("day_view")
+    week_view_str = request.GET.get("week_view_from")
 
-                # ensure aware
-                if not is_aware(occ_start):
-                    occ_start = make_aware(occ_start, tz)
-                if not is_aware(occ_end):
-                    occ_end = make_aware(occ_end, tz)
+    if day_view_str:
+        try:
+            day_view_date = datetime.strptime(day_view_str, "%Y-%m-%d").date()
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if eb["occurrence"].date() == day_view_date
+            ]
+        except ValueError:
+            pass
 
-                # save all references for expanded-bookings
-                expanded_bookings.append({
-                    "booking": booking,
-                    "occurrence": occ_start,
-                    "end_occurrence": occ_end
-                })
-        else:
-            start = booking.start
-            end = booking.end
-            if not is_aware(start):
-                start = make_aware(start, tz)
-            if not is_aware(end):
-                end = make_aware(end, tz)
-            expanded_bookings.append({
-                "booking": booking,
-                "occurrence": start,
-                "end_occurrence": end
-            })
+    if week_view_str:
+        try:
+            week_view_date = datetime.strptime(week_view_str, "%Y-%m-%d").date()
+            end_date = week_view_date + timedelta(days=7)
 
-    # sort chronologically
-    expanded_bookings.sort(key=lambda x: x["occurrence"])
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if week_view_date <= eb["occurrence"].date() < end_date
+            ]
+        except ValueError:
+            pass
 
-    context = {"bookings": expanded_bookings,
-               "filter": booking_filter}
+    context = {
+        "bookings": expanded_bookings,
+        "filter": booking_filter
+    }
 
     return render(request, "appointments/booking_list.html", context)
 
 
 # ---print booking_list to pfd.file ---
-
 
 @login_required
 def booking_pdf(request):
@@ -157,68 +148,68 @@ def booking_pdf(request):
     current_user = request.user
 
     bookings = (
-        Booking.objects.filter(Q(booked_by=current_user) | Q(participants=current_user))
+        Booking.objects.filter(
+            Q(booked_by=current_user) |
+            Q(participants=current_user)
+        )
         .distinct()
         .order_by("-created_at")
     )
 
+    # filter regarding event_type from database entries
     booking_filter = BookingFilter(request.GET, queryset=bookings)
-    bookings = booking_filter.qs
+    filtered_bookings = booking_filter.qs
 
     today = date.today()
     start_date = today - timedelta(days=7)
     end_date = today + timedelta(days=30)
-    tz = get_current_timezone()
+    # tz = get_current_timezone()
 
-    expanded_bookings = []
+    expanded_bookings = expand_bookings(
+        filtered_bookings, start_date, end_date)
 
-    for booking in bookings:
-        if booking.recurrence != "none":
-            occurrences = booking.get_occurrences(start_date, end_date)
-            for occ_start in occurrences:
-                duration = booking.end - booking.start
-                occ_end = occ_start + duration
+    # filter regarding day_view und week_view_from
+    day_view_str = request.GET.get("day_view")
+    week_view_str = request.GET.get("week_view_from")
 
-                if not is_aware(occ_start):
-                    occ_start = make_aware(occ_start, tz)
-                if not is_aware(occ_end):
-                    occ_end = make_aware(occ_end, tz)
+    if day_view_str:
+        try:
+            day_view_date = datetime.strptime(day_view_str, "%Y-%m-%d").date()
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if eb["occurrence"].date() == day_view_date
+            ]
+        except ValueError:
+            pass
 
-                expanded_bookings.append({
-                    "title": booking.title,
-                    "occurrence": occ_start,
-                    "end_occurrence": occ_end,
-                    "status": booking.status,
-                    "participants": ", ".join([str(p) for p in booking.participants.all()]),
-                })
-        else:
-            start = booking.start
-            end = booking.end
-            if not is_aware(start):
-                start = make_aware(start, tz)
-            if not is_aware(end):
-                end = make_aware(end, tz)
-            expanded_bookings.append({
-                "title": booking.title,
-                "occurrence": start,
-                "end_occurrence": end,
-                "status": booking.status,
-                "participants": ", ".join([str(p) for p in booking.participants.all()]),
-            })
-
-    # Sort chronologically by start time
-    expanded_bookings.sort(key=lambda x: x["occurrence"])
+    if week_view_str:
+        try:
+            week_view_date = datetime.strptime(week_view_str, "%Y-%m-%d").date()
+            end_date = week_view_date + timedelta(days=7)
+            expanded_bookings = [
+                eb for eb in expanded_bookings
+                if week_view_date <= eb["occurrence"].date() < end_date
+            ]
+        except ValueError:
+            pass
 
     # --- Create table ---
-    data = [["Title", "Start", "End", "Status", "Participants"]]
+    data = [["Title", "Event Type", "Day", "Start", "End", "Status", "Participants"]]
 
     for eb in expanded_bookings:
+        booking = eb["booking"]     # Booking Object
+        participants = ", ".join(
+            f"{p.first_name[0]}. {p.last_name}" if p.first_name and p.last_name else p.email
+            for p in booking.participants.all()
+        )
         data.append([
-            eb["title"],
+            booking.title,  # filtered_booking object & attribute.title from qs
+            booking.event_type,
+            eb["occurrence"].strftime("%a"),
             eb["occurrence"].strftime("%Y-%m-%d %H:%M"),
             eb["end_occurrence"].strftime("%Y-%m-%d %H:%M"),
-            eb["status"],
-            eb["participants"],
+            booking.status,
+            participants
         ])
 
     # --- Format pdf table ---
@@ -329,3 +320,35 @@ def next_month(d):
     last = d.replace(day=days_in_month)
     nxt = last + timedelta(days=1)
     return f"month={nxt.year}-{nxt.month}"
+
+
+
+
+@login_required
+def booking_day_view(request):
+    """Display all of the logged-in user’s bookings (including recurring ones)
+    for today."""
+
+    current_user = request.user
+    today = date.today()
+
+    # Base queryset: only the user’s own bookings
+    bookings = Booking.objects.filter(
+        Q(booked_by=current_user) | Q(participants=current_user)
+    ).distinct()
+
+    # Expand recurring events within today’s range
+    expanded_bookings = expand_bookings(
+        bookings, start_date=today, end_date=today + timedelta(days=1)
+    )
+
+    # Keep only today’s occurrences
+    today_occurrences = [
+        eb for eb in expanded_bookings if eb["occurrence"].date() == today
+    ]
+
+    context = {
+        "bookings_today": today_occurrences,
+        "today": today
+        }
+    return render(request, "appointments/booking_day_view.html", context)

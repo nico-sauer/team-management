@@ -3,6 +3,7 @@ from calendar import HTMLCalendar
 from .models import Booking
 from datetime import date, timedelta
 from django.utils.timezone import localtime
+from django.utils.timezone import make_aware, get_current_timezone, is_aware
 
 
 class Calendar(HTMLCalendar):
@@ -22,7 +23,7 @@ class Calendar(HTMLCalendar):
         last_day = next_month - timedelta(days=1)
         return first_day, last_day
 
-    def formatday(self, day, bookings):
+    def formatday(self, day, weekday, bookings):
         if day == 0:
             return "<td></td>"
 
@@ -48,37 +49,46 @@ class Calendar(HTMLCalendar):
         # sort chronologically by start_time
         all_bookings.sort(key=lambda b: b.start)
 
-        css_class = (
-            "private"
-            if any(b.event_type == "private" for b in all_bookings) else ""
-        )
+        css_class = ""
 
         for booking in all_bookings:
             local_start = localtime(booking.start)
             local_end = localtime(booking.end)
-            time_str = f"{
-                local_start.strftime('%H:%M')}-{local_end.strftime('%H:%M')}"
-            if booking.status == "pending":
-                d += f"<li>{time_str} Event status pending</li>"
+            time_str = (
+                f"{local_start.strftime('%H:%M')}-"
+                f"{local_end.strftime('%H:%M')}"
+            )
+
+            if booking.booked_by.first_name and booking.booked_by.last_name:
+                username = (f"{booking.booked_by.first_name[0]}."
+                            f" {booking.booked_by.last_name}")
+            else:
+                username = str(booking.booked_by)
+
+            if booking.status == "rejected":
+                d += (
+                    f"<li class='rejected'>{time_str} {booking.title}"
+                    f"rejected </li>"
+                )
             elif booking.event_type == "private":
-                username = (
-                    str(booking.booked_by).split("@")[0]
-                    if booking.booked_by else "Unknown")
-                d += (f"<li class='private'>{time_str}"
-                      f" Private {username}</li>")
+                d += (
+                    f"<li class='private'>{time_str} "
+                    f"Private<br>{username}</li>")
             elif booking.event_type == "training":
-                d += (f"<li class='training'>{time_str}"
-                      f" {booking.title}</li>")
+                d += f"<li class='training'>{time_str} {booking.title}</li>"
+
             else:
                 d += f"<li class='other'>{time_str} {booking.title}</li>"
 
-        return f"<td class='{css_class}'><span class='date'>{day}</span><ul>{d}</ul></td>"
+        return (
+            f"<td class='{css_class}'><span class='date'>{day}</span><ul>{d}"
+            f"</ul></td>")
 
     # formats a week as a <tr>
     def formatweek(self, theweek, bookings):
         week = ""
         for d, weekday in theweek:
-            week += self.formatday(d, bookings)
+            week += self.formatday(d, weekday, bookings)
         return f"<tr> {week} </tr>"
 
     # formats a month as a complete table
@@ -91,7 +101,8 @@ class Calendar(HTMLCalendar):
             end__gte=first_day,
         )
 
-        cal = '<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal = ('<table border="0" cellpadding="0" cellspacing="0"'
+               'class="calendar">\n')
         cal += f"{self.formatmonthname(
             self.year, self.month, withyear=withyear)}\n"
         cal += f"{self.formatweekheader()}\n"
@@ -99,3 +110,46 @@ class Calendar(HTMLCalendar):
             cal += f"{self.formatweek(week, events)}\n"
         cal += "</table>"
         return cal
+
+
+# get expanded bookings for booking_list & booking_list_pdf
+def expand_bookings(filtered_bookings, start_date, end_date):
+    """Expand recurring and non-recurring bookings
+    into individual occurrences."""
+    tz = get_current_timezone()
+    expanded = []
+
+    for booking in filtered_bookings:
+        if booking.recurrence != "none":
+            occurrences = booking.get_occurrences(start_date, end_date)
+            for occ_start in occurrences:
+                duration = booking.end - booking.start
+                occ_end = occ_start + duration
+
+                if not is_aware(occ_start):
+                    occ_start = make_aware(occ_start, tz)
+                if not is_aware(occ_end):
+                    occ_end = make_aware(occ_end, tz)
+
+                expanded.append({
+                    "booking": booking,
+                    "occurrence": occ_start,
+                    "end_occurrence": occ_end,
+                })
+        else:
+            start = booking.start
+            end = booking.end
+            if not is_aware(start):
+                start = make_aware(start, tz)
+            if not is_aware(end):
+                end = make_aware(end, tz)
+
+            expanded.append({
+                "booking": booking,
+                "occurrence": start,
+                "end_occurrence": end,
+            })
+
+    # Sort by occurrence start
+    expanded.sort(key=lambda x: x["occurrence"])
+    return expanded

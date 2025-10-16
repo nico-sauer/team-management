@@ -1,41 +1,65 @@
-
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
-{% block title %}Booking Overview {% endblock %}
+{% block title %}Booking Overview{% endblock %}
 
 {% block content %}
 <div class="container text-center mt-4">
 
-    <h2>{{request.user.first_name}}'s appointments</h2>
+    <h2>{{ request.user.first_name }}'s Appointments</h2>
     <br>
 
-    <!--Filter form-->
+    <!-- Filter Form -->
     <form method="GET" class="text-center">
-        <div class="row justify-content-center align-items-center mb-3">
-            {% for field in filter.form %}
-            <div class="form-group col-md-3">
-                {{ field|as_crispy_field }}
+        <div class="row justify-content-center align-items-end mb-3 g-3">
+
+            <!-- Event Type -->
+            <div class="col-md-3 d-flex flex-column">
+                <label for="id_event_type" class="form-label">Event Type</label>
+                <select name="event_type" id="id_event_type" class="form-select">
+                    <option value="">All</option>
+                    {% for key, value in filter.form.event_type.field.choices %}
+                        <option value="{{ key }}" {% if filter.form.event_type.value == key %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
-            {% endfor %}
-            <div class="col-md-3">
-                <button class="btn btn-outline-success"
-                    type="submit">FILTER</button>
-                <a href="{% url 'appointments:booking_list' %}"
-                    class="btn btn-outline-danger">RESET</a>
-                <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}"
-                    class="btn btn-outline-primary">CREATE PDF</a>      
+
+            <!-- Day View -->
+            <div class="col-md-3 d-flex flex-column">
+                <label for="id_day_view" class="form-label">Day View</label>
+                <input type="text" id="id_day_view" name="day_view" class="form-control" placeholder="YYYY-MM-DD"
+                    value="{{ request.GET.day_view }}">
             </div>
+
+            <!-- Week View From -->
+            <div class="col-md-3 d-flex flex-column">
+                <label for="id_week_view_from" class="form-label">Week View From</label>
+                <input type="text" id="id_week_view_from" name="week_view_from" class="form-control" placeholder="YYYY-MM-DD"
+                    value="{{ request.GET.week_view_from }}">
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-3 d-flex flex-wrap align-items-end justify-content-start mt-2">
+                <button type="submit" class="btn btn-outline-success me-2 mb-2">FILTER</button>
+                <a href="{% url 'appointments:booking_list' %}" class="btn btn-outline-danger me-2 mb-2">RESET</a>
+                <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-outline-primary mb-2">PDF</a>
+            </div>
+
         </div>
     </form>
+
 </div>
 
-<!--Table-->
+<!-- Booking Table -->
 <table class="table table-bordered table-striped table-hover text-left align-middle w-auto mx-auto">
     <thead class="table-dark text-center">
         <tr>
             <th>Title</th>
             <th>Event Type</th>
+            <th>Day</th>
             <th>Start</th>
             <th>End</th>
             <th>Location</th>
@@ -49,13 +73,19 @@
         <tr>
             <td>{{ booking.booking.title }}</td>
             <td>{{ booking.booking.get_event_type_display }}</td>
+            <td>{{ booking.occurrence|date:"D" }}</td>
             <td>{{ booking.occurrence|date:"Y-m-d H:i" }}</td>
             <td>{{ booking.end_occurrence|date:"Y-m-d H:i" }}</td>
             <td>{{ booking.booking.location }}</td>
             <td>{{ booking.booking.status }}</td>
             <td>
                 {% for participant in booking.booking.participants.all %}
-                    {{ participant }}{% if not forloop.last %}, {% endif %}
+                    {% if participant.first_name and participant.last_name %}
+                        {{ participant.first_name|slice:":1" }}. {{ participant.last_name }}
+                    {% else %}
+                        {{ participant.email }}
+                    {% endif %}
+                    {% if not forloop.last %}, {% endif %}
                 {% empty %}
                     -
                 {% endfor %}
@@ -67,20 +97,16 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="8">No bookings found.</td>
+            <td colspan="9">No bookings found.</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<!--Buttons-->
-<div class="d-flex justify-content-center align-items-center mt-5 mb-4 me-5">
-    <a href="{% url 'appointments:booking' %}" class="btn btn-primary me-4">
-        Create a new booking
-    </a>
-        <a href="{% url 'appointments:calendar' %}" class="btn btn-primary">
-        To Calendar View
-    </a>
+
+<!-- Action Buttons -->
+<div class="d-flex justify-content-center align-items-center mt-5 mb-4 gap-3 flex-wrap">
+    <a href="{% url 'appointments:booking' %}" class="btn btn-primary">Create a New Booking</a>
+    <a href="{% url 'appointments:calendar' %}" class="btn btn-primary">Go to Calendar View</a>
 </div>
 
 {% endblock %}
-

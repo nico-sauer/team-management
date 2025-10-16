@@ -40,7 +40,7 @@
                         {{ form.team_id|as_crispy_field }}
                         <label for="id_new_team_name">Or create new team:</label>
                         {{ form.new_team_name|as_crispy_field }}
-
+                        {% comment %} {{ form.team|as_crispy_field }} {% endcomment %}
                         <label for="id_group">Choose group:</label>
                         {{ form.group|as_crispy_field }}
                         <label for="id_new_group_name">Or create new group:</label>

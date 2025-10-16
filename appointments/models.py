@@ -12,7 +12,6 @@ they request to have this timeslot not already booked.
 
 class Booking(models.Model):
     STATUS_CHOICES = [
-        ("pending", "Pending"),
         ("confirmed", "Confirmed"),
         ("rejected", "Rejected"),
     ]
@@ -43,14 +42,16 @@ class Booking(models.Model):
     end = models.DateTimeField()
     location = models.CharField(max_length=100, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
-                              default="pending")
+                              default="confirmed")
     created_at = models.DateTimeField(auto_now_add=True, null=False)
 
     participants = models.ManyToManyField(
         CustomUser, blank=True, related_name="participating_bookings")
 
     recurrence = models.CharField(
-        max_length=20, choices=RECURRENCES, default="none")
+        max_length=20, choices=RECURRENCES, default="none",
+        help_text=("Select daily, weekly or monthly for repeating events, "
+                   "or ignore rubric recurrence/end."))
     recurrence_end = models.DateField(null=True, blank=True, 
                                       help_text="Repetition until when?")
 
@@ -62,22 +63,42 @@ class Booking(models.Model):
 
     """ checks, if a participant has another booking at the same time.
     If yes, return a list with 'conflicting' participants. """
+
+
     def is_conflicting(self, participants=None):
-        # check if participants are given as argument
         if participants is None:
             raise ValueError("Participants must not be empty.")
 
+        from datetime import timedelta
         conflicts = []
+        from_date = self.start.date() - timedelta(days=1)
+        to_date = self.end.date() + timedelta(days=1)
+
         for participant in participants:
-            overlapping = Booking.objects.filter(
+            # all datatbase bookings
+            bookings = Booking.objects.filter(
                 participants=participant,
-                start__lt=self.end,
-                end__gt=self.start,
-                status__in=["pending", "confirmed"],
+                status__in=["confirmed"]
             ).exclude(id=self.id)
-            if overlapping.exists():
-                conflicts.append(participant)
-        return conflicts
+
+            for other in bookings:
+                # check one-time bookings all ocurrences
+                if other.recurrence == "none":
+                    if other.start < self.end and other.end > self.start:
+                        conflicts.append(participant)
+                        break
+
+                # check on recurring bookings
+                else:
+                    occurrences = other.get_occurrences(from_date, to_date)
+                    for occ_start in occurrences:
+                        occ_end = occ_start + (other.end - other.start)
+                        if occ_start < self.end and occ_end > self.start:
+                            conflicts.append(participant)
+                            break
+
+        return list(set(conflicts))
+
 
     def get_occurrences(self, from_date=None, to_date=None):
         """

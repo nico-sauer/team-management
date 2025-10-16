@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if bookings_today %}
+  <h2>Your bookings for today ({{ bookings_today.0.occurrence.date }})</h2>
+  <ul class="list-group">
+    {% for eb in bookings_today %}
+      <li class="list-group-item">
+        <strong>{{ eb.booking.title }}</strong><br>
+        {{ eb.occurrence|date:"H:i" }} - {{ eb.end_occurrence|date:"H:i" }}<br>
+        Participants:
+        {% for p in eb.booking.participants.all %}
+          {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          None
+        {% endfor %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <h2>Your bookings for today ({{today|date:"M. j."}})</h2>
+  <br>
+  <p class="text-muted mt-3 fw-bold">No bookings for today!</p>
+  <br>
+{% endif %}
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "plans/layout.html" %}
+{% extends "base.html" %}
 
 {% block body %}
 
@@ -395,7 +395,8 @@
             </div>
         </div>
         </div>
-    
+        <p><a href="/plans/addmealplan">Edit</a></p>
+
        
 
         <br><br>
@@ -410,8 +411,8 @@
         <br><br><br>
 
         <div style="text-align: center;">
-            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h7>
-            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_fat}} g</h4>
+            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h7>
+            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_protein}} g</h4>
         </div>
         <br><br>
 
@@ -422,8 +423,8 @@
         <br><br>
 
         <div style="text-align: center;">
-            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h7>
-            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_protein}} g</h4>
+            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h7>
+            <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_fat}} g</h4>
         </div>
         <br><br><br>
 
@@ -438,9 +439,9 @@
 
             <script>
                 const labels = [
-                'Fat',
-                'Carbs',
                 'Protein',
+                'Carbs',
+                'Fat',
                 ];
             
                 const data = {
@@ -448,12 +449,12 @@
                 datasets: [{
                     label: 'data',
                     backgroundColor: [
-                        '#f024b6',
+                        '#1b96b5',
                         '#d0ed48',
-                        '#1b96b5'
+                        '#f024b6'
                         ],
                     borderColor: 'grey',
-                    data: ["{{percentage.fat}}", "{{percentage.carb}}", "{{percentage.protein}}"],
+                    data: ["{{percentage.protein}}", "{{percentage.carb}}", "{{percentage.fat}}"],
                 }]
                 };
             
