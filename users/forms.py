@@ -7,6 +7,7 @@ from profiles.models import StaffProfile, AthleteProfile
 
 
 ROLE_CHOICES = (
+    ("Manager", "Manager"),
     ("Trainer", "Trainer"),
     ("Physical Therapist", "Physical Therapist"),
     ("Dietitian", "Dietitian"),
@@ -14,32 +15,20 @@ ROLE_CHOICES = (
     ("Athlete", "Athlete"),
 )
 
-MANAGER_CHOICES = (("Manager", "Manager"),)
-
 
 class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *, current_user, **kwargs):
         super().__init__(**kwargs)
         self.current_user = current_user
-        self.fields["team_id"].queryset = Team.objects.filter(
-            manager=current_user)
+        self.fields["team_id"].queryset = Team.objects.filter(manager=current_user)
 
     first_name = forms.CharField()
     last_name = forms.CharField()
     email = forms.EmailField()
     role = forms.ChoiceField(choices=ROLE_CHOICES)
-    team_id = forms.ModelChoiceField(
-        queryset=Team.objects.all(),
-        required=False
-        )
-    group = forms.ModelChoiceField(queryset=Group.objects.all(),
-                                   required=False
-                                   )
-    new_group_name = forms.CharField(
-        required=False,
-        label="Create new group")
-    new_team_name = forms.CharField(required=False, label="Create new team")
+    team_id = forms.ModelChoiceField(queryset=Team.objects.all(), required=False)
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), required=False)
 
     class Meta:
         model = CustomUser
@@ -57,16 +46,10 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         role = self.cleaned_data.get("role")
-        # Team assignment
-        # team_id = self.cleaned_data.get("team_id")
         group = self.cleaned_data.get("group")
-        # Group.objects.get(name="Managers")
-        # user.group = group
-        # user.groups.add(group)
         if commit:
             user.save()
             user.groups.add(group)
-            # user.group = group
             user.save()
             # Profile creation
             if role in [
@@ -99,15 +82,9 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()
     email = forms.EmailField()
-
-    role = forms.ChoiceField(choices=MANAGER_CHOICES, required=False)
+    role = forms.ChoiceField(choices=ROLE_CHOICES, required=False)
     team_name = forms.CharField(max_length=250)
-
-    group = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
-        initial="Managers",
-        required=False
-    )
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), required=False)
 
     class Meta:
         model = CustomUser
@@ -122,14 +99,9 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
         team_name = self.cleaned_data["team_name"]
-
         if commit:
-
             role = "Manager"
-            user.role = role
-
             if Team.objects.filter(team_name=team_name):
                 raise ValidationError(
                     "The team is already exist, please enter another team"
@@ -143,15 +115,11 @@ class FirstCustomUserCreationForm(UserCreationForm, forms.Form):
                     last_name=self.cleaned_data["last_name"],
                     role=role,
                 )
-
-                team_id = Team.objects.create(team_name=team_name,
-                                              manager=user)
+                team_id = Team.objects.create(team_name=team_name, manager=user)
                 user.team_id = team_id
                 group = Group.objects.get(name="Managers")
                 user.group = group
                 user.groups.add(group)
                 user.save()
-
-        # user.groups.set([group]) if we want more then one group to one user
 
         return user

@@ -12,20 +12,6 @@ import os
 from django.contrib.auth.models import Permission
 from django.conf import settings
 
-# add email after user registration
-
-
-# def send_registrtion_email():
-#     email = EmailMessage(
-#     subject='Welcom to Team Management',
-#     body='Hello,you were registered to Team Management App.
-# f'<a href=http://127.0.0.1:8000/</a>',
-#     from_email='TeamManagement@example.com',
-#     to=['edengoldstein5@gmail.com'],
-#         )
-#     email.send()
-
-
 def first_registration(request):
     if request.method == 'POST':
         form = FirstCustomUserCreationForm(request.POST)
@@ -34,10 +20,10 @@ def first_registration(request):
             if form.is_valid():
                 user = form.save()
                 # add the permission to the manager to add new users
-                if user.role == "Manager":
-                    permission = Permission.objects.get(codename="add_customuser")
-                    user.user_permissions.add(permission)
-                    user.save()
+                # if user.role == "Manager":
+                #     permission = Permission.objects.get(codename="add_customuser")
+                #     user.user_permissions.add(permission)
+                # user.save()
                 messages.success(request, "Registration successful!")
                 # send a confirmation email
                 registered_name = form.cleaned_data["first_name"]
@@ -74,29 +60,14 @@ def first_registration(request):
 @login_required
 @permission_required("users.add_customuser", raise_exception=True)
 def register_user(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(data=request.POST, current_user=request.user)
-        if form.is_valid():
-            user = form.save()
-            messages.success(request, "User registered successfully!")
-            return redirect('/')  # Redirect to home page after registration
-        else:
-            # Clear previous messages before adding a new error
-            storage = messages.get_messages(request)
-            for _ in storage:
-                pass  # This clears the message queue
-            messages.error(request, "There was an error in the registration, please try again")
-
     if request.method == "POST":
-
         form = CustomUserCreationForm(
                                       data=request.POST,
                                       current_user=request.user
                                       )
-
         if form.is_valid():
-            form.save()
-            messages.success(request, "Registration successful!")
+            user = form.save()
+            messages.success(request, "User registered successfully!")
             # send a confirmation email
             registered_name = form.cleaned_data["first_name"]
             registered_email = form.cleaned_data["email"]
@@ -116,12 +87,13 @@ def register_user(request):
                     ],
                     html_message=html,
                 )
-            return redirect("/")
-            
+            return redirect('/')  # Redirect to home page after registration
         else:
-            messages.error(request,
-                           "something went wrong.please try to register again"
-                           )
+            # Clear previous messages before adding a new error
+            storage = messages.get_messages(request)
+            for _ in storage:
+                pass  # This clears the message queue
+            messages.error(request, "There was an error in the registration, please try again")
 
     else:
         form = CustomUserCreationForm(current_user=request.user)
