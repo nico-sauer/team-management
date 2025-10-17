@@ -8,7 +8,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h2 class="mb-4 text-center">Register</h2>
-                    <form method="POST">
+                    <form method="POST" class="auth-form">
                         {% csrf_token %}
                         {{ form.first_name|as_crispy_field }}
                         {{ form.last_name|as_crispy_field }}

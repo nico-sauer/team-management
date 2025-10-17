@@ -3,8 +3,8 @@
    =========================== */
 body,
 html {
-  background: linear-gradient(120deg, #232526 0%, #414345 100%);
-  color: #f8f9fa;
+  background: #bddddc; /* White background for all pages */
+  color: #232526;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -249,26 +249,86 @@ h2 {
 }
 
 body {
-  background: #232526;
-  color: #f8f9fa;
+  background: #fff;
+  color: #232526;
 }
 
-label {
-  color: #232526; /* or any dark color */
+/*label {
+  color: #232526;  /*or any dark color 
   font-weight: 500;
-}
+} 
+
 
 form {
   max-width: 500px;
   margin: 32px auto;
   padding: 24px;
-  background: #fff; /* <-- light background */
+  background: #fff; /* <-- light background 
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(185, 170, 170, 0.08);
-}
+}*/
 
 input,
 select,
 textarea {
   margin-bottom: 16px;
+}
+
+.auth-form {
+  max-width: 500px;
+  margin: 32px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(185, 170, 170, 0.08);
+}
+
+.auth-form label {
+  color: #232526;
+  font-weight: 500;
+}
+
+#homepage-bg {
+  background: linear-gradient(120deg, #232526 0%, #414345 100%);
+  min-height: 100vh;
+}
+
+.filter-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 32px 40px;
+  margin: 32px auto;
+  max-width: 900px;
+}
+
+.filter-form .form-label {
+  font-weight: 600;
+  color: #232526;
+  margin-bottom: 8px;
+}
+
+.filter-form .form-select,
+.filter-form .form-control {
+  min-width: 160px;
+  border-radius: 8px;
+}
+
+.filter-form .btn {
+  min-width: 90px;
+  margin-bottom: 0;
+  margin-right: 8px;
+}
+
+@media (max-width: 900px) {
+  .filter-form {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 12px;
+  }
 }
