@@ -33,8 +33,8 @@
     <div class="col-md-3 d-flex align-items-start justify-content-end">
       <div class="d-flex flex-column gap-2">
         <button type="submit" class="btn btn-primary">Filter</button>
-        <a href="{% url 'appointments:booking_list' %}" class="btn btn-outline-danger">Reset</a>
-        <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-outline-secondary">PDF</a>
+        <a href="{% url 'appointments:booking_list' %}" class="btn btn-danger">Reset</a>
+        <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-secondary">PDF</a>
       </div>
     </div>
   </div>
@@ -57,12 +57,12 @@
     <tbody>
         {% for inst in bookings %}
         <tr>
-            <td>{{ inst.booking.title }}</td>
+            <td>{{ inst.current_title }}</td>
             <td>{{ inst.booking.event_type }}</td>
-            <td>{{ inst.start|date:"D" }}</td>
+            <td>{{ inst.current_start|date:"D" }}</td>
             <td>{{ inst.occurrence_date }}</td>
-            <td>{{ inst.start|date:"H:i" }}</td>
-            <td>{{ inst.end|date:"H:i" }}</td>
+            <td>{{ inst.current_start|date:"H:i" }}</td>
+            <td>{{ inst.current_end|date:"H:i" }}</td>
             <td>{{ inst.booking.status }}</td>
             <td>
                 {% for p in inst.booking.participants.all %}
@@ -70,7 +70,7 @@
                 {% endfor %}
             </td>
             <td class="text-center">
-                <a href="{% url 'appointments:edit_booking' inst.booking.pk %}">Edit</a> |
+                <a href="{% url 'appointments:booking_instance_edit' inst.booking.id inst.id %}">Edit</a> |
                 {% if inst.booking.recurrence != 'none' %}
                     <!-- Delete single booking instance -->
                     <a href="{% url 'appointments:delete_booking_instance' pk=inst.booking.pk instance_id=inst.id %}">

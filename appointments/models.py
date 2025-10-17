@@ -63,40 +63,60 @@ class Booking(models.Model):
             or f"{self.event_type} ({self.start} - {self.end}) @ {self.location}"
         )
 
-    def is_conflicting(self, participants=None):
-        """ checks, if a participant has another booking at the same time.
-        If yes, return a list with 'conflicting' participants. """
+    def is_conflicting(self, participants=None, instance=None):
+        """
+        Checks if a participant has another booking at the same time.
+        If 'instance' is provided, consider its modified start/end times.
+        Returns a list of conflicting participants.
+        """
 
         if participants is None:
             raise ValueError("Participants must not be empty.")
 
-        from datetime import timedelta
-
         conflicts = []
-        from_date = self.start.date() - timedelta(days=1)
-        to_date = self.end.date() + timedelta(days=1)
+
+        # use instance times if editing a single BookingInstance
+        start_time = instance.current_start if instance else self.start
+        end_time = instance.current_end if instance else self.end
+
+        from_date = (start_time.date() - timedelta(days=1))
+        to_date = (end_time.date() + timedelta(days=1))
 
         for participant in participants:
-            # all datatbase bookings
+            # get all relevant bookings
             bookings = Booking.objects.filter(
                 participants=participant, status__in=["confirmed"]
             ).exclude(id=self.id)
 
+            # include BookingInstances (for modified instances)
+            instances = BookingInstance.objects.filter(
+                booking__participants=participant,
+                is_cancelled=False,
+            )
+            if instance:
+                instances = instances.exclude(id=instance.id)
+
+            # check conflicts in bookings
             for other in bookings:
-                # check one-time bookings all ocurrences
                 if other.recurrence == "none":
-                    if other.start < self.end and other.end > self.start:
+                    if other.start < end_time and other.end > start_time:
                         conflicts.append(participant)
                         break
-
-                # check on recurring bookings
                 else:
                     occurrences = other.get_occurrences(from_date, to_date)
                     for occ_start in occurrences:
                         occ_end = occ_start + (other.end - other.start)
-                        if occ_start < self.end and occ_end > self.start:
+                        if occ_start < end_time and occ_end > start_time:
                             conflicts.append(participant)
                             break
+
+            # check conflicts in BookingInstances
+            for inst in instances:
+                inst_start = inst.current_start
+                inst_end = inst.current_end
+                if inst_start < end_time and inst_end > start_time:
+                    conflicts.append(participant)
+                    break
 
         return list(set(conflicts))
 
@@ -187,11 +207,11 @@ class BookingInstance(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
 
-    # optional, if you want to track booking_changes
+    # track booking_changes
     is_cancelled = models.BooleanField(default=False)
     is_modified = models.BooleanField(default=False)
 
-    # optional, if title, start or end should be changed
+    # track title, start- or end time changes
     override_title = models.CharField(null=True, blank=True)
     override_start = models.DateTimeField(null=True, blank=True)
     override_end = models.DateTimeField(null=True, blank=True)
@@ -204,3 +224,15 @@ class BookingInstance(models.Model):
 
     def __str__(self):
         return f"{self.booking.title} ({self.occurrence_date})"
+
+    @property
+    def current_title(self):
+        return self.override_title or self.booking.title
+
+    @property
+    def current_start(self):
+        return self.override_start or self.start
+
+    @property
+    def current_end(self):
+        return self.override_end or self.end

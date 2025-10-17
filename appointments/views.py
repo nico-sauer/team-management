@@ -13,7 +13,7 @@ import calendar
 import io
 
 from .models import Booking, BookingInstance
-from .forms import BookingForm
+from .forms import BookingForm, BookingInstanceEditForm
 from .services.mailer import send_booking_invite
 from appointments.filters import BookingInstanceFilter
 from reportlab.lib import colors
@@ -25,7 +25,7 @@ from .utils import Calendar
 
 
 # -----------------------------
-# Booking Create / Edit
+# Create Booking 
 # -----------------------------
 def create_booking(request):
     if request.method == "POST":
@@ -40,8 +40,8 @@ def create_booking(request):
                 names = ", ".join(str(p) for p in conflicts)
                 messages.error(
                     request,
-                    (f"Find another timeslot, as {names}" 
-                     f"is/are already booked."))
+                    (f"Find another timeslot, as {names}"
+                     f" is/are already booked."))
                 return render(request, "appointments/booking_create.html",
                               {"form": form})
 
@@ -54,20 +54,6 @@ def create_booking(request):
         form = BookingForm(current_user=request.user)
 
     return render(request, "appointments/booking_create.html", {"form": form})
-
-
-@login_required
-def edit_booking(request, pk):
-    booking = get_object_or_404(Booking, pk=pk, booked_by=request.user)
-    if request.method == "POST":
-        form = BookingForm(request.POST, instance=booking)
-        if form.is_valid():
-            form.save()
-            return redirect("appointments:booking_list")
-    else:
-        form = BookingForm(instance=booking)
-    return render(request, "appointments/booking_edit.html", {"form": form})
-
 
 # -----------------------------
 # Booking List (Day / Week View)
@@ -91,6 +77,74 @@ def booking_list(request):
     }
     return render(request, "appointments/booking_list.html", context)
 
+# -----------------------------
+# Booking Edit single Instances
+# -----------------------------
+@login_required
+def edit_booking_instance(request, booking_id, instance_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
+    instance = get_object_or_404(
+        BookingInstance, pk=instance_id, booking=booking)
+
+    if request.method == "POST":
+        form = BookingInstanceEditForm(request.POST, instance=instance)
+        if form.is_valid():
+            inst = form.save(commit=False)
+            inst.is_modified = True
+
+        new_status = form.cleaned_data.get("status")
+
+        # Status can only be change by one time bookings
+        if booking.recurrence == "none":
+            if new_status and new_status != booking.status:
+                booking.status = new_status
+                booking.save()
+        else:
+            messages.warning(
+                request,
+                "Status changes are only possible for one-time bookings. "
+                "Recurring events need to be cancelled or deleted instead."
+            )
+            return redirect(
+                "appointments:booking_instance_edit",
+                booking_id=booking.id,
+                instance_id=inst.id
+            )
+
+        # check appointment-conflicts before saving
+        conflicts = inst.booking.is_conflicting(
+            participants=inst.booking.participants.all(),
+            instance=inst
+        )
+        if conflicts:
+            messages.error(
+                request,
+                "Cannot update instance due to conflicts with: "
+                + ", ".join(
+                    [p.username if p.username else str(p)
+                        for p in conflicts if p is not None]
+                )
+            )
+            return redirect(
+                "appointments:booking_instance_edit",
+                booking_id=booking.id,
+                instance_id=inst.id
+                    )
+        # save instance if no conflicts
+        inst.save()
+        messages.success(request,
+                         (f"Appointment on {inst.occurrence_date}"
+                          f" is updated successfully."))
+    else:
+        form = BookingInstanceEditForm(instance=instance, booking=booking)
+
+    context = {
+        "form": form,
+        "instance": instance,
+        "booking": booking,
+    }
+    return render(request, "appointments/booking_instance_edit.html", context)
+
 
 # -----------------------------
 # Delete Booking / Instance
@@ -98,6 +152,7 @@ def booking_list(request):
 @login_required
 def delete_booking(request, pk, instance_id=None):
     booking = get_object_or_404(Booking, pk=pk)
+
     if booking.booked_by != request.user:
         name = booking.booked_by.get_full_name() or booking.booked_by.username
         messages.warning(
@@ -120,7 +175,7 @@ def delete_booking(request, pk, instance_id=None):
                 messages.success(
                     request,
                     f"The occurrence on {instance.occurrence_date}"
-                    f"was cancelled.")
+                    f" was cancelled.")
             else:
                 booking.delete()
                 messages.success(request, "The single booking was deleted.")
@@ -128,8 +183,7 @@ def delete_booking(request, pk, instance_id=None):
             booking.delete()
             messages.success(
                 request, "The entire series was deleted successfully.")
-
-        return redirect("appointments:booking_list")
+        # return redirect("appointments:booking_list")
 
     return render(
         request, "appointments/booking_delete.html",
@@ -150,7 +204,7 @@ def send_booking_invite_view(request, booking_id):
         ics_file = send_booking_invite(booking, recipients, generate_only=True)
         email = EmailMessage(f"Invitation: {booking.title}",
                              f"Hello,\n\nPlease find attached the invitation"
-                             f"to '{booking.title}'.\n\n{comment}",
+                             f" for '{booking.title}'.\n\n{comment}",
                              to=recipients)
         email.attach("invitation.ics", ics_file.read(), "text/calendar")
         if attachment:
@@ -207,11 +261,11 @@ def booking_pdf(request):
             for p in booking.participants.all()
         )
         # get local timzone
-        start_local = localtime(inst.start)
-        end_local = localtime(inst.end)
-        
+        start_local = localtime(inst.current_start)
+        end_local = localtime(inst.current_end)
+
         data.append([
-            booking.title,
+            inst.current_title,
             booking.event_type,
             start_local.strftime("%a"),
             start_local.strftime("%Y-%m-%d %H:%M"),
@@ -253,7 +307,8 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         context["next_month"] = next_month(d)
 
         first_day = d.replace(day=1)
-        last_day = first_day + timedelta(days=calendar.monthrange(d.year, d.month)[1] - 1)
+        last_day = first_day + timedelta(
+            days=calendar.monthrange(d.year, d.month)[1] - 1)
 
         instances = BookingInstance.objects.filter(
             occurrence_date__gte=first_day,
@@ -261,7 +316,11 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
             is_cancelled=False
         ).select_related('booking')
 
-        context["calendar"] = mark_safe(Calendar(d.year, d.month, events=[(i.start, i.booking) for i in instances]).formatmonth(withyear=True))
+        context["calendar"] = mark_safe(Calendar(
+            d.year,
+            d.month,
+            events=[(inst.current_start, inst) for inst in instances]
+        ).formatmonth(withyear=True))
         return context
 
 
