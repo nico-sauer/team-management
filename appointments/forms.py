@@ -1,5 +1,5 @@
 from django import forms
-from .models import Booking
+from .models import Booking, BookingInstance
 from users.models import CustomUser
 from django.utils import timezone
 from datetime import datetime, time
@@ -89,7 +89,8 @@ class BookingForm(forms.ModelForm):
                 )
         # participants-validations, team-check & min-amount of participants
         if not participants:
-            self.add_error("participants", "Please select at least one participant.")
+            self.add_error(
+                "participants", "Please select at least one participant.")
         elif self.current_user:
             for p in participants:
                 if p.team_id != self.current_user.team_id:
@@ -98,4 +99,37 @@ class BookingForm(forms.ModelForm):
                         f"{p} is not in the same team as {self.current_user}",
                     )
 
+        return cleaned_data
+
+
+class BookingInstanceEditForm(forms.ModelForm):
+    # integrate status field from model Boodings in this form
+    status = forms.ChoiceField(
+        choices=Booking._meta.get_field('status').choices, required=False)
+
+    class Meta:
+        model = BookingInstance
+        fields = ["override_title", "override_start", "override_end",
+                  "status"]
+        widgets = {
+            "override_start": forms.DateTimeInput(attrs={
+                "type": "datetime-local"}),
+            "override_end": forms.DateTimeInput(attrs={
+                "type": "datetime-local"}),
+            "status": forms.Select(attrs={"class": "form-select"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        booking = kwargs.pop("booking", None)
+        super().__init__(*args, **kwargs)
+        if booking:
+            # set current field info "status" from Booking
+            self.fields["status"].initial = booking.status
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("override_start")
+        end = cleaned_data.get("override_end")
+        if start and end and end <= start:
+            raise forms.ValidationError("End time must be after start time.")
         return cleaned_data
