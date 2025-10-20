@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <h2 class="text-center text-white">Edit single occurrence of "{{instance.current_title }}"</h2>
+    <br>
+    <p class="text-center text-white">Do you want to change {{ instance.current_title}} on {{ instance.current_start}} ?</p>
+
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'appointments:booking_list' %}" class="btn btn-danger">Cancel</a>
+    <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">To Booking Overview</a>
+    </form>
+
+    {# Django Messages #}
+    {% if messages or form.errors %}
+    <div style="text-align: center; margin-top: 20px;">
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                <p style="color: red; font-weight: bold;">{{ message }}</p>
+            {% elif message.tags == "warning" %}
+                <p style="color: orange; font-weight: bold;">{{ message }}</p>    
+            {% elif message.tags == "success" %}
+                <p style="color: green; font-weight: bold;">{{ message }}</p>
+            {% else %}
+                <p>{{ message }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}

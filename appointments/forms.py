@@ -1,5 +1,5 @@
 from django import forms
-from .models import Booking
+from .models import Booking, BookingInstance
 from users.models import CustomUser
 from django.utils import timezone
 from datetime import datetime, time
@@ -35,17 +35,19 @@ class BookingForm(forms.ModelForm):
                 attrs={"type": "date", "class": "form-control"}
             ),
         }
-        labels = {"recurrence_end": "Recurrence end date:",
-                  }
+        labels = {
+            "recurrence_end": "Recurrence end date:",
+        }
 
     def __init__(self, *args, **kwargs):
         # current_user is passed when the form is initialized
         self.current_user = kwargs.pop("current_user", None)
         super().__init__(*args, **kwargs)
-        self.fields['participants'].label_from_instance = (
-            lambda u: f"{u.first_name[0]}. {u.last_name}" if u.first_name
-            and u.last_name else u.email
-            )
+        self.fields["participants"].label_from_instance = lambda u: (
+            f"{u.first_name[0]}. {u.last_name}"
+            if u.first_name and u.last_name
+            else u.email
+        )
         if self.current_user:
             # Filter only user from the current user team_id
             self.fields["participants"].queryset = CustomUser.objects.filter(
@@ -75,14 +77,15 @@ class BookingForm(forms.ModelForm):
         # assure that all times are timezone aware
         if recurrence_end and timezone.is_naive(recurrence_end):
             recurrence_end = timezone.make_aware(
-                recurrence_end, timezone.get_current_timezone())
+                recurrence_end, timezone.get_current_timezone()
+            )
 
         # get sure recurrence_end is after start-date
         if start and recurrence_end:
             if recurrence_end <= start:
                 self.add_error(
                     "recurrence_end",
-                    "Recurrence end date must be after the start date."
+                    "Recurrence end date must be after the start date.",
                 )
         # participants-validations, team-check & min-amount of participants
         if not participants:
@@ -96,4 +99,37 @@ class BookingForm(forms.ModelForm):
                         f"{p} is not in the same team as {self.current_user}",
                     )
 
+        return cleaned_data
+
+
+class BookingInstanceEditForm(forms.ModelForm):
+    # integrate status field from model Boodings in this form
+    status = forms.ChoiceField(
+        choices=Booking._meta.get_field('status').choices, required=False)
+
+    class Meta:
+        model = BookingInstance
+        fields = ["override_title", "override_start", "override_end",
+                  "status"]
+        widgets = {
+            "override_start": forms.DateTimeInput(attrs={
+                "type": "datetime-local"}),
+            "override_end": forms.DateTimeInput(attrs={
+                "type": "datetime-local"}),
+            "status": forms.Select(attrs={"class": "form-select"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        booking = kwargs.pop("booking", None)
+        super().__init__(*args, **kwargs)
+        if booking:
+            # set current field info "status" from Booking
+            self.fields["status"].initial = booking.status
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("override_start")
+        end = cleaned_data.get("override_end")
+        if start and end and end <= start:
+            raise forms.ValidationError("End time must be after start time.")
         return cleaned_data

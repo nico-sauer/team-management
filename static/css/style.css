@@ -92,6 +92,10 @@ main.container-fluid {
 .row.justify-content-center {
   margin: 0;
 }
+.card-body {
+  background: #fff;
+  border-radius: 16px;
+}
 
 /* ===========================
    Button Styles
@@ -250,7 +254,7 @@ body {
 }
 
 label {
-  color: #fff;
+  color: #232526; /* or any dark color */
   font-weight: 500;
 }
 
@@ -258,9 +262,9 @@ form {
   max-width: 500px;
   margin: 32px auto;
   padding: 24px;
-  background: #232526;
+  background: #fff; /* <-- light background */
   border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 16px rgba(185, 170, 170, 0.08);
 }
 
 input,

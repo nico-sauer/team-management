@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Send booking/invitaion: {{ booking.title }}</h3>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="comment" class="form-label">Comment (optional):</label>
+            <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="attachment" class="form-label">Further attachement (optional):</label>
+            <input type="file" id="attachment" name="attachment" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-success">Send E-Mail</button>
+        <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+    <div class="text-center mt-4">
+        <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
+            To Booking Overview
+        </a>
+    </div>
+ 
+    {# Django Messages #}
+    {% for message in messages %}
+        {% if message.tags == "error" %}
+        <p style="color:red;">{{ message }}</p>
+        {% elif message.tags == "success" %}
+        <p style="color:green;">{{ message }}</p>
+        {% else %}
+        <p>{{ message }}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

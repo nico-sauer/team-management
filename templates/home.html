@@ -24,7 +24,7 @@
 </div>
 
 <!-- Home tab -->
-<div id="HomeTab" class="tabcontent">
+<div id="HomeTab" class="tabcontent" style="text-align: center;">
     <div class="hero-section">
         <div class="hero-overlay"></div>
         <div class="hero-content py-5">
@@ -52,7 +52,7 @@
                     <div class="alert alert-info">Welcome to Team Management!</div>
                 {% endif %}
             {% else %}
-                <a href="{% url 'users:first_registration' %}" class="btn btn-primary btn-lg">Get Started</a>
+                <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg">Get Started</a>
             {% endif %}
         </div>
     </div>
