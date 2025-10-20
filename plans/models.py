@@ -72,7 +72,7 @@ class TrainingSessions(models.Model):
 
 class WeeklySessions(models.Model):
     day = models.TextField(max_length=10)
-    time = models.DateTimeField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
     session = models.ForeignKey(TrainingSessions, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
 

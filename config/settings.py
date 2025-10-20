@@ -167,3 +167,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 # EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 # EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == "True"
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# django_project/settings.py
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

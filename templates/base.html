@@ -78,7 +78,7 @@
         </nav> {% endcomment %}
     </header>
 
-    <main class="container-fluid">
+    <div class="container-fluid">
         {% block content %}
         {% endblock %}
         {% block back_button %}
@@ -86,7 +86,7 @@
             <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
         </div>
         {% endblock %}
-    </main>
+    </div>
     <footer class="text-center text-muted mt-5 mb-3">
         &copy; {{ now|date:"Y" }} Team Management.
         {% if request.user.is_superuser %}

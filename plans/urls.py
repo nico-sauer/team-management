@@ -27,7 +27,7 @@ urlpatterns = [
     path("deletefromplan", views.deletefromplan, name="deletefromplan"),
     path("deletesession", views.deletesession, name="deletesession"),
     path("deletefromschedule", views.deletefromschedule, name="deletefromschedule"),
-    path("dashboard", views.mealplan, name="dashboard"),
+    path("dashboard", views.Dashboard.as_view(), name="dashboard"),
     path("mealplan", views.mealplan, name="mealplan"),
     path("trainingschedule", views.trainingschedule, name="trainingschedule"),
 ]
