@@ -26,7 +26,7 @@ main.container-fluid {
    Hero Section
    =========================== */
 .hero-section {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh; /* Full viewport height */
   position: relative;
   display: flex;
@@ -61,7 +61,7 @@ main.container-fluid {
    =========================== */
 .features-section {
   background: #232526;
-  width: 100vw;
+  width: 100%;
   padding: 40px 0 60px 0;
   margin: 0;
 }
