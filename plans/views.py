@@ -38,8 +38,8 @@ from appointments.views import *
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import *
@@ -112,7 +112,9 @@ class Dashboard(generic.ListView):
         return context
 
 def addmeal(request):
-    
+    if not request.user.is_authenticated:
+        return redirect('users:login') #redirect to login if not authenticated
+
     if request.method == "GET":
 
         # TODO this will change to if user is authenticated as a chef basically
@@ -170,16 +172,17 @@ def addmeal(request):
         return render(request, "plans/addmeal.html", context)
 
 def deletemeal(request):
-    all_meals = Meals.objects.filter(chef = request.user)
-    # get meal by id and delete from meals object
+    all_meals = Meals.objects.filter(chef=request.user)
     meal_id = request.POST.get("mealtodelete")
-    meal_to_delete = Meals.objects.get(pk=meal_id)
-    meal_to_delete.delete()
+    try:
+        meal_to_delete = Meals.objects.get(pk=meal_id)
+        meal_to_delete.delete()
+    except Meals.DoesNotExist: # exception if ID does not exist
+        return HttpResponseNotFound("Meal not found")
 
     context = {
         "all_meals": all_meals
     }
-
     return render(request, "plans/addmeal.html", context)
 
 def addmealplan(request):
