@@ -85,7 +85,7 @@
                         Delete
                     </a>
                 {% endif %} |
-                <a href="{% url 'appointments:send_invite' inst.booking.pk %}" class="text-success" title="Send E-Mail">
+                <a href="{% url 'appointments:send_invite' inst.id %}" class="text-success" title="Send E-Mail">
                     <i class="bi bi-envelope"></i>
                 </a>
             </td>

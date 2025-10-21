@@ -9,12 +9,12 @@ from django.core.mail import EmailMessage
 from django.http import FileResponse
 from datetime import datetime, timedelta, date
 from django.utils.timezone import localtime
+from appointments.services.ics_generator import generate_ics
 import calendar
 import io
 
 from .models import Booking, BookingInstance
 from .forms import BookingForm, BookingInstanceEditForm
-from .services.mailer import send_booking_invite
 from appointments.filters import BookingInstanceFilter
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
@@ -154,73 +154,131 @@ def edit_booking_instance(request, booking_id, instance_id):
 # -----------------------------
 @login_required
 def delete_booking(request, pk, instance_id=None):
-    booking = get_object_or_404(Booking, pk=pk)
+    """A deletion can only be done by the creator,
+        and a permanent deletion is only possible,
+        if the recurrence is none or all recurring instances are cancelled
+        If the booking or instance does not exist, the user is redirected with
+        a warning."""
+    try:
+        booking = Booking.objects.get(pk=pk)
+    except Booking.DoesNotExist:
+        messages.warning(request,
+                         "The booking you tried to access does not exist.")
+        return redirect("appointments:booking_list")
 
+    # only creator is allowed to delete
     if booking.booked_by != request.user:
         name = booking.booked_by.get_full_name() or booking.booked_by.username
         messages.warning(
             request,
-            f"Sorry, only the appointment creator ({name})"
-            f" is allowed to delete this appointment.")
-        return render(request, "appointments/booking_delete.html",
-                      {"booking": booking})
+            f"Sorry, only the appointment creator ({name}) "
+            f"is allowed to delete this appointment.")
+        return render(
+            request,
+            "appointments/booking_delete.html",
+            {"booking": booking}
+        )
 
     instance = None
     if instance_id:
-        instance = get_object_or_404(BookingInstance, id=instance_id,
-                                     booking=booking)
+        try:
+            instance = BookingInstance.objects.get(
+                id=instance_id, booking=booking)
+        except BookingInstance.DoesNotExist:
+            messages.warning(
+                request,
+                "This occurrence was already deleted or does not exist."
+            )
+            return redirect("appointments:booking_list")
 
     if request.method == "POST":
         if instance:
             if booking.recurrence != "none":
+                # Cancel only individual instances
                 instance.is_cancelled = True
                 instance.save()
                 messages.success(
                     request,
                     f"The occurrence on {instance.occurrence_date}"
                     f" was cancelled.")
+                if not booking.all_booking_instances.filter(is_cancelled=False).exists():
+                    booking.delete()
+                    messages.info(
+                        request,
+                        ("All occurrences were cancelled — the whole booking "
+                         "was removed.")
+                    )
             else:
+                # if no recurring booking -> permanent deletion of booking
                 booking.delete()
                 messages.success(request, "The single booking was deleted.")
         else:
             booking.delete()
             messages.success(
                 request, "The entire series was deleted successfully.")
-        # return redirect("appointments:booking_list")
+
+        # redirect to the same page
+        return redirect(request.path)
 
     return render(
-        request, "appointments/booking_delete.html",
-        {"booking": booking, "instance": instance})
+        request,
+        "appointments/booking_delete.html",
+        {"booking": booking, "instance": instance}
+    )
 
 
-# -----------------------------
-# Send Booking Invite
-# -----------------------------
+# --------------------------------------
+# Send BookingInstance email invitation
+# --------------------------------------
 
 @login_required
-def send_booking_invite_view(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id)
+def send_booking_invite_view(request, instance_id):
+    # send email 
+    instance = get_object_or_404(BookingInstance, id=instance_id)
+    # Get the corresponding booking object
+    booking = instance.booking
+
     if request.method == "POST":
         comment = request.POST.get("comment", "")
         attachment = request.FILES.get("attachment")
         recipients = [p.email for p in booking.participants.all()]
 
-        ics_file = send_booking_invite(booking, recipients, generate_only=True)
-        email = EmailMessage(f"Invitation: {booking.title}",
-                             f"Hello,\n\nPlease find attached the invitation"
-                             f" for '{booking.title}'.\n\n{comment}",
-                             to=recipients)
-        email.attach("invitation.ics", ics_file.read(), "text/calendar")
+        # create ics file from instance data
+        ics_file = generate_ics(booking, instance=instance)
+
+        # Prepare email content
+        subject = f"Invitation: {instance.current_title} on {
+            instance.occurrence_date.strftime('%Y-%m-%d')}"
+        body = (
+            f"Hello,\n\n"
+            f"You are invited to the following appointment:\n\n"
+            f"Title: {instance.current_title}\n"
+            f"Date: {instance.occurrence_date.strftime('%A, %d %B %Y')}\n"
+            f"Start: {localtime(instance.current_start).strftime('%H:%M')}\n"
+            f"End: {localtime(instance.current_end).strftime('%H:%M')}\n"
+            f"{comment}\n\n"
+            f"Regards,\n{request.user.get_full_name() or request.user.username}"
+        )
+        # send e-mail with attachment (ics(MIME)/other) if exists
+        email = EmailMessage(subject, body, to=recipients)
+        email.attach("invitation.ics", ics_file, "text/calendar")
+
         if attachment:
             email.attach(
                 attachment.name, attachment.read(), attachment.content_type)
+
         email.send()
 
         messages.success(
-            request, "E-mail with ics.file was sent successfully.")
+            request, "E-mail with ics-file was sent successfully.")
+
+    context = {
+        "booking": booking,
+        "instance": instance,
+    }
 
     return render(request,
-                  "appointments/send_invite.html", {"booking": booking})
+                  "appointments/send_invite.html", context)
 
 
 # -----------------------------

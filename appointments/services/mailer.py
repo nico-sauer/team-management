@@ -6,7 +6,7 @@ from datetime import datetime
 import pytz
 
 
-def send_booking_invite(booking, recipients, generate_only=False):
+def send_booking_invite(booking, recipients, generate_only=False, instance=None):
     """
     If generate_only=True, only the ICS file is generated and returned.
     Otherwise, it is sent directly as before.
