@@ -3,7 +3,12 @@ from users.models import CustomUser
 from .models import Meals, WeeklyMealPlan, TrainingSessions, WeeklySessions, TDEE
 from django.urls import reverse
 
+# =====================
+# Model Tests
+# =====================
+
 class MealsModelTest(TestCase):
+    """Test creation and fields of Meals model."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="chef@test.com", password="testpass")
         self.meal = Meals.objects.create(
@@ -22,6 +27,7 @@ class MealsModelTest(TestCase):
         self.assertEqual(self.meal.chef.email, "chef@test.com")
 
 class WeeklyMealPlanTest(TestCase):
+    """Test WeeklyMealPlan model logic and relations."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="user@test.com", password="testpass")
         self.meal = Meals.objects.create(name="Meal", chef=self.user)
@@ -33,6 +39,7 @@ class WeeklyMealPlanTest(TestCase):
         self.assertEqual(self.plan.user, self.user)
 
 class AddMealViewTest(TestCase):
+    """Test add meal and delete meal views (GET, POST, permissions)."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="chef@test.com", password="testpass")
         self.client.force_login(self.user)
@@ -53,6 +60,8 @@ class AddMealViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Meals.objects.filter(name="Test Meal").exists())
 
+    # TODO: Add test for invalid POST data (missing required fields)
+
     def test_deletemeal(self):
         meal = Meals.objects.create(name="DeleteMe", chef=self.user)
         response = self.client.post(reverse("deletemeal"), {"mealtodelete": meal.id})
@@ -62,12 +71,15 @@ class AddMealViewTest(TestCase):
         response = self.client.post(reverse("deletemeal"), {"mealtodelete": 9999})
         self.assertEqual(response.status_code, 404)
 
+    # TODO: Add test for delete meal as unauthorized user
+
     def test_addmeal_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse("addmeal"))
         self.assertEqual(response.status_code, 302)  # redirect to login
 
 class TrainingSessionsModelTest(TestCase):
+    """Test TrainingSessions model creation and fields."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="trainer@test.com", password="testpass")
         self.session = TrainingSessions.objects.create(
@@ -83,6 +95,7 @@ class TrainingSessionsModelTest(TestCase):
         self.assertEqual(self.session.trainer, self.user)
 
 class WeeklySessionsModelTest(TestCase):
+    """Test WeeklySessions model creation and relations."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="athlete@test.com", password="testpass")
         self.trainer = CustomUser.objects.create(email="trainer@test.com", password="testpass")
@@ -104,6 +117,7 @@ class WeeklySessionsModelTest(TestCase):
         self.assertEqual(self.weekly_session.user, self.user)
 
 class AddTrainingScheduleViewTest(TestCase):
+    """Test add training schedule view (GET, POST)."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="trainer@test.com", password="testpass")
         self.client.force_login(self.user)
@@ -128,6 +142,7 @@ class AddTrainingScheduleViewTest(TestCase):
         self.assertTrue(WeeklySessions.objects.filter(day="Wednesday", session=self.session, user=self.user).exists())
 
 class MealPlanViewTest(TestCase):
+    """Test meal plan view for correct template and content."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="athlete@test.com", password="testpass")
         self.client.force_login(self.user)
@@ -141,6 +156,7 @@ class MealPlanViewTest(TestCase):
         self.assertContains(response, "Healthy Meal")
 
 class CalculateMacrosTest(TestCase):
+    """Test calculate_macros utility function with weekly meals."""
     def setUp(self):
         self.user = CustomUser.objects.create(email="athlete@test.com", password="testpass")
         self.meal1 = Meals.objects.create(name="Meal1", totalfat=10, totalcarb=20, totalprotein=30, calories=400, chef=self.user)
@@ -156,3 +172,11 @@ class CalculateMacrosTest(TestCase):
         self.assertIn("average_carb", macros)
         self.assertIn("average_protein", macros)
         self.assertIn("average_calories", macros)
+
+    # TODO: Add test for calculate_macros with empty queryset (edge case)
+
+# =====================
+# TODO: Add tests for TDEE model logic if it contains any business rules
+# TODO: Add tests for permissions (e.g., only owner can delete/edit)
+# TODO: Add tests for error handling in views (invalid input, permissions)
+# =====================
