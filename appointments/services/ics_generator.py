@@ -5,7 +5,7 @@ from config import settings
 
 def generate_ics(booking):
     """
-    Generates a fully RFC 5545–compliant ICS event.
+    Generates a fully RFC 5545-compliant ICS event.
     Compatible with Gmail, Outlook, iOS, Android.
     """
 

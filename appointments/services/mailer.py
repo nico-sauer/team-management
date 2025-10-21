@@ -20,7 +20,7 @@ def send_booking_invite(booking, recipients, generate_only=False):
         ics_io = BytesIO(ics_content)
         return ics_io
 
-    # Standard-Mailversand
+    # Standard mail 
     email = EmailMessage(
         subject=f"Invitation: {booking.title}",
         body=f"Appointment: '{booking.title}'.",

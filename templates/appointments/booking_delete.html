@@ -1,36 +1,43 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Delete a Booking{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* only for form styles*/
+  form {
+    max-width: none !important;
+    width: 65% !important;
+    margin: 16px auto;
+    padding: 24px;
+    background: transparent;
+    border: none !important;
+    box-shadow: none !important;
+  }
+</style>
+{% endblock %}
+
 
 {% block content %}
 <br>
 <h2 class="text-center text-white">Delete a Booking</h2>
 <br>
 
-
 {% if instance %}
-  <p class="text-center text-white">
-    Are you sure you want to <strong>cancel this single occurrence</strong> of 
-    "<strong>{{ booking.title }}</strong>" on 
-    <strong>{{ instance.occurrence_date }}</strong> 
+  <p class="text-center text-white" style="font-size: 1.2rem;">
+    Are you sure you want to <strong>cancel this single occurrence</strong> of<br>
+    "<strong>{{ booking.title }}</strong>" on<br> 
+    <strong>{{ instance.occurrence_date }}</strong><br> 
     ({{ instance.start|time:"H:i" }}-{{ instance.end|time:"H:i" }})?
   </p>
 {% else %}
-  <p class="text-center text-white">
-    Are you sure you want to <strong>delete permanent this appointment</strong> 
-    "<strong>{{ booking.title }}</strong>" 
-    (starting {{ booking.start|date:"Y-m-d" }})?
+  <p class="text-center text-white" style="font-size: 1.2rem;">
+    Are you sure you want to <strong>delete permanent this appointment</strong><br> 
+    "<strong>{{ booking.title }}</strong>" taking place on<br>
+    "<strong>{{ booking.start|date:"Y-m-d" }}?</strong>"
   </p>
 {% endif %}
-
-<form method="POST">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-danger">
-    {% if instance %}Delete Occurrence{% else %}Delete Event permanently{% endif %}
-  </button>
-  &nbsp;&nbsp;&nbsp;
-  <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">Go Back</a>
-</form>
 
 {# Django Messages #}
 {% if messages or form.errors %}
@@ -41,10 +48,24 @@
         {% elif message.tags == "success" %}
             <p style="color: green; font-weight: bold;">{{ message }}</p>
         {% else %}
-            <p>{{ message }}</p>
+            <p style="color: orange">{{ message }}</p>
         {% endif %}
     {% endfor %}
   {% endif %}
 </div>
+
+
+<div class="d-flex justify-content-center align-items-center">
+  <form method="POST" class="row g-3 align-items-center justify-content-center text-white">
+    {% csrf_token %}
+    <div class="col-auto d-flex justify-content-center gap-3">
+      <button type="submit" class="btn btn-danger">
+        {% if instance %}Delete Occurrence{% else %}Delete Event permanently{% endif %}
+      </button>
+      <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">Go Back</a>
+    </div>
+  </form>
+</div>
+
 
 {% endblock %}

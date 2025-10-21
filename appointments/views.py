@@ -94,7 +94,7 @@ def edit_booking_instance(request, booking_id, instance_id):
 
         new_status = form.cleaned_data.get("status")
 
-        # Status can only be change by one time bookings
+        # Status can only be changed by one time bookings
         if booking.recurrence == "none":
             if new_status and new_status != booking.status:
                 booking.status = new_status
@@ -103,7 +103,8 @@ def edit_booking_instance(request, booking_id, instance_id):
             messages.warning(
                 request,
                 "Status changes are only possible for one-time bookings. "
-                "Recurring events need to be cancelled or deleted instead."
+                "Recurring events need to be cancelled or deleted by the"
+                " creator."
             )
             return redirect(
                 "appointments:booking_instance_edit",
@@ -131,10 +132,12 @@ def edit_booking_instance(request, booking_id, instance_id):
                 instance_id=inst.id
                     )
         # save instance if no conflicts
+        inst.occurrence_date = inst.current_start.date()
         inst.save()
         messages.success(request,
                          (f"Appointment on {inst.occurrence_date}"
                           f" is updated successfully."))
+
     else:
         form = BookingInstanceEditForm(instance=instance, booking=booking)
 
@@ -158,7 +161,7 @@ def delete_booking(request, pk, instance_id=None):
         messages.warning(
             request,
             f"Sorry, only the appointment creator ({name})"
-            f"is allowed to delete this appointment.")
+            f" is allowed to delete this appointment.")
         return render(request, "appointments/booking_delete.html",
                       {"booking": booking})
 
@@ -193,6 +196,7 @@ def delete_booking(request, pk, instance_id=None):
 # -----------------------------
 # Send Booking Invite
 # -----------------------------
+
 @login_required
 def send_booking_invite_view(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
