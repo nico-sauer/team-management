@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,17 +49,18 @@
   <h1 style="text-align: center">Athlete Profiles</h1>
     <div class="column" style="margin: auto">
     {% for athlete in athletes %}
-        <div class="card" style="width: 350px; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+        <div class="card" style="width: 350px; margin: 20px auto; border-radius: 5px; background-color: black; border-color: darkgrey; text-align: center;">
          <div class="card-body" style="width:350px; margin:auto;">
-            <div style="display: inline; ;">
-                 <a href="details/{{ athlete.id }}"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png?20170328184010" style="width: 300px"></a>  
-                  
-            {% comment %} replace with {{ athlete.icon }} {% endcomment %}
+            <div style="display: inline; color: white;">
+                 <a href="details/{{ athlete.id }}">
+                 <img src="/media/{{athlete.icon}}/" style="clip-path: circle(); width: 200px;"></a>  
+              
+               
                 <p><a href="details/{{ athlete.id }}"> {{ athlete.first_name }} {{ athlete.last_name }}</a></p>
                 <p>Birthday: {{ athlete.birthday }}</p>
                 <p>Position: {{ athlete.position }}</p>
                 <p>Jersey Number: {{ athlete.number }}</p>
-                <button id="myBtn">Open</button>
+                <button  class="btn btn-outline-light" id="myBtn">Open</button>
 
                 <!-- The Modal -->
                 <div id="myModal" class="modal">

@@ -28,17 +28,22 @@
       </div>
     </div>
 
+            <!-- Week View From -->
+            <div class="col-md-3 d-flex flex-column">
+                <label for="id_week_view_from" class="form-label">Week View From</label>
+                <input type="text" id="id_week_view_from" name="week_view_from" class="form-control" placeholder="YYYY-MM-DD"
+                    value="{{ request.GET.week_view_from }}">
+            </div>
 
-    <!-- rechte Spalte: Buttons (oben ausgerichtet) -->
-    <div class="col-md-3 d-flex align-items-start justify-content-end">
-      <div class="d-flex flex-column gap-2">
-        <button type="submit" class="btn btn-primary">Filter</button>
-        <a href="{% url 'appointments:booking_list' %}" class="btn btn-danger">Reset</a>
-        <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-secondary">PDF</a>
-      </div>
-    </div>
-  </div>
-</form>
+            <!-- Buttons -->
+            <div class="col-md-3 d-flex flex-wrap align-items-end justify-content-start mt-2">
+                <button type="submit" class="btn btn-outline-success me-2 mb-2">FILTER</button>
+                <a href="{% url 'appointments:booking_list' %}" class="btn btn-outline-danger me-2 mb-2">RESET</a>
+                <a href="{% url 'appointments:booking_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-outline-primary mb-2">PDF</a>
+            </div>
+
+        </div>
+    </form>
 
 <table class="table table-bordered table-striped table-hover text-left align-middle w-auto mx-auto">
     <thead class="table-dark text-center">

@@ -2,22 +2,6 @@ from rest_framework import serializers
 
 from .models import AthleteProfile, StaffProfile
 
-#from plans.models import MedicalRecords
-
-
-# class MedicalRecordsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MedicalRecords
-#         fields = "__all__"
-        #exclude = ["id", "athlete"]
-    
-    # def get_records(self, instance):
-    #     try:
-    #         medical_records = {record.id:record for record in instance}
-    #         return list(medical_records)
-    #     except AssertionError:
-    #       return f"No records."
-# general profile serializers -> basically what the athletes mostly see of other profiles
 class StaffProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     id = serializers.ReadOnlyField()
