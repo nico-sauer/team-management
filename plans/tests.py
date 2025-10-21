@@ -65,7 +65,7 @@ class AddMealViewTest(TestCase):
     def test_addmeal_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse("addmeal"))
-        self.assertEqual(response.status_code, 302)  # редирект на логин
+        self.assertEqual(response.status_code, 302)  # redirect to login
 
 class TrainingSessionsModelTest(TestCase):
     def setUp(self):
