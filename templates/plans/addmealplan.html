@@ -51,504 +51,78 @@
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: lightblue;
+  background-color: white;
+  width: 100%;
+}
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: white;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.card-title {
+    font-weight: bold;
+    text-transform: uppercase
 }
 </style>
 </head>
-<body>
-<button type="button" class="collapsible">Monday</button>
-<div class="content">
-  <form id="monday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group" >
-            <label for="monday_breakfast" style="font-weight: bold;">Monday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="monday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="monday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="monday_lunch" style="font-weight: bold;">Monday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="monday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="monday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="monday_dinner" style="font-weight: bold;">Monday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="monday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="monday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="monday_snacks" style="font-weight: bold;">Monday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" placeholder="Select"  style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="monday_snacks" >
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-</form>
-</div>
-<button type="button" class="collapsible">Tuesday</button>
-<div class="content">
-  <form id="tuesday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="tuesday_breakfast" style="font-weight: bold;">Tuesday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="tuesday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="tuesday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="tuesday_lunch" style="font-weight: bold;">Tuesday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="tuesday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="tuesday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="tuesday_dinner" style="font-weight: bold;">Tuesday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="tuesday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="tuesday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="tuesday_snacks" style="font-weight: bold;">Tuesday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="tuesday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-</div>
-<button type="button" class="collapsible">Wednesday</button>
-<div class="content">
-       <form id="wednesday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="wednesday_breakfast" style="font-weight: bold;">Wednesday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="wednesday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="wednesday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="wednesday_lunch" style="font-weight: bold;">Wednesday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="wednesday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="wednesday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="wednesday_dinner" style="font-weight: bold;">Wednesday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="wednesday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="wednesday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="wednesday_snacks" style="font-weight: bold;">Wednesday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="wednesday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-</div>
-<button type="button" class="collapsible">Thursday</button>
-<div class="content">
-  <form id="thursday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="thursday_breakfast" style="font-weight: bold;">Thursday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="thursday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="thursday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="thursday_lunch" style="font-weight: bold;">Thursday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="thursday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="thursday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="thursday_dinner" style="font-weight: bold;">Thursday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="thursday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="thursday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="thursday_snacks" style="font-weight: bold;">Thursday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="thursday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-</div>
-<button type="button" class="collapsible">Friday</button>
-<div class="content">
-       <form id="friday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="friday_breakfast" style="font-weight: bold;">Friday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="friday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="friday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="friday_lunch" style="font-weight: bold;">Friday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="friday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="friday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="friday_dinner" style="font-weight: bold;">Friday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="friday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="friday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="friday_snacks" style="font-weight: bold;">Friday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="friday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-</div>
-<button type="button" class="collapsible">Saturday</button>
-<div class="content">
- 
 
-        <form id="saturday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="saturday_breakfast" style="font-weight: bold;">Saturday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="saturday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="saturday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="saturday_lunch" style="font-weight: bold;">Saturday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="saturday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="saturday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="saturday_dinner" style="font-weight: bold;">Saturday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="saturday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="saturday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="saturday_snacks" style="font-weight: bold;">Saturday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="saturday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-
-</div>
-<button type="button" class="collapsible">Sunday</button>
-<div class="content">
-  
-        <form id="sunday_breakfast" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="sunday_breakfast" style="font-weight: bold;">Sunday Breakfast</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="sunday_breakfast">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="sunday_lunch" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="sunday_lunch" style="font-weight: bold;">Sunday Lunch</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="sunday_lunch">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="sunday_dinner" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="sunday_dinner" style="font-weight: bold;">Sunday Dinner</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="sunday_dinner">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-    <form id="sunday_snacks" method="post" action="{% url 'addmealplan' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="sunday_snacks" style="font-weight: bold;">Sunday Snacks</label><br>
-            <div class="form-inline">
-                <select class="form-control" name="meal_select" id="meal_select" style="width: 300px;">
-                    {% for meal in all_meals %}
-                    <option value="{{meal.id}}">{{meal.name}} {{meal.protein}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="day" name="day" value="sunday_snacks">
-                <button type="submit" class="btn btn-outline-dark" style="margin-left: 50px; width: 100px;">Add</button>
-            </div>
-        </div>
-            
-    </form>
-
-
-<script>
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
-</script>
-
-</body>
 </html>
     
 
@@ -562,10 +136,11 @@ for (i = 0; i < coll.length; i++) {
     <br><br>
     <h1 style="color: gray; size: 15pt; text-align: center;">Meal Plan</h1>
     <br>
-
+    
     <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -581,10 +156,38 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="monday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="monday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Monday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -599,12 +202,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="monday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="monday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -619,11 +248,37 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="monday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="monday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Monday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -638,18 +293,47 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
-    <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
-                <h7 class="card-title">Tuesday Breakfast</h7>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="monday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="monday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+
+
+
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Tuesday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "tuesday_breakfast" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -660,15 +344,43 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="tuesday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="tuesday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
-                <h7 class="card-title">Tuesday Lunch</h7>
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Tuesday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "tuesday_lunch" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -678,17 +390,43 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
-                <h7 class="card-title">Tuesday Dinner</h7>
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="tuesday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="tuesday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Tuesday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "tuesday_dinner" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -698,16 +436,40 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
-                <h7 class="card-title">Tuesday Snacks</h7>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="tuesday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="tuesday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Tuesday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "tuesday_snacks" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -717,19 +479,46 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
 
-    <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
-                <h7 class="card-title">Wednesday Breakfast</h7>
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="tuesday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="tuesday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+
+
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Wednesday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "wednesday_breakfast" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -740,15 +529,43 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="wednesday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="wednesday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
-                <h7 class="card-title">Wednesday Lunch</h7>
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Wednesday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "wednesday_lunch" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -758,17 +575,43 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
-                <h7 class="card-title">Wednesday Dinner</h7>
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="wednesday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="wednesday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
+                <h6 class="card-title">Wednesday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
                 {% if meal.day == "wednesday_dinner" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
@@ -778,32 +621,82 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
-                <h7 class="card-title">Wednesday Snacks</h7>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="wednesday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="wednesday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
+                <h6 class="card-title">Wednesday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
-                {% if meal.day == "wednesday_snack" %}
-                <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                {% if meal.day == "wednesday_snacks" %}
+                <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
                     <form method="post" action="{% url 'deletefromplan' %}" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
-                    <input type="hidden" id="daydelete" name="daydelete" value="wednesday_snack">
+                    <input type="hidden" id="daydelete" name="daydelete" value="wednesday_snacks">
                     <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
                     </form>
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
-    <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="wednesday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="wednesday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Thursday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -819,10 +712,38 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="thursday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="thursday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -837,12 +758,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="thursday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="thursday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Thursday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -857,11 +804,35 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="thursday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="thursday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -876,13 +847,40 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
-    <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="thursday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="thursday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Friday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -898,10 +896,38 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="friday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="friday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Friday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -916,12 +942,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="friday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="friday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Friday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -936,11 +988,35 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="friday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="friday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Friday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -955,13 +1031,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
-    <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="friday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="friday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Saturday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -977,10 +1078,38 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="saturday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="saturday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Saturday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -995,12 +1124,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="saturday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="saturday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Saturday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1015,11 +1170,35 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="saturday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="saturday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Saturday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1034,13 +1213,39 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
-   <div class="row"> 
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="saturday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="saturday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
+
+
+<div class="row"> 
+   
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Sunday Breakfast</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1056,10 +1261,38 @@ for (i = 0; i < coll.length; i++) {
                 {% endif %}
                 {% endfor %}
             </div>
+</div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="sunday_breakfast" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <div style="width 25%">
+                <input type="hidden" id="day" name="day" value="sunday_breakfast">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
         </div>
-    </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+        </div>
+
+
+
+    
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Sunday Lunch</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1074,12 +1307,38 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
+                <br>
         </div>
-   
-    </div>
-    <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:150px;">
+
+        
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="sunday_lunch" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="sunday_lunch">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+            
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+      
+
+
+
+    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Sunday Dinner</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1094,11 +1353,35 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+                </div>
         </div>
-    </div>
-     <div class="card" style="width: 150px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width: 150px;">
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="sunday_dinner" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="sunday_dinner">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+              
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+       
+
+     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+        <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Sunday Snacks</h6>
             <div style="display: inline;">
                 {% for meal in weekly_meals %}
@@ -1113,13 +1396,54 @@ for (i = 0; i < coll.length; i++) {
                     <br>
                 {% endif %}
                 {% endfor %}
-            </div>
+               </div>
         </div>
-    </div>
-    </div>
+
+            <br>
+            <div class="container" style="display: flex; align-items: center; justify-content: center;">
+            <form id="sunday_snacks" method="post" action="{% url 'addmealplan' %}">
+            {% csrf_token %}
+        
+                
+        <div class="form-block">
+                <select class="form-control" name="meal_select" id="meal_select" style="width: 200px;">
+                    {% for meal in all_meals %}
+                    <option value="{{meal.id}}">{{meal.name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="day" name="day" value="sunday_snacks">
+                <br>
+                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+             
+      
+            </div>
+            <br>
+            </div>
+    
+        </form>
+        </div>
+        </div>
 
 
-</div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
 
     <br><br>
     <h1 style="color: gray; size: 15pt; text-align: center;">Macros</h1>
@@ -1200,5 +1524,77 @@ for (i = 0; i < coll.length; i++) {
     {% endif %}
 
     <br><br><br>
+
+
+<button class="btn btn-outline-dark" id="myBtn">Add New Meal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+       {% include 'plans/addmeal.html' %} 
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+  
+    </div>
+
+</div> 
+</div>
+
+
+
+    
+
+   
+
+<script>
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
 
 {% endblock %}

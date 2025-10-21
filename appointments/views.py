@@ -424,3 +424,4 @@ def booking_day_view(request):
         "today": today
     }
     return render(request, "appointments/booking_day_view.html", context)
+

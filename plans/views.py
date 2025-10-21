@@ -31,10 +31,15 @@
 #     template_name = 'plans/universalplan_form.html'
 #     success_url = '/success_url/'
 
+
+
+
+from appointments.views import *
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import *
@@ -49,17 +54,68 @@ def index(request):
         return render(request, "registration/login.html")
 
 
+
+class Dashboard(generic.ListView):
+    model = Booking
     
-def tdee(request):
-    context = {
-        "calories": "2000"
-    }
-    return render(request, "plans/tdee.html", context)
+    template_name = "plans/dashboard.html"
+
+    """create context-dict =
+                        {"object_list":"[]",
+                         "prev-month": "",
+                         "next-month":"",
+                         calendar:""} """
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # use today's date/month for the calendar
+        d = get_date(self.request.GET.get("month", None))
+        context["prev_month"] = prev_month(d)
+        context["next_month"] = next_month(d)
+
+        # timeframe: full month
+        first_day = d.replace(day=1)
+        last_day = first_day + timedelta(
+            days=calendar.monthrange(d.year, d.month)[1] - 1
+        )
+
+        # get all bookings
+        bookings = Booking.objects.all()
+        all_sessions = TrainingSessions.objects.filter()
+        weekly_sessions = WeeklySessions.objects.filter().order_by("time")
+        all_meals = Meals.objects.filter()
+        weekly_meals = WeeklyMealPlan.objects.filter()
+        
+
+        # list of occurences
+        expanded_events = []
+        for booking in bookings:
+            occurrences = booking.get_occurrences(first_day, last_day)
+            for occ in occurrences:
+                expanded_events.append((occ, booking))
+
+        # Instantiate our calendar class with today's year, date and occurences
+        cal = Calendar(d.year, d.month, events=expanded_events)
+
+        # Call the formatmonth method, which returns our calendar as a table
+        html_cal = cal.formatmonth(withyear=True)
+        context= {
+            "calendar": mark_safe(html_cal),
+            "all_sessions": all_sessions,
+            
+            "weekly_sessions": weekly_sessions,
+            "all_meals": all_meals,
+            
+            "weekly_meals": weekly_meals,
+            }
+            
+        return context
 
 def addmeal(request):
-    
-    if request.method == "GET":
+    if not request.user.is_authenticated:
+        return redirect('users:login') #redirect to login if not authenticated
 
+    if request.method == "GET":
         # TODO this will change to if user is authenticated as a chef basically
         
         if request.user.is_authenticated: 
@@ -74,17 +130,23 @@ def addmeal(request):
             "no_user": no_user
         }
 
-        return render(request, "plans/addmeal.html", context)
-
+        return render(request, "plans/addmealplan.html", context)
     else:
-
-        # get inputs from form
-        mealtitle = request.POST["mealtitle"]
+        mealtitle = request.POST.get("mealtitle")
         carb_grams = request.POST.get("carbgrams")
         fat_grams = request.POST.get("fatgrams")
         protein_grams = request.POST.get("proteingrams")
         calories = request.POST.get("calories")
-        
+        dietary_requirements = request.POST.get("dietreq")
+
+        # If required field missing, show error or re-render form
+        if not mealtitle:
+            all_meals = Meals.objects.filter(chef=request.user)
+            context = {
+                "all_meals": all_meals,
+                "error": "Meal title is required."
+            }
+            return render(request, "plans/addmeal.html", context)
 
         # default to zero
         if not carb_grams:
@@ -103,7 +165,7 @@ def addmeal(request):
      
 
         # save meal
-        meal = Meals(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories, chef = chef)
+        meal = Meals(name = name, totalcarb = carb_grams, totalfat = fat_grams, totalprotein = protein_grams, calories = calories, dietary_requirements = dietary_requirements, chef = chef)
         meal.save()
         all_meals = Meals.objects.filter(chef = request.user)
 
@@ -114,16 +176,19 @@ def addmeal(request):
         return render(request, "plans/addmeal.html", context)
 
 def deletemeal(request):
-    all_meals = Meals.objects.filter(chef = request.user)
-    # get meal by id and delete from meals object
+    all_meals = Meals.objects.filter(chef=request.user)
     meal_id = request.POST.get("mealtodelete")
-    meal_to_delete = Meals.objects.get(pk=meal_id)
-    meal_to_delete.delete()
+    try:
+        meal_to_delete = Meals.objects.get(pk=meal_id)
+        if meal_to_delete.chef != request.user: # check if the meal belongs to the user
+            return HttpResponseNotFound("You do not have permission to delete this meal.")
+        meal_to_delete.delete()
+    except Meals.DoesNotExist: # exception if ID not found
+        return HttpResponseNotFound("Meal not found")
 
     context = {
         "all_meals": all_meals
     }
-
     return render(request, "plans/addmeal.html", context)
 
 def addmealplan(request):
@@ -235,15 +300,17 @@ def mealplan(request):
         return render(request, "plans/mealplan.html", context)
     
 def deletefromplan(request):
-
-
     meal_id = request.POST.get("mealtodelete")
-    meal_object = Meals.objects.get(pk = meal_id)
+    try: #check if meal exists
+        meal_object = Meals.objects.get(pk=meal_id)
+    except Meals.DoesNotExist:
+        return HttpResponseNotFound("Meal not found")
     daydelete = request.POST.get("daydelete")
 
-    meal_to_delete = WeeklyMealPlan.objects.filter(meal = meal_object, user = request.user, day = daydelete)
+    meal_to_delete = WeeklyMealPlan.objects.filter(meal=meal_object, user=request.user, day=daydelete)
     object_to_delete = meal_to_delete.first()
-    object_to_delete.delete()
+    if object_to_delete:
+        object_to_delete.delete()
 
     all_meals = Meals.objects.filter(chef = request.user)
     weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
@@ -368,7 +435,7 @@ def addsession(request):
             "all_sessions": all_sessions
         }
 
-        return render(request, "plans/addsession.html", context)
+        return render(request, "plans/addtrainingschedule.html", context)
 
 def deletesession(request):
 
@@ -398,7 +465,7 @@ def addtrainingschedule(request):
         #
         if request.user.is_authenticated:
             all_sessions = TrainingSessions.objects.filter(trainer = user)
-            weekly_sessions = WeeklySessions.objects.filter(user = user)
+            weekly_sessions = WeeklySessions.objects.filter(user = user).order_by("time")
             no_user = False
         else:
             all_sessions = None
@@ -426,15 +493,17 @@ def addtrainingschedule(request):
 
     
         day = request.POST.get("day")
+        time = request.POST.get("time")
         trainingsessions_id = request.POST["session_select"]
         session_select = TrainingSessions.objects.get(pk = trainingsessions_id)
         user = request.user
 
+        
         # save to weekly schedule
-        weekly = WeeklySessions(day = day, session = session_select, user = user)
+        weekly = WeeklySessions(day = day, time = time, session = session_select, user = user)
         weekly.save()
 
-        weekly_sessions = WeeklySessions.objects.filter(user = request.user)
+        weekly_sessions = WeeklySessions.objects.filter(user = request.user).order_by("time")
 
       
 
@@ -457,7 +526,7 @@ def trainingschedule(request):
         # query that user's meals
         if request.user.is_authenticated:
             all_sessions = TrainingSessions.objects.filter(trainer = user)
-            weekly_sessions = WeeklySessions.objects.filter(user = user)
+            weekly_sessions = WeeklySessions.objects.filter(user = user).order_by("time")
 
             no_user = False
         else:
@@ -497,3 +566,10 @@ def deletefromschedule(request):
     }
 
     return render(request, "plans/addtrainingschedule.html", context)
+
+    
+def tdee(request):
+    context = {
+        "calories": "2000"
+    }
+    return render(request, "plans/tdee.html", context)

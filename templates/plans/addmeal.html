@@ -1,4 +1,3 @@
-{% extends "plans/layout.html" %}
 
 {% block body %}
 <br>
@@ -27,15 +26,15 @@
         <div class="form-group" style="text_align: center>
             <div class="form-group">
             <label for="dietreq" style="font-weight: bold;">Dietary Requirements</label><br>
-            <select>
-                <option value="14"></option>
-                <option value="1">Vegetarian</option>
-                <option value="2">Vegan</option>
-                <option value="3">Gluten-Free</option>
-                <option value="4">Pescatarian</option>
-                <option value="5">Dairy-Free</option>
-                <option value="6">Placeholder</option>
-                <option value="7">Placeholder</option> 
+            <select class="form-control" name="dietreq" id="req">
+                <option value=""></option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Glutenfree">Glutenfree</option>
+                <option value="Pescatarian">Pescatarian</option>
+                <option value="Dairy-Free">Dairy-Free</option>
+                <option value="Nut-Free">Nut-Free</option>
+                <option value="Placeholder">Placeholder</option> 
             </select> 
        
         <br>
@@ -61,33 +60,37 @@
 
         <br>
         <button type="submit" class="btn btn-dark">Save Meal</button>
+        <br><br><br>
         </div>
 
 
     </form>
      {% endif %}
 
-
-    <br><br><br>
-    <h3 style="color: black; size: 15pt; text-align: center;">Saved Meals</h3>
+       
+    <button type="button" class="collapsible">Saved Meals</button>
+    <div class="content">
     <br><br>
-
     {% if all_meals %}
 
         {% for meal in all_meals %}
-
+     <div class="container" style="display: flex; justify-items: center; justify-content: center">
         <div class="card" style="width: 600px; margin-bottom: 20px; border-radius: 8px; border-color: grey; text-align: center;">
             <div class="card-body" style="width: 600px;">
                 <div>
                     <h5 class="card-title">{{meal.name}}</h5>
                 </div>
-
+    </div>
                 <div style="display: inline;">
                     <span style="color: black; font-weight: bolder; margin-right: 5px;">{{meal.calories}} calories</span>
+                    <span>{{meal.totalprotein}}g Protein -</span>
                     <span>{{meal.totalcarb}}g Carbs -</span>
-                    <span>{{meal.totalfat}}g Fat - </span>
-                    <span>{{meal.totalprotein}}g Protein</span>
-                    {% comment %} <span>{{meal.dietary_requirements}}</span> {% endcomment %}
+                    <span>{{meal.totalfat}}g Fat</span>
+                   
+                  
+                </div>
+                <div>
+                    <span>{{meal.dietary_requirements}}</span>
                 </div>
 
 
@@ -98,9 +101,9 @@
                 </form>
             </div>
         </div>
-
+</div>
         {% endfor %}
-    
+    </div>
     {% else %}
 
     <div class="card" style="width:  600px; margin-bottom: 20px; border-radius: 8px; border-color: grey;">

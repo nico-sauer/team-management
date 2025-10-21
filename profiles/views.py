@@ -21,6 +21,7 @@ from .forms import *
 from .models import AthleteProfile, StaffProfile
 from django.views.generic import TemplateView
 from .serializers import * 
+
 # Create your views here.
 # @ team pls ignore this gigantic mess i will clean this up soon
 #basic profile views for athletes
@@ -38,7 +39,7 @@ def athlete_details(request, id=None):
     #template = loader.get_template('profiles/medical_records.html')
     if request.method == "POST":
     
-        form = AthleteProfileForm(request.POST, instance=athlete)
+        form = AthleteProfileForm(request.POST, request.FILES, instance=athlete)
         if form.is_valid():
             form.save()
             #return redirect('profiles/medical_records', athlete(id))
@@ -52,27 +53,6 @@ def athlete_details(request, id=None):
    }
     # if request.method == "POST":
     return render(request, 'profiles/athlete.html', context)
-# def athlete_details(request, id):
-#   athlete = AthleteProfile.objects.get(id=id)
-#   template = loader.get_template('profiles/athlete.html')
-  
-#   context = {
-#     'athlete': athlete,
-#   }
-#   return HttpResponse(template.render(context, request))
-
-
-# def post(request, id):
-#     template = loader.get_template('profiles/athlete.html')
-#     athlete = get_object_or_404(AthleteProfile, id=id)
-#     serializer = MedicalRecordsSerializer(athlete, data=request.data)
-#     context = {
-#     'athlete': athlete,
-#     }
-#     if not serializer.is_valid():
-#         return Response({'serializer': serializer, 'profile': athlete})
-#     serializer.save()
-#     return HttpResponse(template.render(context, request))
 
 def medical_records(request, id=None):
     athlete = AthleteProfile.objects.filter(pk=id).first()
@@ -116,10 +96,7 @@ def dietary(request, id=None):
     # if request.method == "POST":
     return render(request, 'profiles/dietary.html', context)
   
-#   context = {
-#     'athlete': athlete,
-#   }
-#   return HttpResponse(template.render(context, request))
+
 
 #basic profile views for staff 
 
@@ -139,7 +116,7 @@ def staff_details(request, id=None):
     #template = loader.get_template('profiles/medical_records.html')
     if request.method == "POST":
     
-        form = StaffProfileForm(request.POST, instance=staff_member)
+        form = StaffProfileForm(request.POST, request.FILES, instance=staff_member)
         if form.is_valid():
             form.save()
             #return redirect('profiles/medical_records', staff_member(id))
@@ -155,14 +132,6 @@ def staff_details(request, id=None):
     return render(request, 'profiles/staff.html', context)
 
 
-    
-    
-
-# @api_view(['GET'])
-# @renderer_classes([StaticHTMLRenderer])
-# def simple_html_view(request):
-#     data = '<html><body><h1>Hello, world</h1></body></html>'
-#     return Response(data)
 
 # # Create your views here.
 class MedicalRecordsView(APIView):
@@ -174,29 +143,6 @@ class MedicalRecordsView(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'profiles/medical_records.html'
     
-    
-
-
-    # def get(self, request, pk):
-    #     athlete = get_object_or_404(AthleteProfile, pk=pk)
-    #     #self.check_object_permissions(self.request, athlete) # required for IsOwnerOrReadOnly to work fine see https://stackoverflow.com/questions/25554415/django-rest-framework-ignoring-my-isownerorreadonly-permissions
-    #     serializer_context = {
-    #         'request': AthleteProfile(request),
-    #     }
-    #     serializer = MedicalRecordsSerializer(athlete, context=serializer_context)
-    #     return Response({'serializer': serializer, 'athlete': athlete})
-
-    # def post(self, request, pk):
-    #     athlete = get_object_or_404(AthleteProfile, pk=pk)
-    #     #self.check_object_permissions(self.request, athlete) # required for IsOwnerOrReadOnly to work fine see https://stackoverflow.com/questions/25554415/django-rest-framework-ignoring-my-isownerorreadonly-permissions
-    #     serializer_context = {
-    #         'request': AthleteProfile(request),
-    #     }
-    #     serializer = MedicalRecordsSerializer(athlete, context=serializer_context, data=request.data)
-    #     if not serializer.is_valid():
-    #         return Response({'serializer': serializer, 'athlete': athlete})
-    #     serializer.save()
-    #     return HttpResponseRedirect(reverse('MedicalRecords')) # redirect to URL that is associated with the name announces-list
 
     
     def get(self, request, pk, *args, **kwargs):
@@ -244,27 +190,6 @@ class MedicalRecordsView(APIView):
                                     data=(serializer.errors))
 
 
-
-# def test(request):
-    
-#     return render(request, "profiles/athleteprofile.html")
-# class Dashboard(TemplateView):
-#     template_name = 'profiles/dashboard.html'
-
-# def dashboard(request):
-#     render(request, "dashboard.html")
-    
-#     # render(template_name="dashboard.html")
-    #return render()
-#     template_name = 'dashboard.html'
-
-# def render_to_response(self, context, **response_kwargs):
-#     return self.response_class(
-#         request=self.request,
-#         template=self.get_template_names(),
-#         context=context,
-#         **response_kwargs,
-#     )
 
 #manager viewsets
 
@@ -365,24 +290,6 @@ class MedicalRecords(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 
-    # if request.method == "GET":
-
-    #     # Query that user's meals
-    #     if request.user.is_authenticated:
-    #         all_meals = Meals.objects.filter(mealcreator = request.user)
-    #         no_user = False
-    #     else:
-    #         all_meals = None
-    #         no_user = True
-
-    #     context = {
-    #         "all_meals": all_meals,
-    #         "no_user": no_user
-    #     }
-
-    #     return render(request, "plans/addmeal.html", context)
-
-  
 
 class DieticianAccess(viewsets.ModelViewSet):
 
@@ -504,19 +411,3 @@ class AthleteViewSet(viewsets.ModelViewSet):
     
     
     
-# def add_athlete(request):
-#     return render(request,'add-athlete.html',{'active_page': 'athletes'})   
-
-
-# # @login_required
-# def all_athletes(request):
-#     athletes = AthleteProfile.objects.all()
-#     return render(request, 'athletes.html', {'athletes': athletes,'active_page': 'athletes'})
-
-# # @login_required
-# def add_staff(request):
-#     return render(request,'add-staff.html',{'active_page': 'staff'})
-# # @login_required
-# def all_staff(request):
-#     staff = StaffProfile.objects.all()
-#     return render(request, 'staff.html', {'staff': staff,'active_page': 'staff'})

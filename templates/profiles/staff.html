@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load rest_framework %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block title %}
   {{ staff_member.first_name }} {{ staff_member.last_name }}
 {% endblock %}
@@ -50,26 +51,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
   text-decoration: none;
   cursor: pointer;
 }
-table, th, td {
+table, th, p {
   border:1px solid black;
    width: 100%;
     table-layout:fixed
  
   display: inline-block;
 }
-.medical_records{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-    border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
 
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
 </style>
 <link
 
@@ -78,31 +68,32 @@ rel="stylesheet"
 href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css">
 
 </head>
-<div class="card" style="width: 100%; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
-    <div class="card-body" style="width:100%; margin:auto; text-align: left;">
+<div class="card" style="color: white; width: 80%; padding: 30px; margin: 30px auto;  border-radius: 5px; background-color: black; border-color: darkgrey;">
+    <div class="card-body" style="width:100%; margin:auto; text-align: center;">
         <div style="display: inline;">
-         <a href="details/{{ staff_member.id }}"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png?20170328184010" style="width: 100px"></a>  
+        
+       
+       <img src="{{staff_member.icon.url}}" style="clip-path: circle(); width: 200px;">
+      
+          <p></p>
             <h1>{{ staff_member.title }} {{ staff_member.first_name }} {{ staff_member.last_name }}</h1>
           <div>
-          <table style="width:200px; height: 100% margins: auto">
-          
-            <tr>
-              <td>Name: {{ staff_member.title }} {{ staff_member.first_name }} {{ staff_member.last_name }}</td>
-            </tr>
-           
-            <tr>
-              <td>Email: {{ staff_member.email}}</td>
-            </tr>
-            <tr>
-              <td>Phone Number: {{ staff_member.phone_number}}</td>
-            </tr>
-        
-          </table>
-         <a href="/appointments/booking_create"><button>Appointment</button></a> <! -- link to appointment booking -->
+            <div>
+              <p>Email: {{ staff_member.email}}</p>
+            </div>
+            <div>
+              <p>Phone Number: {{ staff_member.phone_number}}</p>
+            </div>
+           <div>
+              <p>{{ staff_member.role}}</p>
+            </div>
+         
+         <a href="/appointments/booking_create"><button class="btn btn-outline-light">Appointment</button></a> <! -- link to appointment booking -->
           </div>
           </div>
           <div>
-        <button id="myBtn">Edit</button>
+          <br>
+        <button class="btn btn-outline-light" id="myBtn">Edit</button>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -110,14 +101,21 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-        <form method="post" style="width: 100%;">
+        <form method="post"  enctype="multipart/form-data"  style="width: 100%;">
                   {% csrf_token %}
-                  {% crispy form %}
+                  <div class="form-group col-md-12">{{ form.icon|as_crispy_field }}</div>             
+                  <div class="form-group col-md-12">{{ form.first_name|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.last_name|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.birthday|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.email|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.phone_number|as_crispy_field }}</div>
+                  <div class="form-group col-md-3">{{ form.role|as_crispy_field }}</div>
+               
     
                        
            
                  
-                  <button type="submit">Save</button>
+                  <button class="btn btn-outline-light" type="submit">Save</button>
           </form>
   </div>
 

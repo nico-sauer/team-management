@@ -4,20 +4,122 @@
 
 <html>
 <head>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+
+  background-color: black;
+  color: gray;
+  text-align: center;
+}
+
+.modal-body {
+    padding: 2px 16px;
+    background-color: black;
+    }
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: black;
+  color: white;
+}
+.row {
+    margin: auto;
+  
+    vertical-align: middle;
+    float: none;
+}
+.card-title {
+    display: block;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.card-body {
+    width: 100%;
+}
+
+</style>
 <meta name="viewport" content="width=100vw, initial-scale=1">
+</head>
+<body>
 
 <br>   <br><br>
+<div class= card style="text-align: center; background-color: black">
+        <p></p>
+        <p></p>
+
         <h1 style="color: gray; size: 15pt; text-align: center;">Meal Plan</h1>
         <br>
+        <p></p>
 
-        <div class="row"> 
+        <div class="row""> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Monday Breakfast</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Monday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "monday_breakfast" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7> 
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6> 
+                    <br>
+                    
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -25,12 +127,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Monday Lunch</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Monday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "monday_lunch" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -39,12 +143,14 @@
         
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Monday Dinner</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Monday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "monday_dinner" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -52,12 +158,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Monday Snacks</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Monday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "monday_snacks" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                    <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -67,12 +175,14 @@
         </div>
         <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Tuesday Breakfast</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Tuesday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "tuesday_breakfast" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -80,12 +190,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Tuesday Lunch</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Tuesday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "tuesday_lunch" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                    <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -94,12 +206,14 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Tuesday Dinner</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Tuesday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "tuesday_dinner" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -107,12 +221,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Tuesday Snacks</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Tuesday Snacks</h6>
                      <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "tuesday_snacks" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -123,12 +239,14 @@
 
         <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Wednesday Breakfast</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Wednesday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "wednesday_breakfast" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -136,12 +254,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Wednesday Lunch</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Wednesday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "wednesday_lunch" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -150,12 +270,14 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Wednesday Dinner</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Wednesday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "wednesday_dinner" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -163,12 +285,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
-                    <h7 class="card-title">Wednesday Snacks</h7>
+        <div class="card-body">
+                    <h6 class="card-title">Wednesday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "wednesday_snack" %}
-                    <h7 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h7>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -178,12 +302,14 @@
         </div>
         <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Thursday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "thursday_breakfast" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -191,12 +317,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Thursday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "thursday_lunch" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -205,12 +333,14 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Thursday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "thursday_dinner" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -218,12 +348,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Thursday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "thursday_snacks" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -233,12 +365,14 @@
         </div>
         <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Friday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "friday_breakfast" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -246,12 +380,15 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Friday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "friday_lunch" %}
-                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                    <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}{{meal.meal.dietary_requirement}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
+                    <p>{{meal.meal.dietary_requirement}}</p>
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -260,12 +397,14 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Friday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "friday_dinner" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -273,12 +412,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Friday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "friday_snacks" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -288,12 +429,14 @@
         </div>
         <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Saturday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "saturday_breakfast" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -302,12 +445,14 @@
         </div>
         
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Saturday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "saturday_lunch" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -316,12 +461,14 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Saturday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "saturday_dinner" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -329,12 +476,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Saturday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "saturday_snacks" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -344,12 +493,14 @@
         </div>
     <div class="row"> 
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Sunday Breakfast</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "sunday_breakfast" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -357,12 +508,14 @@
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Sunday Lunch</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "sunday_lunch" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                         <br>
                     {% endif %}
                     {% endfor %}
@@ -371,24 +524,28 @@
     
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Sunday Dinner</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "sunday_dinner" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                     {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </div>
         <div class="card" style="width: 250px; height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
-        <div class="card-body" style="width:250px;">
+        <div class="card-body">
                     <h6 class="card-title">Sunday Snacks</h6>
                 <div style="display: inline;">
                     {% for meal in weekly_meals %}
                     {% if meal.day == "sunday_snacks" %}
                     <h6 style="color: gray; font-weight: bolder; display: inline;">{{meal.meal.name}}</h6>
+                     <br>
+                    <p style="color: gray; font-weight: italics; display: inline;">{{meal.meal.dietary_requirements}}</p> 
                     {% endif %}
                     {% endfor %}
                 </div>
@@ -399,45 +556,65 @@
 
        
 
-        <br><br>
+
+</div>
+
+<!-- Trigger/Open The Modal -->
+<button class="btn btn-outline-light" id="myBtn">Check Macros</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+  
+      
+     
+   
+    <div class="modal-body">
+    <span class="close">&times;</span>
+    <br><br>
         <h1 style="color: gray; size: 15pt; text-align: center;">Macros</h1>
-        <h7 style="color: gray; text-align: center;">Daily Average</h7>
+        <h6 style="color: gray; text-align: center;">Daily Average</h6>
         <br><br>
 
         <div style="text-align: center;">
-            <h5 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Calories</h5>
+            <h6 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Calories</h6>
             <h2 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_calories}}</h2>
         </div>
         <br><br><br>
 
         <div style="text-align: center;">
-            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h7>
+            <h6 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h6>
             <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_protein}} g</h4>
         </div>
         <br><br>
 
         <div style="text-align: center;">
-            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Carbs</h7>
+            <h6 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Carbs</h6>
             <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_carb}} g</h4>
         </div>
         <br><br>
 
         <div style="text-align: center;">
-            <h7 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h7>
+            <h6 style="display: inline; color: grey; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h6>
             <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_fat}} g</h4>
         </div>
+        
         <br><br><br>
 
-
+       
         <h3 style="color: gray; size: 15pt; text-align: center;">Macro Distribution</h3>
         <br>
 
-        <div style="width: 450px; margin: auto;">
+        <div style="width: 300px; margin: auto;">
             <canvas id="MacroChart"></canvas>
+            
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
             <script>
+            
                 const labels = [
                 'Protein',
                 'Carbs',
@@ -451,10 +628,11 @@
                     backgroundColor: [
                         '#1b96b5',
                         '#d0ed48',
-                        '#f024b6'
+                        '#f024b6',
                         ],
-                    borderColor: 'grey',
+                    borderColor: 'white',
                     data: ["{{percentage.protein}}", "{{percentage.carb}}", "{{percentage.fat}}"],
+                    
                 }]
                 };
             
@@ -465,7 +643,8 @@
                 };
             </script>
 
-
+            <br><br>
+         
             <script>
                 const MacroChart = new Chart(
                 document.getElementById('MacroChart'),
@@ -476,8 +655,43 @@
 
 
 
-
+        
     </div>
+    
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+
+  
 
         </body>
     </html> 
