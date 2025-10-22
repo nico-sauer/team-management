@@ -104,6 +104,16 @@
     font-weight: bold;
     text-transform: uppercase
 }
+.card-body {
+    width: 100%;
+    
+}
+.row {
+    margin: auto;
+   width:90%;
+    vertical-align: middle;
+    float: none;
+}
 .btn {
     border-radius: 5px;
 
@@ -116,16 +126,16 @@
 }
 </style>
 </head>
-<body>
 
-   
-
-    
 
     {% endif %}
 
 
-
+<body>
+<br>   <br><br>
+<div class="card" style="text-align: center; background-color: black">
+        <p></p>
+        <p></p>
 
     <h3 style="color: white; size: 15pt; text-align: center;">Edit Schedule</h3>
     <br>
@@ -155,7 +165,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name=addsession id="monday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name=a id="monday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -180,6 +190,7 @@
             
             </div>
             </div>
+     
      <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                <h6 class="card-title">Tuesday</h6>
@@ -203,7 +214,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="tuesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="tuesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -250,7 +261,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="wednesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="wednesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -295,7 +306,7 @@
    
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="thursday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="thursday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -317,7 +328,7 @@
             </form>
             </div>
             </div>
-            </div>
+        
     </div>
     </div>
     
@@ -345,7 +356,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="friday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="friday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -391,7 +402,7 @@
    
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="saturday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="saturday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -437,7 +448,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="addsession" id="sunday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="a" id="sunday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -471,6 +482,7 @@
 
 </div>
 
+</div>
 
  
   <br><br><br>
@@ -546,7 +558,7 @@ for (i = 0; i < coll.length; i++) {
 </script>
 <script>
 function validateForm() {
-  var x = document.forms["addsession"]["time"].value;
+  var x = document.forms["a"]["time"].value;
   if (x == "" || x == null) {
     alert("Please enter a time");
     return false;
