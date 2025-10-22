@@ -30,7 +30,7 @@
 }
 .row {
     margin: auto;
-  
+   width:90%;
     vertical-align: middle;
     float: none;
 }
@@ -117,7 +117,9 @@
             </div>
         </div>
     </div>
-   
+    </div>
+
+   <div>
     <div class="row"> 
     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
@@ -168,6 +170,7 @@
     </div>
     
     </div>
+    <div
 
 
 </div> 
@@ -178,7 +181,10 @@
 
     <br><br><br>
     
-   <p><a href="/plans/addtrainingschedule">Edit</a></p>
+    {% if user.is_authenticated and user.role == "Trainer" or user.is_superuser %}
+        <p style="margin-left: 1150px"><a href="/plans/addtrainingschedule">Edit</a></p>
+    {% endif %}
+       
 
     </body>
     </html> 

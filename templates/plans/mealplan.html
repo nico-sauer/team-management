@@ -552,12 +552,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
             </div>
         </div>
         </div>
-        <p><a href="/plans/addmealplan">Edit</a></p>
-
+        {% if user.is_authenticated and user.role == "Chef" or user.is_superuser %}
+        <p style="margin-left: 1150px"><a href="/plans/addmealplan">Edit</a></p>
+        {% endif %}
        
 
 
-</div>
 
 <!-- Trigger/Open The Modal -->
 <button class="btn btn-outline-light" id="myBtn">Check Macros</button>
@@ -690,7 +690,7 @@ window.onclick = function(event) {
 }
 </script>
 
-
+</div>
   
 
         </body>

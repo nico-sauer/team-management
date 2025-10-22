@@ -31,7 +31,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 100%;
   text-align: left;
   font-weight: bolder;
 }
@@ -52,41 +52,53 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 table, th, td {
   border:1px solid black;
-   width: 100%;
-    table-layout:fixed
+  width: 100%;
+  table-layout:fixed
  
   display: inline-block;
-}
-.medical_records{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-    border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
 }
 
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+.container {  display: grid;
+  grid-template-columns: 1fr
+  grid-template-rows: 0.7fr 1.3fr;
+  grid-auto-columns: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "basic_info dietary_info"
+    "medical_records medical_records";
+  width: 100%;
+}
+
+.basic_info { grid-area: basic_info; }
+
+.dietary_info { grid-area: dietary_info; }
+
+.medical_records { grid-area: medical_records; }
+
 </style>
 <link
 
 rel="stylesheet"
 
-href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css">
+href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css">
 
 </head>
-<div class="card" style="width: 100%; margin: 20px auto;  border-radius: 5px; background-color: lightgrey; border-color: darkgrey; text-align: center;">
+<div class="card" style="width: 80%; margin: 20px auto;  border-radius: 2px; border-color: darkgrey; text-align: center;">
     <div class="card-body" style="width:100%; margin:auto; text-align: left;">
-        <div style="display: inline;">
+   
             <h1>{{ athlete.first_name }} {{ athlete.last_name }}</h1>
-          <div>
-          <table style="width:200px; height: 100%" margins: auto>
+          <div class="container">
+          <div class="basic_info">
+        
+          <table style="width:200px; height: 100%; margins: auto">
           
             <tr>
-              <td>Name: {{ athlete.first_name }} {{ athlete.last_name }}</td>
+              <td colspan="1">Name: {{ athlete.first_name }} {{ athlete.last_name }}</td>
             </tr>
             <tr>
               <td>Birthday: {{ athlete.birthday}}</td>
@@ -101,12 +113,18 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
               <td>Weight: {{ athlete.weight }}kg</td> 
             </tr>
             <tr>
-              <td>Bloodtype: {{ athlete.blood_type}}</td> 
+              <td>Bloodtype: {{ athlete.blood_type}}</td>
             </tr>
             
           </table>
-          <div>
-          <table style="width:30%; height: 100%"; margins: auto>
+          </div>
+          
+
+
+            <br>
+            <div class="dietary_info">    
+            <div>
+          <table style="width:30%; height: 100%; margin-left:-400px">
           
             <tr>
               <td>Average TDEE: {{ athlete.calories}}</td>
@@ -122,13 +140,12 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
             </tr>
            
           </table>
-          </div>
           
-
-
+            
             <br>
-                   
-            <table style="width:80%; margins: auto">
+           
+        
+              <table style="width:80%; margin-left: -400px">
               <tr>
                 <th>Dietary Restrictions</th>
               </tr>
@@ -139,7 +156,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
             </table>
             
             
-            <table style="width:80%; margins: auto">
+            <table style="width:80%; margin-left: -400px">
               <tr>
                 <th>Allergies</th>
               </tr>
@@ -148,10 +165,13 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
               </tr>
               
             </table>
+            </div>
+            </div>
+            </div>
+            </div>
+             <div class="medical_info" >
             
-            
-            
-            <table style="width:80%; margins: auto">
+            <table style="width:99%; margin: auto">
               <tr>
                 <th>Additional Notes</th>
               </tr>
@@ -161,11 +181,14 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
               </tr>
               
             </table>
-                <p style="font-weight: bolder">Last updated on {{ athlete.last_updated}}</p>
+                 <p style="font-weight: lighter; font-size: smaller; text-align: right;">Last updated on {{ athlete.last_updated}}</p>
           </div>
-          </div>
+       
+     
           <div>
-        <button id="myBtn">Open Modal</button>
+        <button class="btn btn-outline-dark" id="myBtn" style="border-radius: 5px; margin-left: 1250px;">Edit</button>
+        </div>
+        <p></p>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -177,6 +200,8 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
                   {% csrf_token %}
                   
                  
+                            
+                 
                   <div class="form-group col-md-12">{{ form.height|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.weight|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.calories|as_crispy_field }}</div>
@@ -184,9 +209,29 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
                   <div class="form-group col-md-12">{{ form.carbs|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.fat|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.dietary_restrictions|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.additional_notes|as_crispy_field }}</div>
+                  <div style="display: none; visibility: hidden">
+                  <div class="form-group col-md-12">{{ form.first_name|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.last_name|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.birthday|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.email|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.phone_number|as_crispy_field }}</div>
+                  <div class="form-group col-md-12" >{{ form.icon|as_crispy_field }}</div>  
+                  <div class="form-group col-md-12">{{ form.position|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.number|as_crispy_field }}</div>
+                   <div class="form-group col-md-3">{{ form.height|as_crispy_field }}</div>
+                  <div class="form-group col-md-3">{{ form.weight|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.gender|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.blood_type|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.prescriptions|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.allergies|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.diagnoses|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.treatment_details|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.medical_history|as_crispy_field }}</div>
                   
-                 
-                  <button type="submit">Save</button>
+                  </div>
+                  
+                  <button class="btn btn-outline-dark" style="border-radius: 5px;" type="submit">Save</button>
             </form>
   </div>
 
@@ -226,9 +271,10 @@ window.onclick = function(event) {
 </div>
 
   
-  {% comment %} <p>Phone: {{ athlete.phone }}</p> {% endcomment %}
+
  
   
-  <p>Back to <a href="/profiles/athletes">Members</a></p>
+  <p> <a href="/plans/tdee">TDEE</a></p>
   
 {% endblock %}        
+

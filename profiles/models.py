@@ -59,7 +59,7 @@ GENDER = (
 class StaffProfile(models.Model):
    
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField(default='default.png', upload_to='profile_images/', blank=True)
+    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
     title = models.CharField(choices= TITLE, blank=True)
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
@@ -89,16 +89,16 @@ class AthleteProfile(models.Model):
     #basic profile info:
     
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField(default='default.png', upload_to='profile_images/', blank=True)
+    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
-    birthday = models.DateField(null=True, blank=False)
+    birthday = models.DateField(blank=False)
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    number = models.PositiveIntegerField(default=0, null=True, blank=True) 
-    position = models.CharField(null=True, blank=True)
+    number = models.PositiveIntegerField(default=0) 
+    position = models.CharField(null=True)
     
     #medical profile info:
     gender = models.CharField(choices = GENDER, blank=True)
