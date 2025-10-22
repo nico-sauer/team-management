@@ -2,40 +2,53 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
-    <h3>Send booking/invitaion: {{ booking.title }}</h3>
+<div class="container mt-5 text-center">
+    <h3 class="text-white">
+        Send booking/invitation: {{ booking.title }}
+    </h3>
+
+    {% if instance %}
+        <p class="text-light mb-4">
+            Instance date: <strong>{{ instance.occurrence_date|date:"D, d M Y" }}</strong><br>
+            Time: {{ instance.current_start|date:"H:i" }} - {{ instance.current_end|date:"H:i" }}
+        </p>
+    {% endif %}
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-3">
-            <label for="comment" class="form-label">Comment (optional):</label>
+            <label for="comment" class="form-label text-dark">Comment (optional):</label>
             <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
         </div>
 
         <div class="mb-3">
-            <label for="attachment" class="form-label">Further attachement (optional):</label>
+            <label for="attachment" class="form-label text-dark">Further attachment (optional):</label>
             <input type="file" id="attachment" name="attachment" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-success">Send E-Mail</button>
         <a href="{% url 'appointments:booking_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
+
     <div class="text-center mt-4">
         <a href="{% url 'appointments:booking_list' %}" class="btn btn-primary">
             To Booking Overview
         </a>
+        
     </div>
- 
-    {# Django Messages #}
+    <br>
+    {# Django messages #}
     {% for message in messages %}
-        {% if message.tags == "error" %}
-        <p style="color:red;">{{ message }}</p>
-        {% elif message.tags == "success" %}
-        <p style="color:green;">{{ message }}</p>
-        {% else %}
-        <p>{{ message }}</p>
-        {% endif %}
+        <p style="color:
+            {% if message.tags == 'error' %}red
+            {% elif message.tags == 'success' %}green
+            {% else %}black
+            {% endif %};
+        ">
+            {{ message }}
+        </p>
     {% endfor %}
 </div>
 {% endblock %}
+

@@ -38,8 +38,8 @@ from appointments.views import *
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import *
@@ -112,9 +112,10 @@ class Dashboard(generic.ListView):
         return context
 
 def addmeal(request):
-    
-    if request.method == "GET":
+    if not request.user.is_authenticated:
+        return redirect('users:login') #redirect to login if not authenticated
 
+    if request.method == "GET":
         # TODO this will change to if user is authenticated as a chef basically
         
         if request.user.is_authenticated: 
@@ -130,17 +131,22 @@ def addmeal(request):
         }
 
         return render(request, "plans/addmealplan.html", context)
-
     else:
-
-        # get inputs from form
-        mealtitle = request.POST["mealtitle"]
+        mealtitle = request.POST.get("mealtitle")
         carb_grams = request.POST.get("carbgrams")
         fat_grams = request.POST.get("fatgrams")
         protein_grams = request.POST.get("proteingrams")
         calories = request.POST.get("calories")
         dietary_requirements = request.POST.get("dietreq")
-        
+
+        # If required field missing, show error or re-render form
+        if not mealtitle:
+            all_meals = Meals.objects.filter(chef=request.user)
+            context = {
+                "all_meals": all_meals,
+                "error": "Meal title is required."
+            }
+            return render(request, "plans/addmeal.html", context)
 
         # default to zero
         if not carb_grams:
@@ -170,16 +176,19 @@ def addmeal(request):
         return render(request, "plans/addmeal.html", context)
 
 def deletemeal(request):
-    all_meals = Meals.objects.filter(chef = request.user)
-    # get meal by id and delete from meals object
+    all_meals = Meals.objects.filter(chef=request.user)
     meal_id = request.POST.get("mealtodelete")
-    meal_to_delete = Meals.objects.get(pk=meal_id)
-    meal_to_delete.delete()
+    try:
+        meal_to_delete = Meals.objects.get(pk=meal_id)
+        if meal_to_delete.chef != request.user: # check if the meal belongs to the user
+            return HttpResponseNotFound("You do not have permission to delete this meal.")
+        meal_to_delete.delete()
+    except Meals.DoesNotExist: # exception if ID not found
+        return HttpResponseNotFound("Meal not found")
 
     context = {
         "all_meals": all_meals
     }
-
     return render(request, "plans/addmeal.html", context)
 
 def addmealplan(request):
@@ -291,15 +300,17 @@ def mealplan(request):
         return render(request, "plans/mealplan.html", context)
     
 def deletefromplan(request):
-
-
     meal_id = request.POST.get("mealtodelete")
-    meal_object = Meals.objects.get(pk = meal_id)
+    try: #check if meal exists
+        meal_object = Meals.objects.get(pk=meal_id)
+    except Meals.DoesNotExist:
+        return HttpResponseNotFound("Meal not found")
     daydelete = request.POST.get("daydelete")
 
-    meal_to_delete = WeeklyMealPlan.objects.filter(meal = meal_object, user = request.user, day = daydelete)
+    meal_to_delete = WeeklyMealPlan.objects.filter(meal=meal_object, user=request.user, day=daydelete)
     object_to_delete = meal_to_delete.first()
-    object_to_delete.delete()
+    if object_to_delete:
+        object_to_delete.delete()
 
     all_meals = Meals.objects.filter(chef = request.user)
     weekly_meals = WeeklyMealPlan.objects.filter(user = request.user)
