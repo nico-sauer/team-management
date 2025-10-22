@@ -71,10 +71,10 @@ class Booking(models.Model):
     def is_conflicting(self, participants=None, instance=None):
         """
         Checks if a participant has another booking at the same time.
-        If 'instance' is provided, consider its modified start/end times.
+        Only checks BookingInstance (source of truth). If 'instance'
+        is provided,consider its modified start/end times.
         Returns a list of conflicting participants.
         """
-
         if participants is None:
             raise ValueError("Participants must not be empty.")
 
@@ -84,44 +84,38 @@ class Booking(models.Model):
         start_time = instance.current_start if instance else self.start
         end_time = instance.current_end if instance else self.end
 
+        # small buffer for occurrences search (dates)
         from_date = (start_time.date() - timedelta(days=1))
         to_date = (end_time.date() + timedelta(days=1))
 
         for participant in participants:
-            # get all relevant bookings
-            bookings = Booking.objects.filter(
-                participants=participant, status__in=["confirmed"]
-            ).exclude(id=self.id)
-
-            # include BookingInstances (for modified instances)
-            instances = BookingInstance.objects.filter(
+            # queryset: all non-cancelled BookingInstances for this participant
+            inst_qs = BookingInstance.objects.filter(
                 booking__participants=participant,
-                is_cancelled=False,
+                is_cancelled=False
             )
+
+            # if we're checking/editing a specific instance: exclude it
             if instance:
-                instances = instances.exclude(id=instance.id)
+                inst_qs = inst_qs.exclude(id=instance.id)
+            # if we're checking a whole booking (self) that already exists: exclude its instances
+            elif self.id:
+                inst_qs = inst_qs.exclude(booking_id=self.id)
 
-            # check conflicts in bookings
-            for other in bookings:
-                if other.recurrence == "none":
-                    if other.start < end_time and other.end > start_time:
-                        conflicts.append(participant)
-                        break
-                else:
-                    occurrences = other.get_occurrences(from_date, to_date)
-                    for occ_start in occurrences:
-                        occ_end = occ_start + (other.end - other.start)
-                        if occ_start < end_time and occ_end > start_time:
-                            conflicts.append(participant)
-                            break
+            # optionally narrow by occurrence_date to speed up DB lookup
+            inst_qs = inst_qs.filter(
+                occurrence_date__gte=from_date,
+                occurrence_date__lte=to_date
+            )
 
-            # check conflicts in BookingInstances
-            for inst in instances:
+            # check time overlap against the remaining instances
+            for inst in inst_qs.select_related("booking"):
                 inst_start = inst.current_start
                 inst_end = inst.current_end
                 if inst_start < end_time and inst_end > start_time:
                     conflicts.append(participant)
                     break
+            # no need to check any bookings (instances are the source of truth)
 
         return list(set(conflicts))
 

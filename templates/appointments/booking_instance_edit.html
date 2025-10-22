@@ -18,19 +18,20 @@
     </form>
 
     {# Django Messages #}
-    {% if messages or form.errors %}
-    <div style="text-align: center; margin-top: 20px;">
-        {% for message in messages %}
-            {% if message.tags == "error" %}
-                <p style="color: red; font-weight: bold;">{{ message }}</p>
-            {% elif message.tags == "warning" %}
-                <p style="color: orange; font-weight: bold;">{{ message }}</p>    
-            {% elif message.tags == "success" %}
-                <p style="color: green; font-weight: bold;">{{ message }}</p>
-            {% else %}
-                <p>{{ message }}</p>
-            {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
+    <div class="d-flex justify-content-center">
+        {% if messages or form.errors %}
+            {% for message in messages %}
+                {% if forloop.last %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% elif message.tags == "success" %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% else %}
+                        <div class="alert alert-info">{{ message }}</div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}    
+    </div> 
+
 {% endblock %}

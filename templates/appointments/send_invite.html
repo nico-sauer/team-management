@@ -38,17 +38,22 @@
         
     </div>
     <br>
-    {# Django messages #}
-    {% for message in messages %}
-        <p style="color:
-            {% if message.tags == 'error' %}red
-            {% elif message.tags == 'success' %}green
-            {% else %}black
-            {% endif %};
-        ">
-            {{ message }}
-        </p>
-    {% endfor %}
+        {# Django Messages #}
+    <div class="d-flex justify-content-center">
+    {% if messages or form.errors %}
+        {% for message in messages %}
+            {% if forloop.last %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger">{{ message }}</div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% else %}
+                <div class="alert alert-info">{{ message }}</div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </div> 
 </div>
 {% endblock %}
 
