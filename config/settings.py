@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import sys
 from django.contrib.messages import constants as messages
 from pathlib import Path
 import logging
@@ -129,7 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
@@ -161,14 +161,14 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"             # appointments_app
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == "True"
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# EMAIL_HOST = os.getenv('EMAIL_HOST')
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == "True"
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-import sys
+#use sqlite instead of postgresql for tests
 
 if 'test' in sys.argv:
     DATABASES['default'] = {

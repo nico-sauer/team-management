@@ -1,13 +1,11 @@
-{% extends "plans/layout.html" %}
+{% extends "base.html" %}
 
 {% block body %}
-<br>
-<h3 style="color: black; size: 15pt; text-align: center;">Create Meal Plan</h3>
-<br>
+
 
 <div style="max-width: 100vw; margin: auto;">
 
-    {% if not user.is_authenticated %}
+    {% if not user.is_superuser and user.role != "Chef" %}
 
     <div class="alert alert-danger" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">
@@ -31,29 +29,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-.collapsible {
-  background-color: #777;
-  color: white;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  text-align: center;
-  outline: none;
-  font-size: 15px;
-}
-
-.active, .collapsible:hover {
-  background-color: #555;
-}
-
-.content {
-  padding: 0 18px;
-  display: none;
-  overflow: hidden;
-  background-color: white;
-  width: 100%;
-}
 
 .collapsible {
   background-color: #777;
@@ -116,30 +91,44 @@
   text-decoration: none;
   cursor: pointer;
 }
+.row {
+    margin-left: 30px;
+}
 .card-title {
     font-weight: bold;
     text-transform: uppercase
 }
+.btn {
+    border-radius: 5px;
+
+}
+.btn {
+    display: inline; 
+    size: 50%;
+    border-radius: 5px;
+    margin-bottom: 5px
+}
 </style>
 </head>
 
-</html>
     
-
-   
-
     
 
     {% endif %}
-    </div>
+   
 
-    <br><br>
-    <h1 style="color: gray; size: 15pt; text-align: center;">Meal Plan</h1>
-    <br>
+<body>
+<br>
+<div class= card style="text-align: center; background-color: black">
+        <p></p>
+        <p></p>
+       <h3 style="color: white; size: 15pt; text-align: center;">Edit Meal Plan</h3>
+    <p></p>
+    
     
     <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday Breakfast</h6>
             <div style="display: inline;">
@@ -150,9 +139,10 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="monday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                   
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -170,10 +160,10 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="monday_breakfast">
                 <br>
-                <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
+                <button type="submit" class="btn btn-outline-dark" style="border-radius: 5px;margin-center: 50px; width: 100px;">Add</button>
       
             </div>
             <br>
@@ -186,7 +176,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Monday Lunch</h6>
             <div style="display: inline;">
@@ -197,9 +187,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="monday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                     <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -232,7 +222,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday Dinner</h6>
             <div style="display: inline;">
@@ -243,9 +233,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="monday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -277,7 +267,7 @@
 
 
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Monday Snacks</h6>
             <div style="display: inline;">
@@ -288,9 +278,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="monday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -327,7 +317,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Tuesday Breakfast</h6>
             <div style="display: inline;">
@@ -338,9 +328,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="tuesday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -358,7 +348,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="tuesday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -374,7 +364,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Tuesday Lunch</h6>
             <div style="display: inline;">
@@ -385,9 +375,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="tuesday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -420,7 +410,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Tuesday Dinner</h6>
             <div style="display: inline;">
@@ -431,9 +421,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="tuesday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -463,7 +453,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Tuesday Snacks</h6>
             <div style="display: inline;">
@@ -474,9 +464,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="tuesday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -512,7 +502,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Wednesday Breakfast</h6>
             <div style="display: inline;">
@@ -523,9 +513,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="wednesday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -543,7 +533,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="wednesday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -559,7 +549,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Wednesday Lunch</h6>
             <div style="display: inline;">
@@ -570,9 +560,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="wednesday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -605,7 +595,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Wednesday Dinner</h6>
             <div style="display: inline;">
@@ -616,9 +606,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="wednesday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -648,7 +638,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Wednesday Snacks</h6>
             <div style="display: inline;">
@@ -659,9 +649,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="wednesday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -695,7 +685,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Thursday Breakfast</h6>
             <div style="display: inline;">
@@ -706,9 +696,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="thursday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -726,7 +716,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="thursday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -742,7 +732,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday Lunch</h6>
             <div style="display: inline;">
@@ -753,9 +743,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="thursday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -788,7 +778,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Thursday Dinner</h6>
             <div style="display: inline;">
@@ -799,9 +789,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="thursday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -831,7 +821,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday Snacks</h6>
             <div style="display: inline;">
@@ -842,9 +832,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="thursday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -879,7 +869,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Friday Breakfast</h6>
             <div style="display: inline;">
@@ -890,9 +880,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="friday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -910,7 +900,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="friday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -926,7 +916,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Friday Lunch</h6>
             <div style="display: inline;">
@@ -937,9 +927,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="friday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -972,7 +962,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Friday Dinner</h6>
             <div style="display: inline;">
@@ -983,9 +973,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="friday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -1015,7 +1005,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Friday Snacks</h6>
             <div style="display: inline;">
@@ -1026,9 +1016,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="friday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -1061,7 +1051,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Saturday Breakfast</h6>
             <div style="display: inline;">
@@ -1072,9 +1062,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="saturday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -1092,7 +1082,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="saturday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -1108,7 +1098,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Saturday Lunch</h6>
             <div style="display: inline;">
@@ -1119,9 +1109,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="saturday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -1154,7 +1144,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Saturday Dinner</h6>
             <div style="display: inline;">
@@ -1165,9 +1155,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="saturday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -1197,7 +1187,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Saturday Snacks</h6>
             <div style="display: inline;">
@@ -1208,9 +1198,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="saturday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                </div>
@@ -1244,7 +1234,7 @@
 
 <div class="row"> 
    
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Sunday Breakfast</h6>
             <div style="display: inline;">
@@ -1255,9 +1245,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="sunday_breakfast">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -1275,7 +1265,7 @@
                     <option value="{{meal.id}}">{{meal.name}}</option>
                     {% endfor %}
                 </select>
-                <div style="width 25%">
+                <div style="width 23%">
                 <input type="hidden" id="day" name="day" value="sunday_breakfast">
                 <br>
                 <button type="submit" class="btn btn-outline-dark" style="margin-center: 50px; width: 100px;">Add</button>
@@ -1291,7 +1281,7 @@
 
 
     
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Sunday Lunch</h6>
             <div style="display: inline;">
@@ -1302,9 +1292,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="sunday_lunch">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -1337,7 +1327,7 @@
 
 
 
-    <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Sunday Dinner</h6>
             <div style="display: inline;">
@@ -1348,9 +1338,9 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="sunday_dinner">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
-                    <br>
+                  <p></p>
                 {% endif %}
                 {% endfor %}
                 </div>
@@ -1380,7 +1370,7 @@
         </div>
        
 
-     <div class="card" style="width: 25%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 23%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Sunday Snacks</h6>
             <div style="display: inline;">
@@ -1391,7 +1381,7 @@
                     {% csrf_token %}
                     <input type="hidden" id="mealtodelete" name="mealtodelete" value="{{meal.meal.id}}">
                     <input type="hidden" id="daydelete" name="daydelete" value="sunday_snacks">
-                    <button type="submit" class="btn-sm btn-outline-danger" style="display: inline; size: 50%; border: 0; margin-bottom: 5px;">Remove</button>
+                    <button  type="submit" class="btn btn-outline-danger">Remove</button>
                     </form>
                     <br>
                 {% endif %}
@@ -1425,108 +1415,14 @@
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-    <br><br>
-    <h1 style="color: gray; size: 15pt; text-align: center;">Macros</h1>
-    <h6 style="color: gray; text-align: center;">Daily Average</h6>
-    <br><br>
-
-    <div style="text-align: center;">
-        <h5 style="display: inline; color: black; text-align: center; vertical-align: middle; margin-right: 30px;">Calories</h5>
-        <h2 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_calories}}</h2>
-    </div>
-    <br><br><br>
-
-    <div style="text-align: center;">
-        <h6 style="display: inline; color: black; text-align: center; vertical-align: middle; margin-right: 30px;">Fat</h6>
-        <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_fat}} g</h4>
-    </div>
-    <br><br>
-
-    <div style="text-align: center;">
-        <h6 style="display: inline; color: black; text-align: center; vertical-align: middle; margin-right: 30px;">Carbs</h6>
-        <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_carb}} g</h4>
-    </div>
-    <br><br>
-
-    <div style="text-align: center;">
-        <h6 style="display: inline; color: black; text-align: center; vertical-align: middle; margin-right: 30px;">Protein</h6>
-        <h4 style="display: inline; color: gray; size: 15pt; text-align: center; vertical-align: middle;">{{macros.average_protein}} g</h4>
-    </div>
-    <br><br><br>
-
-
-    <h3 style="color: gray; size: 15pt; text-align: center;">Macro Distribution</h3>
-    <br>
-
-    <div style="width: 300px; margin: auto;">
-        <canvas id="MacroChart"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-        <script>
-            const labels = [
-              'Fat',
-              'Carbs',
-              'Protein',
-            ];
-          
-            const data = {
-              labels: labels,
-              datasets: [{
-                label: 'data',
-                backgroundColor: [
-                    '#f024b6',
-                    '#d0ed48',
-                    '#1b96b5'
-                    ],
-                borderColor: 'white',
-                data: ["{{percentage.fat}}", "{{percentage.carb}}", "{{percentage.protein}}"],
-              }]
-            };
-          
-            const config = {
-              type: 'doughnut',
-              data: data,
-              options: {}
-            };
-          </script>
-
-
-          <script>
-            const MacroChart = new Chart(
-              document.getElementById('MacroChart'),
-              config
-            );
-          </script>
     </div>
 
 
-    {% endif %}
 
     <br><br><br>
 
 
-<button class="btn btn-outline-dark" id="myBtn">Add New Meal</button>
+<button class="btn btn-outline-light" id="myBtn">Add New Meal</button>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -1576,7 +1472,7 @@ window.onclick = function(event) {
 
     
 
-   
+{% endif %}
 
 <script>
 
@@ -1595,6 +1491,8 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 </script>
-
+</body>
+</html>
+    
 
 {% endblock %}

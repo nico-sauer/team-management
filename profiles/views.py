@@ -23,7 +23,7 @@ from django.views.generic import TemplateView
 from .serializers import * 
 
 # Create your views here.
-# @ team pls ignore this gigantic mess i will clean this up soon
+# @ team pls ignore this gigantic mess of imports i will clean this up soon
 #basic profile views for athletes
 def athlete_list(request):
   athletes = AthleteProfile.objects.all().values()
@@ -60,7 +60,7 @@ def medical_records(request, id=None):
     #template = loader.get_template('profiles/medical_records.html')
     if request.method == "POST":
     
-        form = AthleteProfileForm(request.POST, instance=athlete)
+        form = AthleteProfileForm(request.POST, request.FILES, instance=athlete)
         if form.is_valid():
             form.save()
             #return redirect('profiles/medical_records', athlete(id))

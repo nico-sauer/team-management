@@ -173,7 +173,7 @@ def addmeal(request):
             "all_meals": all_meals
         }
 
-        return render(request, "plans/addmeal.html", context)
+        return render(request, "plans/addmealplan.html", context)
 
 def deletemeal(request):
     all_meals = Meals.objects.filter(chef=request.user)
@@ -189,7 +189,7 @@ def deletemeal(request):
     context = {
         "all_meals": all_meals
     }
-    return render(request, "plans/addmeal.html", context)
+    return render(request, "plans/addmealplan.html", context)
 
 def addmealplan(request):
     
@@ -406,7 +406,7 @@ def addsession(request):
             "no_user": no_user
         }
 
-        return render(request, "plans/addsession.html", context)
+        return render(request, "plans/addtrainingschedule.html", context)
 
     else:
 
@@ -451,7 +451,7 @@ def deletesession(request):
         "all_sessions": all_sessions
     }
 
-    return render(request, "plans/addsession.html", context)
+    return render(request, "plans/addtrainingschedule.html", context)
 
 def addtrainingschedule(request):
     
