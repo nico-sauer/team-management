@@ -3,20 +3,30 @@ import pytz
 from config import settings
 
 
-def generate_ics(booking):
+def generate_ics(booking, instance=None):
     """
-    Generates a fully RFC 5545–compliant ICS event.
+    Generates a fully RFC 5545-compliant ICS event.
+    Supports both Booking and BookingInstance.
     Compatible with Gmail, Outlook, iOS, Android.
     """
 
     berlin_tz = pytz.timezone("Europe/Berlin")
 
-    start_berlin = booking.start.astimezone(berlin_tz)
-    end_berlin = booking.end.astimezone(berlin_tz)
-    dtstamp = timezone.now().astimezone(berlin_tz).strftime("%Y%m%dT%H%M%S")
+    # Use instance data if available
+    if instance:
+        title = instance.current_title
+        start = instance.current_start.astimezone(berlin_tz)
+        end = instance.current_end.astimezone(berlin_tz)
+        uid = f"{booking.id}-{instance.occurrence_date}@teamapp.com"
+    else:
+        title = booking.title
+        start = booking.start.astimezone(berlin_tz)
+        end = booking.end.astimezone(berlin_tz)
+        uid = f"{booking.id}@teamapp.com"
 
-    dtstart = start_berlin.strftime("%Y%m%dT%H%M%S")
-    dtend = end_berlin.strftime("%Y%m%dT%H%M%S")
+    dtstamp = timezone.now().astimezone(berlin_tz).strftime("%Y%m%dT%H%M%S")
+    dtstart = start.strftime("%Y%m%dT%H%M%S")
+    dtend = end.strftime("%Y%m%dT%H%M%S")
 
     # Timezone block for Gmail & Outlook compatibility
     VTIMEZONE = """BEGIN:VTIMEZONE
@@ -49,14 +59,14 @@ CALSCALE:GREGORIAN
 METHOD:REQUEST
 {VTIMEZONE}
 BEGIN:VEVENT
-UID:{booking.id}@teamapp.com
+UID:{uid}
 DTSTAMP:{dtstamp}
 DTSTART;TZID=Europe/Berlin:{dtstart}
 DTEND;TZID=Europe/Berlin:{dtend}
-SUMMARY:{booking.title}
+SUMMARY:{title}
 LOCATION:{booking.location or ""}
 DESCRIPTION:{booking.event_type or ""}
-STATUS:{booking.status or "CONFIRMED"}
+STATUS:{booking.status.upper() if booking.status else "CONFIRMED"}
 ORGANIZER;CN=TeamApp:mailto:{organizer_email}
 ATTENDEE;CN=Guest;RSVP=TRUE:mailto:{attendee_email}
 END:VEVENT
@@ -64,39 +74,3 @@ END:VCALENDAR"""
 
     # Gmail expects CRLF line endings
     return ics_content.replace("\n", "\r\n").encode("utf-8")
-
-
-# def generate_ics(booking):
-#     """
-#     Generates an ICS calendar event for a booking.
-#     Times are converted to Europe/Berlin and TZID is used.
-#     """
-
-#     berlin_tz = pytz.timezone("Europe/Berlin")
-
-#     # Convert booking times to Berlin timezone
-#     start_berlin = booking.start.astimezone(berlin_tz)
-#     end_berlin = booking.end.astimezone(berlin_tz)
-#     dtstamp = timezone.now().astimezone(berlin_tz).strftime("%Y%m%dT%H%M%S")
-
-#     dtstart = start_berlin.strftime("%Y%m%dT%H%M%S")
-#     dtend = end_berlin.strftime("%Y%m%dT%H%M%S")
-
-#     ics_content = f"""BEGIN:VCALENDAR
-# VERSION:2.0
-# PRODID:-//YourApp//EN
-# CALSCALE:GREGORIAN
-# METHOD:REQUEST
-# BEGIN:VEVENT
-# UID:{booking.id}@teamapp.com
-# DTSTAMP:{dtstamp}
-# DTSTART;TZID=Europe/Berlin:{dtstart}
-# DTEND;TZID=Europe/Berlin:{dtend}
-# SUMMARY:{booking.title}
-# LOCATION:{booking.location or ""}
-# DESCRIPTION:{booking.event_type or ""}
-# STATUS:{booking.status or "CONFIRMED"}
-# END:VEVENT
-# END:VCALENDAR"""
-
-#     return ics_content.encode("utf-8")  # Returns bytes, ready to attach to email

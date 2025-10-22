@@ -63,6 +63,11 @@ class Booking(models.Model):
             or f"{self.event_type} ({self.start} - {self.end}) @ {self.location}"
         )
 
+    def delete(self, *args, **kwargs):
+        # delete all instances
+        self.all_booking_instances.all().delete()
+        super().delete(*args, **kwargs)
+
     def is_conflicting(self, participants=None, instance=None):
         """
         Checks if a participant has another booking at the same time.

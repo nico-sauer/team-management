@@ -2,9 +2,12 @@
    calendar container
 ---------------------------- */
 .calendar-container {
+    background-color: rgb(226, 221, 221) !important;
     width: 98%;
     margin: auto;
     font-size: 13px;
+    padding: 5px;
+    border-radius: 6px;
 }
 
 /* ---------------------------
@@ -79,7 +82,6 @@ a {
 .btn {
     outline: none;
     color: black;
-    background-color: transparent;
     box-shadow: none;
 }
 

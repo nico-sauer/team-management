@@ -15,6 +15,6 @@ urlpatterns = [
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
     path("booking_pdf/", views.booking_pdf, name="booking_pdf"),
     path("booking_day_view/", views.booking_day_view, name="booking_day_view"),
-    path('booking/<int:booking_id>/send_invite/',
-         views.send_booking_invite_view, name='send_invite'),
+    path('booking_instance/<int:instance_id>/send_invite/',
+         views.send_booking_invite_view, name='send_invite')
 ]
