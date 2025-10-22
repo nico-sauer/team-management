@@ -30,7 +30,7 @@
 }
 .row {
     margin: auto;
-  
+   width:90%;
     vertical-align: middle;
     float: none;
 }
@@ -45,8 +45,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<br>   <br><br>
-<div class= card style="text-align: center; background-color: black">
+<br>  
+<div class= "card" style="text-align: center; background-color: black">
         <p></p>
         <p></p>
 
@@ -55,15 +55,15 @@
     <br>
 
     <div class="row"> 
-    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Monday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "monday" %}
-                <h6 style="color: darkgray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: darkgray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                   
                     <br>
                 {% endif %}
@@ -71,15 +71,15 @@
             </div>
         </div>
     </div>
-     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Tuesday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "tuesday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                     <br>
                 {% endif %}
                 {% endfor %}
@@ -87,62 +87,64 @@
         </div>
    
     </div>
-    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Wednesday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "wednesday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                     <br>
                 {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
-     <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+     <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Thursday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "thursday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                     <br>
                 {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
-   
+    </div>
+
+   <div>
     <div class="row"> 
-    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Friday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "friday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                     <br>
                 {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
-    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width: 100%;">
                 <h6 class="card-title">Saturday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "saturday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
 
                     <br>
                 {% endif %}
@@ -151,15 +153,15 @@
         </div>
    
     </div>
-    <div class="card" style="width: 100%; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
+    <div class="card" style="width: 100%; min-height: 300px; margin-bottom: 20px; border-radius: 10px; border-color: darkgrey; text-align: center;">
         <div class="card-body" style="width:100%;">
                 <h6 class="card-title">Sunday</h6>
             <div style="display: inline;">
                 {% for session in weekly_sessions %}
                 {% if session.day == "sunday" %}
-                <h6 style="color: gray; font-weight: bolder;;">{{session.time}} - {{session.session.name}}</h6>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.type}}</p>
-                <p style="color: gray; font-weight: bolder;;">{{session.session.description}}</p>
+                <h6 style="color: gray; font-weight: bolder;">{{session.time}} - {{session.session.name}}</h6>
+                <p style="color: gray; font-weight: bolder;">{{session.session.type}}</p>
+                <p style="color: gray; font-weight: bolder;">{{session.session.description}}</p>
                     <br>
                 {% endif %}
                 {% endfor %}
@@ -170,15 +172,13 @@
     </div>
 
 
-</div> 
 
-
-
-
-
-    <br><br><br>
     
-   <p><a href="/plans/addtrainingschedule">Edit</a></p>
+    
+    {% if user.is_authenticated and user.role == "Trainer" or user.is_superuser %}
+        <p style="margin-left: 1480px"><a href="/plans/addtrainingschedule">Edit</a></p>
+    {% endif %}
+       
 
     </body>
     </html> 
