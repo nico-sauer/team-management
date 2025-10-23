@@ -179,10 +179,10 @@ window.onclick = function(event) {
         </div>
        
     </div>
-  {% if user.is_authenticated and (user.is_doctor or user.is_superuser) %}
+  {% if user.is_authenticated and user.is_doctor or user.is_authenticated and user.is_superuser %}
     <p><a href="/profiles/athletes/medical/{{ athlete.id }}">Medical Records</a></p>
     {% endif %}
-  {% if user.is_authenticated and (user.is_dietician or user.is_superuser) %}
+  {% if user.is_authenticated and user.is_dietician or user.is_authenticated and user.is_superuser %}
     <p><a href="/profiles/athletes/dietary/{{ athlete.id }}">Dietary Information</a></p>
       {% endif %}
         
