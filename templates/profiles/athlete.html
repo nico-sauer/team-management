@@ -69,7 +69,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
         <div style="display: inline;">
         
        
-       <img src="{{athlete.icon.url}}" style="clip-path: circle(); width: 200px;">
+  <img src="{{athlete.icon.url}}" onerror="this.onerror=null;this.src='/media/default.png';" style="clip-path: circle(); width: 200px;">
       
           <p></p>
             <h1>{{ athlete.first_name }} {{ athlete.last_name }}</h1>
@@ -108,8 +108,11 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-        <form method="post" enctype="multipart/form-data" style="width: 100%;">
-                  {% csrf_token %}
+  <form method="post" enctype="multipart/form-data" style="width: 100%;">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
     
                   <div class="form-group col-md-12" >{{ form.icon|as_crispy_field }}</div>   
                   <div class="form-group col-md-12">{{ form.first_name|as_crispy_field }}</div>
@@ -176,7 +179,15 @@ window.onclick = function(event) {
 }
 </script>
         
-        </div>
+  </div>
+  {% if show_modal %}
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+      var modal = document.getElementById('myModal');
+      if(modal) modal.style.display = 'block';
+  });
+  </script>
+  {% endif %}
        
     </div>
   {% if user.is_authenticated and user.is_doctor or user.is_authenticated and user.is_superuser %}

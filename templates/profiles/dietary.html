@@ -202,8 +202,11 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-        <form method="post" style="width: 100%;">
-                  {% csrf_token %}
+  <form method="post" enctype="multipart/form-data" style="width: 100%;">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
                   
   
                             
@@ -271,7 +274,15 @@ window.onclick = function(event) {
 }
 </script>
         
-        </div>
+  </div>
+  {% if show_modal %}
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+      var modal = document.getElementById('myModal');
+      if(modal) modal.style.display = 'block';
+  });
+  </script>
+  {% endif %}
        
     </div>
 </div>
