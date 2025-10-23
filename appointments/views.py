@@ -49,7 +49,7 @@ def create_booking(request):
             booking.generate_booking_instances()
             form.save_m2m()
             messages.success(request, "Booking was successful")
-            return redirect("appointments:booking_list")
+            return redirect("appointments:booking")
     else:
         form = BookingForm(current_user=request.user)
 
@@ -102,14 +102,9 @@ def edit_booking_instance(request, booking_id, instance_id):
         else:
             messages.warning(
                 request,
-                "Status changes are only possible for one-time bookings. "
-                "Recurring events need to be cancelled or deleted by the"
+                "Info: Status changes are only possible for one-time bookings."
+                " Recurring events need to be cancelled or deleted by the"
                 " creator."
-            )
-            return redirect(
-                "appointments:booking_instance_edit",
-                booking_id=booking.id,
-                instance_id=inst.id
             )
 
         # check appointment-conflicts before saving
@@ -164,7 +159,7 @@ def delete_booking(request, pk, instance_id=None):
     except Booking.DoesNotExist:
         messages.warning(request,
                          "The booking you tried to access does not exist.")
-        return redirect("appointments:booking_list")
+        # return redirect("appointments:booking_list")
 
     # only creator is allowed to delete
     if booking.booked_by != request.user:
@@ -189,7 +184,7 @@ def delete_booking(request, pk, instance_id=None):
                 request,
                 "This occurrence was already deleted or does not exist."
             )
-            return redirect("appointments:booking_list")
+            # return redirect("appointments:booking_list")
 
     if request.method == "POST":
         if instance:
@@ -218,7 +213,7 @@ def delete_booking(request, pk, instance_id=None):
                 request, "The entire series was deleted successfully.")
 
         # redirect to the same page
-        return redirect(request.path)
+        # return redirect(request.path)
 
     return render(
         request,
@@ -359,6 +354,7 @@ def booking_pdf(request):
 # Calendar View
 # -----------------------------
 class CalendarView(LoginRequiredMixin, generic.ListView):
+    """Generate calendar for same team_members"""
     model = Booking
     template_name = "appointments/calendar.html"
 
@@ -372,12 +368,27 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         last_day = first_day + timedelta(
             days=calendar.monthrange(d.year, d.month)[1] - 1)
 
+        # team of the logged_in user
+        user_team = self.request.user.team_id
+
+        # if user doesn't belong to a user_team, show empty calendar
+        if not user_team:
+            context["calendar"] = mark_safe(Calendar(
+                d.year, d.month, events=[]
+            ).formatmonth(withyear=True))
+            return context
+
+        # Filter: Only bookings of team members, that are in the same team
         instances = BookingInstance.objects.filter(
             occurrence_date__gte=first_day,
             occurrence_date__lte=last_day,
             is_cancelled=False
-        ).select_related('booking')
+        ).filter(
+            Q(booking__booked_by__team_id=user_team) |
+            Q(booking__participants__team_id=user_team)
+        ).select_related('booking').distinct()
 
+        # Generate calendar
         context["calendar"] = mark_safe(Calendar(
             d.year,
             d.month,
@@ -424,4 +435,3 @@ def booking_day_view(request):
         "today": today
     }
     return render(request, "appointments/booking_day_view.html", context)
-

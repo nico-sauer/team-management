@@ -16,7 +16,7 @@
         {{ field.label_tag }}
         {{ field }}
         {% if field.help_text %}
-            <small class="form-text" style="color: white;">{{ field.help_text }}</small>
+            <small class="form-text" style="color: black;">{{ field.help_text }}</small>
         {% endif %}
         {% for error in field.errors %}
             <p style="color:red;">{{ error }}</p>
@@ -34,27 +34,30 @@
         </a>
     </form>
 
+  {# Django Messages #}
+  <div class="d-flex justify-content-center mt-3">
     {% if messages or form.errors %}
-
-    {# Django Messages #}
-    {% for message in messages %}
-        {% if message.tags == "error" %}
-        <p style="color:red;">{{ message }}</p>
-        {% elif message.tags == "success" %}
-        <p style="color:green;">{{ message }}</p>
-        {% else %}
-        <p>{{ message }}</p>
+      {% for message in messages %}
+        {% if forloop.last %}
+          {% if message.tags == "error" %}
+            <div class="alert alert-danger">{{ message }}</div>
+          {% elif message.tags == "success" %}
+            <div class="alert alert-success">{{ message }}</div>
+          {% else %}
+            <div class="alert alert-info">{{ message }}</div>
+          {% endif %}
         {% endif %}
-    {% endfor %}
-
-
-    {# Non-field Errors #}
-    {% for error in form.non_field_errors %}
-        <p style="color:red;">{{ error }}</p>
-    {% endfor %}
-
+      {% endfor %}
     {% endif %}
+  </div>
 
-    
+  {# Non-field Errors #}
+  {% if form.non_field_errors %}
+    <div class="mt-2 text-center">
+      {% for error in form.non_field_errors %}
+        <p style="color:red;">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

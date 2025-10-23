@@ -80,12 +80,8 @@ class Calendar(HTMLCalendar):
     def formatmonth(self, withyear=True):
         first_day, last_day = self.get_month_date_range()
 
-        # only bookings, which are in this month range
-        instances = BookingInstance.objects.filter(
-            occurrence_date__gte=first_day,
-            occurrence_date__lte=last_day,
-            is_cancelled=False
-        ).select_related('booking')
+        instances = [inst for _, inst in self.events 
+                     if first_day <= inst.occurrence_date <= last_day]
 
         cal = (
             '<table border="0" cellpadding="0" cellspacing="0"''class="calendar">\n')

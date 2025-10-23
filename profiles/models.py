@@ -63,7 +63,7 @@ class StaffProfile(models.Model):
     title = models.CharField(choices= TITLE, blank=True)
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
-    birthday = models.DateField(null=True, blank=False)
+    birthday = models.DateField(null=True, blank=True)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
 
     email = models.EmailField(("Email Address"))
@@ -93,12 +93,12 @@ class AthleteProfile(models.Model):
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)
-    birthday = models.DateField(blank=False)
+    birthday = models.DateField(null=True, blank=True)
     email = models.EmailField(("Email Address"))
     phone_number = PhoneNumberField("Phone Number")
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    number = models.PositiveIntegerField(default=0) 
-    position = models.CharField(null=True)
+    number = models.PositiveIntegerField(default=0, null=True, blank=True) 
+    position = models.CharField(null=True, blank=True)
     
     #medical profile info:
     gender = models.CharField(choices = GENDER, blank=True)
