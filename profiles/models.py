@@ -59,7 +59,7 @@ GENDER = (
 class StaffProfile(models.Model):
    
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
+    icon = models.ImageField(default='default.png', upload_to='profile_images')
     title = models.CharField(choices= TITLE, blank=True)
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
@@ -89,7 +89,7 @@ class AthleteProfile(models.Model):
     #basic profile info:
     
     #id = models.UUIDField(primary_key=True, default=uuid4)
-    icon = models.ImageField(default='default.jpg', upload_to='profile_images')
+    icon = models.ImageField(default='default.png', upload_to='profile_images')
     first_name = models.CharField(("First Name"), max_length=30)
     last_name = models.CharField(("Last Name"), max_length=30)
     slug = AutoSlugField(always_update=True, populate_from="get_full_name", unique=True)

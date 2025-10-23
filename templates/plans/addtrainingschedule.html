@@ -24,8 +24,8 @@
     <div class="content">
     <div class="alert alert-info" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">
-        Currently no saved sessions. <br><br>
-        <a href="{% url 'addsession' %}" class="alert-link">Add session</a><br><br>
+        Currently no saved sessions.</p>
+     
         </p>
     </div>
 
@@ -166,7 +166,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name=a id="monday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name=addsession id="monday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -215,7 +215,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="tuesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="tuesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -262,7 +262,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="wednesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="wednesday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -307,7 +307,7 @@
    
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="thursday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="thursday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -357,7 +357,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="friday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="friday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -403,7 +403,7 @@
    
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="saturday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="saturday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -449,7 +449,7 @@
     </div>
             <br>
             <div class="container" style="display: flex; align-items: center; justify-content: center;">
-            <form name="a" id="sunday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
+            <form name="addsession" id="sunday" method="post" action="{% url 'addtrainingschedule' %}" onsubmit="return validateForm()">
             {% csrf_token %}
         
                 
@@ -558,13 +558,13 @@ for (i = 0; i < coll.length; i++) {
 }
 </script>
 <script>
-function validateForm() {
-  var x = document.forms["a"]["time"].value;
+{% comment %} function validateForm() {
+  var x = document.forms["addsession"]["time"].value;
   if (x == "" || x == null) {
-    alert("Please enter a time");
+    alert("Please enter addsession time");
     return false;
   }
 }
-</script>
+</script> {% endcomment %}
 
 {% endblock %}

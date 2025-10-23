@@ -173,7 +173,7 @@ def addmeal(request):
             "all_meals": all_meals
         }
 
-        return render(request, "plans/addmealplan.html", context)
+        return render(request, "plans/addmeal.html", context)
 
 def deletemeal(request):
     all_meals = Meals.objects.filter(chef=request.user)
@@ -189,7 +189,7 @@ def deletemeal(request):
     context = {
         "all_meals": all_meals
     }
-    return render(request, "plans/addmealplan.html", context)
+    return render(request, "plans/addmeal.html", context)
 
 def addmealplan(request):
     
@@ -274,8 +274,8 @@ def mealplan(request):
 
         # query that user's meals
         if request.user.is_authenticated:
-            all_meals = Meals.objects.filter(chef = user)
-            weekly_meals = WeeklyMealPlan.objects.filter(user = user)
+            all_meals = Meals.objects.all()
+            weekly_meals = WeeklyMealPlan.objects.all()
 
             #calculate macros and percentage
             macros = calculate_macros(weekly_meals)
@@ -406,7 +406,7 @@ def addsession(request):
             "no_user": no_user
         }
 
-        return render(request, "plans/addtrainingschedule.html", context)
+        return render(request, "plans/addsession.html", context)
 
     else:
 
@@ -451,7 +451,7 @@ def deletesession(request):
         "all_sessions": all_sessions
     }
 
-    return render(request, "plans/addtrainingschedule.html", context)
+    return render(request, "plans/addsession.html", context)
 
 def addtrainingschedule(request):
     
@@ -525,8 +525,8 @@ def trainingschedule(request):
 
         # query that user's meals
         if request.user.is_authenticated:
-            all_sessions = TrainingSessions.objects.filter(trainer = user)
-            weekly_sessions = WeeklySessions.objects.filter(user = user).order_by("time")
+            all_sessions = TrainingSessions.objects.all()
+            weekly_sessions = WeeklySessions.objects.all().order_by("time")
 
             no_user = False
         else:
