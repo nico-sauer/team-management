@@ -6,13 +6,14 @@ from django.core.exceptions import ValidationError
 from profiles.models import StaffProfile, AthleteProfile
 
 
-ROLE_CHOICES = (
+ROLE_CHOICES =(
+    
     ("Manager", "Manager"),
     ("Trainer", "Trainer"),
     ("Physical Therapist", "Physical Therapist"),
-    ("Dietitian", "Dietitian"),
+    ("Dietician", "Dietician"),
     ("Doctor", "Doctor"),
-    ("Athlete", "Athlete"),
+    ("Chef", "Chef"),
 )
 
 
