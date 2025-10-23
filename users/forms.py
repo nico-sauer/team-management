@@ -7,7 +7,7 @@ from profiles.models import StaffProfile, AthleteProfile
 
 
 ROLE_CHOICES =(
-    
+    ("Athlete", "Athlete"),
     ("Manager", "Manager"),
     ("Trainer", "Trainer"),
     ("Physical Therapist", "Physical Therapist"),
@@ -57,7 +57,7 @@ class CustomUserCreationForm(UserCreationForm):
                 "Manager",
                 "Trainer",
                 "Physical Therapist",
-                "Dietitian",
+                "Dietician",
                 "Doctor",
                 "Chef",
             ]:
