@@ -14,6 +14,7 @@ ROLE_CHOICES =(
     ("Dietician", "Dietician"),
     ("Doctor", "Doctor"),
     ("Chef", "Chef"),
+    ("Athlete", "Athlete"),
 )
 
 
@@ -50,14 +51,16 @@ class CustomUserCreationForm(UserCreationForm):
         group = self.cleaned_data.get("group")
         if commit:
             user.save()
-            user.groups.add(group)
+            # Only add group if one was selected
+            if group:
+                user.groups.add(group)
             user.save()
             # Profile creation
             if role in [
                 "Manager",
                 "Trainer",
                 "Physical Therapist",
-                "Dietitian",
+                "Dietician",
                 "Doctor",
                 "Chef",
             ]:

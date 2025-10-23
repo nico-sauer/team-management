@@ -128,33 +128,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
-
-
-    @property
-    def is_chef(self):
-        """
-        Convenience property used by templates/views to check if the user
-        should be treated as a Trainer. Returns True if either:
-        - the related StaffProfile has role == 'Trainer', or
-        - the user belongs to a Group named 'Trainers' (fallback).
-
-        This is a small, non-invasive helper so templates can use
-        `user.is_chef` instead of directly accessing profiles or groups.
-        """
-        try:
-            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Chef':
-                return True
-        except Exception:
-            pass
-        # fallback to group membership (if your project uses groups)
-        try:
-            return any(g.name == 'Chefs' for g in self.groups.all())
-        except Exception:
-            return False
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
-
-    objects = CustomUserManager()
-
-    def __str__(self):
-        return self.email

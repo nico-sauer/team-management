@@ -32,10 +32,10 @@
             
             
             {% if request.user.is_authenticated and profile %}
-                {% if profile.role == "Manager" %}
+                {% if request.user.is_manager %}
                     <div class="alert alert-info">Welcome, Manager!</div>
                     <a href="{% url 'users:register' %}" class="btn btn-success">Register Team Member</a>
-                {% elif profile.role == "Trainer" %}
+                {% elif request.user.is_trainer %}
                     <div class="alert alert-info">Welcome, Trainer!</div>
                     <h3>Your Athletes</h3>
                     <ul>
@@ -46,7 +46,7 @@
                         {% endfor %}
                     </ul>
                     <a href="{% url 'addtrainingschedule' %}" class="btn btn-success">Create Training Plan</a>
-                {% elif profile.role == "Dietician" %}
+                {% elif request.user.is_dietician %}
                     <div class="alert alert-info">Welcome, Dietician!</div>
                 {% else %}
                     <div class="alert alert-info">Welcome to Team Management!</div>
