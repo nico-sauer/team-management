@@ -7,7 +7,7 @@
 
 <div style="max-width: 600px; margin: auto;">
 
-    {% if not user.is_superuser and user.role != "Chef" %}
+    {% if not user.is_superuser and not user.is_chef %}
 
     <div class="alert alert-danger" role="alert" style="width: 600px;">
         <p style="font-size: large; text-align: center; margin-top: 15px;">

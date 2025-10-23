@@ -23,10 +23,10 @@
                 <p>Birthday: {{ athlete.birthday }}</p>
                 <p>Position: {{ athlete.position }}</p>
                 <p>Jersey Number: {{ athlete.number }}</p>
-                  {% if user.is_authenticated and user.role == "Doctor" or user.is_superuser %}
+                  {% if user.is_authenticated and (user.is_doctor or user.is_superuser) %}
               <p><a href="/profiles/athletes/medical/{{ athlete.id }}">Medical Records</a></p>
               {% endif %}
-              {% if user.is_authenticated and user.role == "Dietician" or user.is_superuser %}
+              {% if user.is_authenticated and (user.is_dietician or user.is_superuser) %}
               <p><a href="/profiles/athletes/dietary/{{ athlete.id }}">Dietary Information</a></p>
                 {% endif %}
         

@@ -66,9 +66,57 @@ class CustomUser(AbstractUser):
                 return True
         except Exception:
             pass
-        # fallback to group membership (if your project uses groups)
+        # f
         try:
-            return any(g.name == 'Trainers' for g in self.groups.all())
+            return self.groups.filter(name__iexact='Trainers').exists()
+        except Exception:
+            return False
+    
+    @property
+    def is_chef(self):
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Chef':
+                return True
+        except Exception:
+            pass
+        try:
+            return self.groups.filter(name__icontains='chef').exists()
+        except Exception:
+            return False
+
+    @property
+    def is_doctor(self):
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Doctor':
+                return True
+        except Exception:
+            pass
+        try:
+            return self.groups.filter(name__icontains='doctor').exists()
+        except Exception:
+            return False
+
+    @property
+    def is_dietician(self):
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role in ('Dietician', 'Dietitian'):
+                return True
+        except Exception:
+            pass
+        try:
+            return self.groups.filter(name__icontains='diet').exists()
+        except Exception:
+            return False
+
+    @property
+    def is_manager(self):
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Manager':
+                return True
+        except Exception:
+            pass
+        try:
+            return self.groups.filter(name__icontains='manager').exists()
         except Exception:
             return False
     USERNAME_FIELD = "email"
