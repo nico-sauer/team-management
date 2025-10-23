@@ -99,8 +99,9 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
           </div>
           </div>
           <div>
+        {% if user.id == athlete.id or user.is_superuser %}
         <button  class="btn btn-outline-light" id="myBtn">Edit</button>
-
+        {% endif %}
 <!-- The Modal -->
 <div id="myModal" class="modal">
 
@@ -178,10 +179,10 @@ window.onclick = function(event) {
         </div>
        
     </div>
-    {% if user.is_authenticated and user.role == "Doctor" or user.is_superuser %}
+    {% if user.is_doctor or user.id == athlete.id or user.is_superuser %}
     <p><a href="/profiles/athletes/medical/{{ athlete.id }}">Medical Records</a></p>
     {% endif %}
-    {% if user.is_authenticated and user.role == "Dietician" or user.is_superuser %}
+    {% if user.is_dietician or user.id == athlete.id or user.is_superuser %}
     <p><a href="/profiles/athletes/dietary/{{ athlete.id }}">Dietary Information</a></p>
       {% endif %}
         

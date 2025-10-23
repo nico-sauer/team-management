@@ -86,9 +86,9 @@ class CustomUser(AbstractUser):
     def is_chef(self):
         """
         Convenience property used by templates/views to check if the user
-        should be treated as a Trainer. Returns True if either:
-        - the related StaffProfile has role == 'Trainer', or
-        - the user belongs to a Group named 'Trainers' (fallback).
+        should be treated as a Chef. Returns True if either:
+        - the related StaffProfile has role == 'Chef', or
+        - the user belongs to a Group named 'Chefs' (fallback).
 
         This is a small, non-invasive helper so templates can use
         `user.is_chef` instead of directly accessing profiles or groups.
@@ -103,6 +103,8 @@ class CustomUser(AbstractUser):
             return any(g.name == 'Chefs' for g in self.groups.all())
         except Exception:
             return False
+        
+        
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -110,3 +112,70 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+    
+    @property
+    def is_doctor(self):
+        """
+        Convenience property used by templates/views to check if the user
+        should be treated as a Doctor. Returns True if either:
+        - the related StaffProfile has role == 'Doctor', or
+        - the user belongs to a Group named 'Doctors' (fallback).
+
+        This is a small, non-invasive helper so templates can use
+        `user.is_doctor` instead of directly accessing profiles or groups.
+        """
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Doctor':
+                return True
+        except Exception:
+            pass
+        # fallback to group membership (if your project uses groups)
+        try:
+            return any(g.name == 'Doctors' for g in self.groups.all())
+        except Exception:
+            return False
+        
+        
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+    
+    @property
+    def is_dietician(self):
+        """
+        Convenience property used by templates/views to check if the user
+        should be treated as a Dietician. Returns True if either:
+        - the related StaffProfile has role == 'Dietician', or
+        - the user belongs to a Group named 'Dieticians' (fallback).
+
+        This is a small, non-invasive helper so templates can use
+        `user.is_dietician` instead of directly accessing profiles or groups.
+        """
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Dietician':
+                return True
+        except Exception:
+            pass
+        # fallback to group membership (if your project uses groups)
+        try:
+            return any(g.name == 'Dieticians' for g in self.groups.all())
+        except Exception:
+            return False
+        
+        
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+    
+    
+    
+  
