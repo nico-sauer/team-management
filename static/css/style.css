@@ -272,3 +272,38 @@ select,
 textarea {
   margin-bottom: 16px;
 }
+
+/* Profile-specific layout fixes */
+.profile-basic,
+.profile-dietary,
+.profile-medical {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 16px auto;
+}
+
+.profile-basic table,
+.profile-dietary table,
+.profile-medical table {
+  width: 100% !important;
+  margin: 0 !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.profile-basic th,
+.profile-dietary th,
+.profile-medical th,
+.profile-basic td,
+.profile-dietary td,
+.profile-medical td {
+  display: table-cell !important;
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+/* Make the edit modal button float to the right in a safe way */
+.profile-edit-btn {
+  float: right;
+  margin-left: 12px;
+}

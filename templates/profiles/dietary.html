@@ -54,8 +54,6 @@ table, th, td {
   border:1px solid black;
   width: 100%;
   table-layout:fixed
- 
-  display: inline-block;
 }
 
 
@@ -132,7 +130,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
             <br>
             <div class="dietary_info">    
             <div>
-          <table style="width:30%; height: 100%; margin-left:-400px">
+          <table style="width:100%; height: auto; margin-left:0" class="profile-dietary">
           
             <tr>
               <td>Average TDEE: {{ athlete.calories}}</td>
@@ -153,7 +151,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
             <br>
            
         
-              <table style="width:80%; margin-left: -400px">
+              <table style="width:100%; margin-left: 0" class="profile-dietary">
               <tr>
                 <th>Dietary Restrictions</th>
               </tr>
@@ -164,7 +162,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
             </table>
             
             
-            <table style="width:80%; margin-left: -400px">
+            <table style="width:100%; margin-left: 0" class="profile-dietary">
               <tr>
                 <th>Allergies</th>
               </tr>
