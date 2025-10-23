@@ -354,6 +354,7 @@ def booking_pdf(request):
 # Calendar View
 # -----------------------------
 class CalendarView(LoginRequiredMixin, generic.ListView):
+    """Generate calendar for same team_members"""
     model = Booking
     template_name = "appointments/calendar.html"
 
@@ -367,12 +368,27 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         last_day = first_day + timedelta(
             days=calendar.monthrange(d.year, d.month)[1] - 1)
 
+        # team of the logged_in user
+        user_team = self.request.user.team_id
+
+        # if user doesn't belong to a user_team, show empty calendar
+        if not user_team:
+            context["calendar"] = mark_safe(Calendar(
+                d.year, d.month, events=[]
+            ).formatmonth(withyear=True))
+            return context
+
+        # Filter: Only bookings of team members, that are in the same team
         instances = BookingInstance.objects.filter(
             occurrence_date__gte=first_day,
             occurrence_date__lte=last_day,
             is_cancelled=False
-        ).select_related('booking')
+        ).filter(
+            Q(booking__booked_by__team_id=user_team) |
+            Q(booking__participants__team_id=user_team)
+        ).select_related('booking').distinct()
 
+        # Generate calendar
         context["calendar"] = mark_safe(Calendar(
             d.year,
             d.month,
