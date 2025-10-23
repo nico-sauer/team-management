@@ -110,10 +110,10 @@ def login_user(request):
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "You are login")
+            messages.success(request, "You have been logged in.")
             return redirect("/")  # after login return to Home page
         else:
-            messages.error(request, "There was an error. Try to log in again")
+            messages.error(request, "There has been an error. Try to log in again")
             return redirect("/")
     else:
         return render(
