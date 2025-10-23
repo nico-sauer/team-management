@@ -5,6 +5,14 @@
   {{ athlete.first_name }} {{ athlete.last_name }}
 {% endblock %}
 
+{% if not user.is_superuser and not user.is_doctor %}
+
+    <div class="alert alert-danger" role="alert" style="width: 600px;">
+        <p style="font-size: large; text-align: center; margin-top: 15px;">
+        Access denied.</p>
+    </div>
+
+    {% endif %}
 
 {% block content %}
 <style>
@@ -89,14 +97,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
 
 </head>
 <body>
- {% if not user.is_superuser and not user.is_doctor and not user.id == athlete.id %}
-
-    <div class="alert alert-danger" role="alert" style="width: 600px;">
-        <p style="font-size: large; text-align: center; margin-top: 15px;">
-        Access denied.</p>
-    </div>
-
-    {% else %}
+ 
 <div class="card" style="width: 80%; margin: 20px auto;  border-radius: 2px; border-color: darkgrey; text-align: center;">
     <div class="card-body" style="width:100%; margin:auto; text-align: left;">
    
@@ -231,9 +232,9 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
                   <div class="form-group col-md-12">{{ form.email|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.phone_number|as_crispy_field }}</div>
                   <div class="form-group col-md-12" >{{ form.icon|as_crispy_field }}</div>  
-                 <div class="form-group col-md-12">{{ form.position|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.position|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.number|as_crispy_field }}</div>
-                   <div class="form-group col-md-12">{{ form.calories|as_crispy_field }}</div>
+                  <div class="form-group col-md-12">{{ form.calories|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.protein|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.carbs|as_crispy_field }}</div>
                   <div class="form-group col-md-12">{{ form.fat|as_crispy_field }}</div>
@@ -246,7 +247,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.8.2/c ss/bootstrap.min.css"
   </div>
 
 </div>
-      {% endif %}
+
 <script>
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -281,7 +282,7 @@ window.onclick = function(event) {
 </div>
   
 
- 
+  {% endif %}
   
 </body>
   
