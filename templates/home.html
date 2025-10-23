@@ -45,7 +45,7 @@
                             <li>No athletes in your team.</li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'plans:create_training_plan' %}" class="btn btn-success">Create Training Plan</a>
+                    <a href="{% url 'addtrainingschedule' %}" class="btn btn-success">Create Training Plan</a>
                 {% elif profile.role == "Dietician" %}
                     <div class="alert alert-info">Welcome, Dietician!</div>
                 {% else %}
