@@ -57,7 +57,7 @@ class CustomUserCreationForm(UserCreationForm):
                 "Manager",
                 "Trainer",
                 "Physical Therapist",
-                "Dietitian",
+                "Dietician",
                 "Doctor",
                 "Chef",
             ]:

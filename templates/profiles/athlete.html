@@ -99,7 +99,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/c ss/bootstrap.min.css"
           </div>
           </div>
           <div>
-        {% if user.id == athlete.id or user.is_superuser %}
+        {% if user.is_manager or user.is_superuser %}
         <button  class="btn btn-outline-light" id="myBtn">Edit</button>
         {% endif %}
 <!-- The Modal -->

@@ -178,4 +178,36 @@ class CustomUser(AbstractUser):
     
     
     
-  
+    @property
+    def is_manager(self):
+        """
+        Convenience property used by templates/views to check if the user
+        should be treated as a Manager. Returns True if either:
+        - the related StaffProfile has role == 'Manager', or
+        - the user belongs to a Group named 'Managers' (fallback).
+
+        This is a small, non-invasive helper so templates can use
+        `user.is_manager` instead of directly accessing profiles or groups.
+        """
+        try:
+            if getattr(self, 'staffprofile', None) and self.staffprofile.role == 'Manager':
+                return True
+        except Exception:
+            pass
+        # fallback to group membership (if your project uses groups)
+        try:
+            return any(g.name == 'Managers' for g in self.groups.all())
+        except Exception:
+            return False
+        
+        
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+    
+    
+    
