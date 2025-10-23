@@ -552,7 +552,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             </div>
         </div>
         </div>
-    {% if request.user.is_authenticated and (request.user.is_chef or request.user.is_superuser) %}
+    {% if request.user.is_authenticated and request.user.is_chef or request.user.is_authenticated and request.user.is_superuser %}
     <p style="margin-left: 1250px"><a href="/plans/addmealplan">Edit</a></p>
     {% endif %}
        

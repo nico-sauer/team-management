@@ -175,7 +175,7 @@
 
     
     
-    {% if request.user.is_authenticated and (request.user.is_trainer or request.user.is_superuser) %}
+    {% if request.user.is_authenticated and request.user.is_trainer or request.user.is_authenticated and request.user.is_superuser %}
         <p style="margin-left: 1480px"><a href="/plans/addtrainingschedule">Edit</a></p>
     {% endif %}
        
