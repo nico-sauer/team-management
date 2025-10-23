@@ -22,9 +22,20 @@ class HomePageView(TemplateView):
                 except AthleteProfile.DoesNotExist:
                     profile = None
 
-            # If trainer, get athletes in their team
+            # If trainer, get athletes in their team.
+            # NOTE: StaffProfile does not define a `team` field. The Team is
+            # stored on the related `CustomUser` via the `team_id` ForeignKey.
+            # Accessing `profile.team` will raise AttributeError, so we fetch
+            # the team from the related user and filter athletes by the
+            # user's `team_id`. If the trainer has no team (team_id is None)
+            # we return an empty QuerySet instead of raising an error.
             if profile and getattr(profile, "role", None) == "Trainer":
-                athletes = AthleteProfile.objects.filter(team=profile.team)
+                trainer_user = getattr(profile, "user", None)
+                trainer_team = getattr(trainer_user, "team_id", None)
+                if trainer_team:
+                    athletes = AthleteProfile.objects.filter(user__team_id=trainer_team)
+                else:
+                    athletes = AthleteProfile.objects.none()
 
         context['profile'] = profile
         context['athletes'] = athletes
