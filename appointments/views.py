@@ -378,7 +378,7 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
             ).formatmonth(withyear=True))
             return context
 
-        # Filter: Only bookings of team members, that are in the same team
+        # Filter: Only bookings of all team members, that are in the same team
         instances = BookingInstance.objects.filter(
             occurrence_date__gte=first_day,
             occurrence_date__lte=last_day,

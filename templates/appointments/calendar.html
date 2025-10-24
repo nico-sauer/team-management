@@ -17,7 +17,7 @@
 
 <div class="container my-4">  
 
-    <h2 class="text-center text-white mb-4">Team-Calendar</h2>
+    <h2 class="text-center text-white mb-4">Calendar - {{request.user.manager_team}}</h2>
 
     <div class="clearfix mb-3">
         <a class="btn btn-info float-left" href="{% url 'appointments:calendar' %}?{{ prev_month }}">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="calendar-container">
-        {{ calendar|safe }}
+        {{ calendar|safe }}  <!-- |safe = execute safe calendar data as html not as text -->
     </div>
 
     <div class="text-left mt-4">

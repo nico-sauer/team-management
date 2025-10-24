@@ -80,7 +80,7 @@ class Calendar(HTMLCalendar):
     def formatmonth(self, withyear=True):
         first_day, last_day = self.get_month_date_range()
 
-        instances = [inst for _, inst in self.events 
+        instances = [inst for _, inst in self.events
                      if first_day <= inst.occurrence_date <= last_day]
 
         cal = (
