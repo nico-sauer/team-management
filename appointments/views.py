@@ -80,11 +80,11 @@ def booking_list(request):
 # -----------------------------
 # Booking Edit single Instances
 # -----------------------------
+
 @login_required
 def edit_booking_instance(request, booking_id, instance_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    instance = get_object_or_404(
-        BookingInstance, pk=instance_id, booking=booking)
+    instance = get_object_or_404(BookingInstance, pk=instance_id, booking=booking)
 
     if request.method == "POST":
         form = BookingInstanceEditForm(request.POST, instance=instance)
@@ -92,47 +92,58 @@ def edit_booking_instance(request, booking_id, instance_id):
             inst = form.save(commit=False)
             inst.is_modified = True
 
-        new_status = form.cleaned_data.get("status")
+            new_status = form.cleaned_data.get("status")
 
-        # Status can only be changed by one time bookings
-        if booking.recurrence == "none":
-            if new_status and new_status != booking.status:
-                booking.status = new_status
-                booking.save()
-        else:
-            messages.warning(
-                request,
-                "Info: Status changes are only possible for one-time bookings."
-                " Recurring events need to be cancelled or deleted by the"
-                " creator."
-            )
-
-        # check appointment-conflicts before saving
-        conflicts = inst.booking.is_conflicting(
-            participants=inst.booking.participants.all(),
-            instance=inst
-        )
-        if conflicts:
-            messages.error(
-                request,
-                "Cannot update instance due to conflicts with: "
-                + ", ".join(
-                    [p.username if p.username else str(p)
-                        for p in conflicts if p is not None]
+            # Status can only be changed for one-time bookings
+            if booking.recurrence == "none":
+                if new_status and new_status != booking.status:
+                    booking.status = new_status
+                    booking.save()
+            else:
+                messages.warning(
+                    request,
+                    (
+                        "Info: Status changes are only possible for one-time bookings. "
+                        "Recurring events need to be cancelled or deleted by the creator."
+                    ),
                 )
+
+            # check appointment conflicts before saving
+            conflicts = inst.booking.is_conflicting(
+                participants=inst.booking.participants.all(),
+                instance=inst
             )
-            return redirect(
+
+            if conflicts:
+                messages.error(
+                    request,
+                    "Cannot update instance due to conflicts with: "
+                    + ", ".join(
+                        [p.username if p.username else str(p)
+                         for p in conflicts if p is not None]
+                    ),
+                )
+                return redirect(
+                    "appointments:booking_instance_edit",
+                    booking_id=booking.id,
+                    instance_id=inst.id,
+                )
+
+            # save instance if no conflicts
+            inst.occurrence_date = inst.current_start.date()
+            inst.save()
+            messages.success(
+                request,
+                f"Appointment on {inst.occurrence_date} is updated successfully.",
+            )
+
+            return redirect(  # redirect after successful save
                 "appointments:booking_instance_edit",
                 booking_id=booking.id,
-                instance_id=inst.id
-                    )
-        # save instance if no conflicts
-        inst.occurrence_date = inst.current_start.date()
-        inst.save()
-        messages.success(request,
-                         (f"Appointment on {inst.occurrence_date}"
-                          f" is updated successfully."))
-
+                instance_id=inst.id,
+            )
+        else:
+            messages.error(request, "Please correct the errors.")
     else:
         form = BookingInstanceEditForm(instance=instance, booking=booking)
 
