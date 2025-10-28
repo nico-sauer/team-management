@@ -40,7 +40,7 @@ class BookingForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # current_user is passed when the form is initialized
+        # current_user is handed over when the form is initialized
         self.current_user = kwargs.pop("current_user", None)
         super().__init__(*args, **kwargs)
         self.fields["participants"].label_from_instance = lambda u: (

@@ -80,7 +80,7 @@ class Calendar(HTMLCalendar):
     def formatmonth(self, withyear=True):
         first_day, last_day = self.get_month_date_range()
 
-        instances = [inst for _, inst in self.events 
+        instances = [inst for _, inst in self.events
                      if first_day <= inst.occurrence_date <= last_day]
 
         cal = (
@@ -93,49 +93,3 @@ class Calendar(HTMLCalendar):
         cal += "</table>"
         return cal
 
-
-# # get expanded bookings for booking_list & booking_list_pdf
-# def expand_bookings(filtered_bookings, start_date, end_date):
-#     """Expand recurring and non-recurring bookings
-#     into individual occurrences."""
-#     tz = get_current_timezone()
-#     expanded = []
-
-#     for booking in filtered_bookings:
-#         if booking.recurrence != "none":
-#             occurrences = booking.get_occurrences(start_date, end_date)
-#             for occ_start in occurrences:
-#                 duration = booking.end - booking.start
-#                 occ_end = occ_start + duration
-
-#                 if not is_aware(occ_start):
-#                     occ_start = make_aware(occ_start, tz)
-#                 if not is_aware(occ_end):
-#                     occ_end = make_aware(occ_end, tz)
-
-#                 expanded.append(
-#                     {
-#                         "booking": booking,
-#                         "occurrence": occ_start,
-#                         "end_occurrence": occ_end,
-#                     }
-#                 )
-#         else:
-#             start = booking.start
-#             end = booking.end
-#             if not is_aware(start):
-#                 start = make_aware(start, tz)
-#             if not is_aware(end):
-#                 end = make_aware(end, tz)
-
-#             expanded.append(
-#                 {
-#                     "booking": booking,
-#                     "occurrence": start,
-#                     "end_occurrence": end,
-#                 }
-#             )
-
-#     # Sort by occurrence start
-#     expanded.sort(key=lambda x: x["occurrence"])
-#     return expanded
